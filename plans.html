@@ -43,13 +43,28 @@
       margin-bottom:12px;
     }
     .controls .left, .controls .right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-    select, button, input{
+
+    select, button, input, textarea{
       border:1px solid var(--line);
       background:#fff; border-radius:12px;
       padding:8px 10px; font-size:14px;
     }
+    textarea{ min-height:38px; resize:vertical; }
+
     button{ cursor:pointer; }
     button:hover{ background:var(--selected); }
+    button.primary{
+      background: #fff7ed;
+      border-color:#d9c7ad;
+      color:#4b3f35;
+      font-weight:600;
+    }
+    button.danger{
+      background:#fff;
+      border-color:#e8c9a6;
+      color:#7a4e2d;
+    }
+
     .hint{ color:var(--muted); font-size:13px; margin-top:8px; }
 
     .calendar{
@@ -62,20 +77,23 @@
       font-weight:600; color:var(--muted);
       text-align:center; padding:8px 0;
     }
+
     .cell{
       background:#fff; border:1px solid var(--line);
       border-radius:14px; padding:10px;
-      min-height:62px;
+      min-height:68px;
       display:flex; flex-direction:column;
       gap:6px;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease;
       position: relative;
+      user-select:none;
     }
     .cell:hover{ background: #fff7ed; }
     .cell:active{ transform: scale(0.99); }
     .cell.muted{ opacity:.45; cursor:default; }
     .cell.muted:hover{ background:#fff; }
+
     .date{
       font-weight:700;
       display:flex; justify-content:space-between; align-items:center;
@@ -86,9 +104,17 @@
       border:1px solid var(--line);
       padding:2px 8px; border-radius:999px;
     }
+
+    /* Draft selection (current plan being selected) */
     .cell.selected{
       background: var(--selected);
       border-color:#d9c7ad;
+    }
+
+    /* Saved dates (belong to saved plans) */
+    .cell.saved{
+      outline: 2px solid rgba(215,178,138,0.35);
+      outline-offset: 0px;
     }
 
     .section{
@@ -114,6 +140,7 @@
       border-bottom:1px solid var(--line);
       text-align:left;
       font-size:14px;
+      vertical-align:top;
     }
     th{ background:#fff7ed; color:#4b3f35; }
     tr:last-child td{ border-bottom:none; }
@@ -129,6 +156,24 @@
       font-size:12px;
       margin-right:6px;
       margin-top:6px;
+      white-space:nowrap;
+    }
+
+    .pill.strong{
+      border-color:#d9c7ad;
+      background:#fff7ed;
+      color:#4b3f35;
+      font-weight:600;
+    }
+
+    .stack{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .wide{
+      width: min(520px, 92vw);
     }
 
     /* ===== Singapore Public Holiday styles ===== */
@@ -148,20 +193,26 @@
       color:#7a4e2d;
     }
     .ph-name{
-      margin-top: 4px;
+      margin-top: 2px;
       font-size:12px;
       color:#7a4e2d;
-      line-height:1.3;
+      line-height:1.25;
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
       padding-right:8px;
     }
+
+    .muted-box{
+      border:1px dashed var(--line);
+      border-radius:14px;
+      padding:12px;
+      background: rgba(255,255,255,0.6);
+    }
   </style>
 </head>
 
 <body>
-
   <header>
     <h1>Plans</h1>
     <div class="nav">
@@ -186,32 +237,46 @@
       </div>
 
       <div class="right">
-        <input id="labelInput" placeholder="假期名称（可选）例如：Jordan Trip" />
-        <button id="clearMonthBtn">Clear This Month</button>
-        <button id="clearAllBtn">Clear All</button>
+        <button id="clearMonthBtn">Clear This Month (Draft)</button>
+        <button id="clearDraftBtn">Clear Draft</button>
+        <button id="clearAllBtn" class="danger">Clear All Saved</button>
       </div>
+    </div>
+
+    <div class="muted-box" style="margin-bottom:10px;">
+      <div class="stack">
+        <input id="planNameInput" class="wide" placeholder="Plan Name（必填）例如：Jordan Trip" />
+        <button id="savePlanBtn" class="primary">Save Plan</button>
+      </div>
+      <div style="margin-top:10px;">
+        <textarea id="planNoteInput" class="wide" placeholder="Note（去哪里/做什么，可选）例如：Amman → Petra → Wadi Rum"></textarea>
+      </div>
+      <div class="hint" id="draftHint" style="margin-top:8px;"></div>
     </div>
 
     <div class="calendar" id="calendar"></div>
 
     <div class="hint">
-      ✅ 点击日期：加入/取消“计划假期”。右上角可填一个“假期名称”（可选），会记录到该日期。<br/>
+      ✅ 点击日期：加入/取消当前“Draft Plan”。<br/>
+      ✅ <b>按住 Shift</b> 再点一个日期：会自动选中两者之间的连续区间（适合 12/22–12/26）。<br/>
       🟨 标注 <b>PH</b> 的为新加坡公共假期（Public Holiday）。
     </div>
   </div>
 
   <div class="section">
-    <h2>Yearly Summary</h2>
-    <div class="small">按年份汇总你选中的假期日期：天数 + 日期清单（可带名称）。</div>
+    <h2>Yearly Summary (Saved Plans)</h2>
+    <div class="small">每保存一次 Plan，就会在这里新增一行。你可以先保存 4 月的，再保存 8 月的。</div>
+
     <div style="margin-top:12px; overflow:auto;">
       <table>
         <thead>
           <tr>
-            <th style="width:120px;">Year</th>
-            <th style="width:120px;">Days</th>
-            <th>Details</th>
-<th style="width:260px;">Note</th>
-
+            <th style="width:90px;">Year</th>
+            <th style="width:170px;">Plan</th>
+            <th style="width:90px;">Days</th>
+            <th>Details (Ranges)</th>
+            <th style="width:260px;">Note</th>
+            <th style="width:110px;">Action</th>
           </tr>
         </thead>
         <tbody id="summaryBody"></tbody>
@@ -220,7 +285,9 @@
   </div>
 
 <script>
-  // ===== Singapore Public Holidays (manual list) =====
+  // ==========================
+  // 1) Singapore Public Holidays (manual list)
+  // ==========================
   // Key format: "YYYY-MM-DD"
   const SG_PUBLIC_HOLIDAYS = {
     2026: {
@@ -257,61 +324,119 @@
     return map[key] || "";
   }
 
-  // --- Storage ---
-  const STORAGE_KEY = "ernest_journal_plans_v1";
-  function loadPlans(){
-    try{
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    }catch(e){
-      return {};
-    }
+  // ==========================
+  // 2) Storage model
+  // ==========================
+  // savedPlans: [{ id, name, note, dates:[YYYY-MM-DD...] }]
+  // draftDates: { "YYYY-MM-DD": true }
+  const STORAGE_SAVED = "ernest_journal_saved_plans_v2";
+  const STORAGE_DRAFT = "ernest_journal_draft_plan_v2";
+
+  function loadJson(key, fallback){
+    try { return JSON.parse(localStorage.getItem(key) || ""); } catch(e) { return fallback; }
   }
-  function savePlans(data){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  function saveJson(key, data){
+    localStorage.setItem(key, JSON.stringify(data));
   }
 
-  // data shape:
-  // plans["YYYY-MM-DD"] = { label: "Jordan Trip" }
-  let plans = loadPlans();
+  let savedPlans = loadJson(STORAGE_SAVED, []);
+  let draftDates = loadJson(STORAGE_DRAFT, {}); // object map for quick toggle
 
-  // --- Helpers ---
+  // ==========================
+  // 3) Helpers
+  // ==========================
   const pad2 = (n) => String(n).padStart(2, "0");
   function ymd(y,m,d){ return `${y}-${pad2(m)}-${pad2(d)}`; }
+
   function parseYmd(s){
     const [y,m,d] = s.split("-").map(Number);
     return {y,m,d};
+  }
+  function toDateObj(key){
+    const {y,m,d} = parseYmd(key);
+    return new Date(y, m-1, d);
+  }
+  function diffDays(aKey, bKey){
+    const ms = 24*60*60*1000;
+    return Math.round((toDateObj(bKey) - toDateObj(aKey)) / ms);
   }
 
   function daysInMonth(year, month){ // month: 1-12
     return new Date(year, month, 0).getDate();
   }
-
   function firstDow(year, month){ // 0=Sun..6=Sat
     return new Date(year, month-1, 1).getDay();
   }
 
-  function formatDateChinese(key){
-    const {y,m,d} = parseYmd(key);
-    return `${y}/${pad2(m)}/${pad2(d)}`;
-  }
-
   function escapeHtml(str){
-    return str.replace(/[&<>"']/g, (m) => ({
+    return String(str || "").replace(/[&<>"']/g, (m) => ({
       "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
     })[m]);
   }
 
-  // --- UI refs ---
+  function formatDateYMDChinese(key){
+    const {y,m,d} = parseYmd(key);
+    return `${y}/${pad2(m)}/${pad2(d)}`;
+  }
+
+  // Convert sorted dates into ranges: [ {start, end, days}, ... ]
+  function makeRanges(sortedKeys){
+    const ranges = [];
+    let start = null;
+    let prev = null;
+
+    for(const k of sortedKeys){
+      if(!start){
+        start = k; prev = k;
+        continue;
+      }
+      if(diffDays(prev, k) === 1){
+        prev = k;
+      }else{
+        ranges.push({ start, end: prev, days: diffDays(start, prev) + 1 });
+        start = k; prev = k;
+      }
+    }
+    if(start) ranges.push({ start, end: prev, days: diffDays(start, prev) + 1 });
+    return ranges;
+  }
+
+  function rangesToHtmlPills(ranges){
+    return ranges.map(r => {
+      const start = formatDateYMDChinese(r.start);
+      const end = formatDateYMDChinese(r.end);
+      const text = (r.start === r.end) ? `${start}` : `${start}–${end}`;
+      return `<span class="pill strong">${text}</span>`;
+    }).join("");
+  }
+
+  function allSavedDatesSet(){
+    const set = new Set();
+    savedPlans.forEach(p => (p.dates || []).forEach(d => set.add(d)));
+    return set;
+  }
+
+  // ==========================
+  // 4) UI refs
+  // ==========================
   const yearSelect = document.getElementById("yearSelect");
   const monthSelect = document.getElementById("monthSelect");
   const calendarEl = document.getElementById("calendar");
   const summaryBody = document.getElementById("summaryBody");
-  const labelInput = document.getElementById("labelInput");
+
+  const planNameInput = document.getElementById("planNameInput");
+  const planNoteInput = document.getElementById("planNoteInput");
+  const savePlanBtn = document.getElementById("savePlanBtn");
+  const draftHint = document.getElementById("draftHint");
+
   const todayBtn = document.getElementById("todayBtn");
   const clearMonthBtn = document.getElementById("clearMonthBtn");
+  const clearDraftBtn = document.getElementById("clearDraftBtn");
   const clearAllBtn = document.getElementById("clearAllBtn");
 
-  // --- Init selects ---
+  // ==========================
+  // 5) Init selects (years)
+  // ==========================
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth()+1;
@@ -325,7 +450,6 @@
     opt.textContent = y;
     yearSelect.appendChild(opt);
   }
-
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   for(let m=1; m<=12; m++){
     const opt = document.createElement("option");
@@ -339,11 +463,54 @@
 
   const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
-  // --- Render calendar ---
+  // ==========================
+  // 6) Calendar with Shift-range selection
+  // ==========================
+  let lastClickedKey = null;
+
+  function setDraftDate(key, val){
+    if(val) draftDates[key] = true;
+    else delete draftDates[key];
+    saveJson(STORAGE_DRAFT, draftDates);
+  }
+
+  function toggleDraftDate(key){
+    const exists = !!draftDates[key];
+    setDraftDate(key, !exists);
+  }
+
+  function addRangeToDraft(aKey, bKey){
+    // assume aKey and bKey in same timeline; we just walk day by day
+    const a = toDateObj(aKey);
+    const b = toDateObj(bKey);
+    const step = a <= b ? 1 : -1;
+
+    let cur = new Date(a);
+    while(true){
+      const k = ymd(cur.getFullYear(), cur.getMonth()+1, cur.getDate());
+      setDraftDate(k, true);
+      if(cur.getFullYear() === b.getFullYear() && cur.getMonth() === b.getMonth() && cur.getDate() === b.getDate()){
+        break;
+      }
+      cur.setDate(cur.getDate() + step);
+    }
+  }
+
+  function updateDraftHint(){
+    const keys = Object.keys(draftDates).sort();
+    if(keys.length === 0){
+      draftHint.innerHTML = `Draft：<b>0</b> day selected.（先点日期或 Shift 连选）`;
+      return;
+    }
+    const ranges = makeRanges(keys);
+    const totalDays = keys.length;
+    draftHint.innerHTML = `Draft：<b>${totalDays}</b> day(s) selected. Ranges：${rangesToHtmlPills(ranges)}`;
+  }
+
   function renderCalendar(){
     calendarEl.innerHTML = "";
 
-    // header row
+    // day-of-week header
     for(const d of dows){
       const div = document.createElement("div");
       div.className = "dow";
@@ -357,6 +524,8 @@
     const total = daysInMonth(y,m);
     const first = firstDow(y,m);
 
+    const savedSet = allSavedDatesSet();
+
     // leading blanks
     for(let i=0;i<first;i++){
       const blank = document.createElement("div");
@@ -368,172 +537,140 @@
     for(let d=1; d<=total; d++){
       const key = ymd(y,m,d);
 
-      const isSelected = !!plans[key];
-      const label = plans[key]?.label?.trim() || "";
-
-      // PH check
+      const inDraft = !!draftDates[key];
       const phLabel = getPublicHolidayLabelByKey(key);
+      const isSaved = savedSet.has(key);
 
       const cell = document.createElement("div");
-      cell.className = "cell" + (isSelected ? " selected" : "") + (phLabel ? " is-ph" : "");
+      cell.className =
+        "cell" +
+        (inDraft ? " selected" : "") +
+        (isSaved ? " saved" : "") +
+        (phLabel ? " is-ph" : "");
 
       cell.innerHTML = `
         <div class="date">
           <span>${d}</span>
-          ${isSelected ? `<span class="tag">Planned</span>` : `<span></span>`}
+          ${inDraft ? `<span class="tag">Draft</span>` : `<span></span>`}
         </div>
-
         ${phLabel ? `<div class="ph-name">${escapeHtml(phLabel)}</div>` : ``}
-        ${label ? `<div class="small">${escapeHtml(label)}</div>` : `<div class="small">&nbsp;</div>`}
         ${phLabel ? `<div class="ph-tag">PH</div>` : ``}
       `;
 
-     cell.addEventListener("click", () => {
-  if(plans[key]){
-    // 已选：再点一次就取消
-    delete plans[key];
-  }else{
-    const labelVal = labelInput.value.trim();
-
-    // 新增：note（去哪里）
-    const noteVal = prompt("Note（去哪里/做什么，可留空）:", "") || "";
-
-    plans[key] = { label: labelVal, note: noteVal.trim() };
-  }
-
-  savePlans(plans);
-  renderCalendar();
-  renderSummary();
-});
-
+      cell.addEventListener("click", (ev) => {
+        // Shift 连选：从 lastClickedKey 到当前 key 全部选中
+        if(ev.shiftKey && lastClickedKey){
+          addRangeToDraft(lastClickedKey, key);
+        }else{
+          toggleDraftDate(key);
+        }
+        lastClickedKey = key;
+        updateDraftHint();
+        renderCalendar();
+      });
 
       calendarEl.appendChild(cell);
     }
   }
 
-  // --- Summary table ---
+  // ==========================
+  // 7) Save plan / Summary
+  // ==========================
   function renderSummary(){
-  // group by year
-  const byYear = {};
-  Object.keys(plans).forEach(key => {
-    const y = key.slice(0,4);
-    if(!byYear[y]) byYear[y] = [];
-    byYear[y].push(key);
-  });
-
-  const years = Object.keys(byYear).sort((a,b)=>Number(a)-Number(b));
-  summaryBody.innerHTML = "";
-
-  if(years.length === 0){
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="4" class="small">还没有选择任何假期日期。</td>`;
-    summaryBody.appendChild(tr);
-    return;
-  }
-
-  // helper: split into consecutive groups
-  function splitConsecutive(sortedKeys){
-    const groups = [];
-    let current = [];
-
-    function toDate(k){
-      const {y,m,d} = parseYmd(k);
-      return new Date(y, m-1, d);
-    }
-    function diffDays(a,b){
-      const ms = 24*60*60*1000;
-      return Math.round((toDate(b) - toDate(a)) / ms);
-    }
-
-    for(let i=0;i<sortedKeys.length;i++){
-      const k = sortedKeys[i];
-      if(current.length === 0){
-        current.push(k);
-        continue;
-      }
-      const prev = current[current.length-1];
-      if(diffDays(prev, k) === 1){
-        current.push(k);
-      }else{
-        groups.push(current);
-        current = [k];
-      }
-    }
-    if(current.length) groups.push(current);
-    return groups;
-  }
-
-  for(const y of years){
-    const keys = byYear[y].sort(); // YYYY-MM-DD string sort works
-    const groups = splitConsecutive(keys);
-
-    // 同一年可能多行：第 1 行显示 Year，后面行 Year 为空（更清爽）
-    groups.forEach((grp, idx) => {
-      const days = grp.length;
-
-      const details = grp.map(k => {
-        const label = plans[k]?.label?.trim();
-        if(label){
-          return `<span class="pill">${formatDateChinese(k)} · ${escapeHtml(label)}</span>`;
-        }
-        return `<span class="pill">${formatDateChinese(k)}</span>`;
-      }).join("");
-
-      // Note：把该段假期里所有 note 收集（去重）合并展示
-      const notesSet = new Set();
-      grp.forEach(k => {
-        const n = plans[k]?.note?.trim();
-        if(n) notesSet.add(n);
-      });
-      const noteText = Array.from(notesSet).join(" / ");
-      const noteHtml = noteText ? escapeHtml(noteText) : `<span class="small">—</span>`;
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><b>${idx === 0 ? y : ""}</b></td>
-        <td>${days}</td>
-        <td>${details}</td>
-        <td>${noteHtml}</td>
-      `;
-      summaryBody.appendChild(tr);
-    });
-  }
-}
-
-
-    const years = Object.keys(byYear).sort((a,b)=>Number(a)-Number(b));
     summaryBody.innerHTML = "";
 
-    if(years.length === 0){
+    if(!savedPlans.length){
       const tr = document.createElement("tr");
-      tr.innerHTML = `<td colspan="3" class="small">还没有选择任何假期日期。</td>`;
+      tr.innerHTML = `<td colspan="6" class="small">还没有保存任何 Plan。先选日期（可 Shift 连选）→ 填 Plan Name → Save Plan。</td>`;
       summaryBody.appendChild(tr);
       return;
     }
 
-    for(const y of years){
-      const keys = byYear[y].sort();
-      const days = keys.length;
+    // Sort by start date
+    const plansSorted = [...savedPlans].sort((a,b) => {
+      const aStart = (a.dates || []).slice().sort()[0] || "9999-12-31";
+      const bStart = (b.dates || []).slice().sort()[0] || "9999-12-31";
+      return aStart.localeCompare(bStart);
+    });
 
-      const details = keys.map(k => {
-        const label = plans[k]?.label?.trim();
-        if(label){
-          return `<span class="pill">${formatDateChinese(k)} · ${escapeHtml(label)}</span>`;
-        }
-        return `<span class="pill">${formatDateChinese(k)}</span>`;
-      }).join("");
+    // render each plan as its own row; Year from plan start date
+    for(const p of plansSorted){
+      const dates = (p.dates || []).slice().sort();
+      const year = dates[0] ? dates[0].slice(0,4) : "";
+      const ranges = makeRanges(dates);
+      const days = dates.length;
+
+      const detailsHtml = rangesToHtmlPills(ranges);
+      const noteHtml = p.note ? escapeHtml(p.note) : `<span class="small">—</span>`;
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><b>${y}</b></td>
+        <td><b>${escapeHtml(year)}</b></td>
+        <td>${escapeHtml(p.name || "Untitled")}</td>
         <td>${days}</td>
-        <td>${details}</td>
+        <td>${detailsHtml}</td>
+        <td>${noteHtml}</td>
+        <td>
+          <button class="danger" data-del="${escapeHtml(p.id)}">Delete</button>
+        </td>
       `;
       summaryBody.appendChild(tr);
     }
+
+    // bind delete buttons
+    summaryBody.querySelectorAll("button[data-del]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-del");
+        if(!confirm("确定删除这个 Plan 吗？")) return;
+        savedPlans = savedPlans.filter(p => p.id !== id);
+        saveJson(STORAGE_SAVED, savedPlans);
+        renderSummary();
+        renderCalendar();
+      });
+    });
   }
 
-  // --- Buttons ---
+  function newId(){
+    return "p_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2,8);
+  }
+
+  savePlanBtn.addEventListener("click", () => {
+    const name = planNameInput.value.trim();
+    if(!name){
+      alert("请先填写 Plan Name（例如：Jordan Trip）");
+      planNameInput.focus();
+      return;
+    }
+    const dates = Object.keys(draftDates).sort();
+    if(!dates.length){
+      alert("你还没选任何日期。先在日历里点选（可 Shift 连选）。");
+      return;
+    }
+
+    const note = planNoteInput.value.trim();
+    const plan = { id: newId(), name, note, dates };
+
+    savedPlans.push(plan);
+    saveJson(STORAGE_SAVED, savedPlans);
+
+    // clear draft for next plan
+    draftDates = {};
+    saveJson(STORAGE_DRAFT, draftDates);
+    lastClickedKey = null;
+
+    // reset inputs (optional: keep note)
+    planNameInput.value = "";
+    planNoteInput.value = "";
+
+    updateDraftHint();
+    renderSummary();
+    renderCalendar();
+    alert("已保存 ✅ 现在可以开始选下一个计划了。");
+  });
+
+  // ==========================
+  // 8) Buttons
+  // ==========================
   todayBtn.addEventListener("click", () => {
     yearSelect.value = currentYear;
     monthSelect.value = currentMonth;
@@ -544,31 +681,38 @@
     const y = Number(yearSelect.value);
     const m = Number(monthSelect.value);
     const prefix = `${y}-${pad2(m)}-`;
-    Object.keys(plans).forEach(k => {
-      if(k.startsWith(prefix)) delete plans[k];
+    Object.keys(draftDates).forEach(k => {
+      if(k.startsWith(prefix)) delete draftDates[k];
     });
-    savePlans(plans);
+    saveJson(STORAGE_DRAFT, draftDates);
+    updateDraftHint();
     renderCalendar();
-    renderSummary();
+  });
+
+  clearDraftBtn.addEventListener("click", () => {
+    if(!confirm("确定清空 Draft（未保存的选择）吗？")) return;
+    draftDates = {};
+    saveJson(STORAGE_DRAFT, draftDates);
+    lastClickedKey = null;
+    updateDraftHint();
+    renderCalendar();
   });
 
   clearAllBtn.addEventListener("click", () => {
-    if(!confirm("确定要清空全部计划假吗？")) return;
-    plans = {};
-    savePlans(plans);
-    renderCalendar();
+    if(!confirm("确定清空全部 Saved Plans 吗？（不可恢复）")) return;
+    savedPlans = [];
+    saveJson(STORAGE_SAVED, savedPlans);
     renderSummary();
-  });
-
-  // --- Select change ---
-  yearSelect.addEventListener("change", () => {
-    renderCalendar();
-  });
-  monthSelect.addEventListener("change", () => {
     renderCalendar();
   });
 
-  // --- First render ---
+  yearSelect.addEventListener("change", renderCalendar);
+  monthSelect.addEventListener("change", renderCalendar);
+
+  // ==========================
+  // 9) First render
+  // ==========================
+  updateDraftHint();
   renderCalendar();
   renderSummary();
 </script>
