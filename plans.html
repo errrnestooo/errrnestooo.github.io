@@ -202,52 +202,42 @@
     }
 
     .right-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
-    /* Saved Plans collapse */
-.plan-details {
-  margin-top: 6px;
-}
 
-.plan-details summary{
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.plan-details summary::-webkit-details-marker{ 
-  display:none; 
-}
-
-.plan-details summary:hover{
-  background: var(--selected);
-}
-
-.plan-meta{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  align-items:center;
-  margin-top: 6px;
-}
-
-.badge{
-  display:inline-block;
-  padding: 2px 8px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--muted);
-  font-size: 12px;
-  white-space: nowrap;
-}
+    /* ✅ Saved Plans 可折叠：details/summary */
+    .plan-details { margin-top: 6px; }
+    .plan-details summary{
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .plan-details summary::-webkit-details-marker{ display:none; }
+    .plan-details summary:hover{ background: var(--selected); }
+    .plan-details[open] summary{
+      background: var(--selected);
+      border-color:#d9c7ad;
+      color: var(--link);
+    }
+    .chev{
+      width: 8px; height: 8px;
+      border-right: 2px solid var(--muted);
+      border-bottom: 2px solid var(--muted);
+      transform: rotate(45deg);
+      transition: transform .15s ease, border-color .15s ease;
+      display:inline-block;
+    }
+    .plan-details[open] .chev{
+      transform: rotate(-135deg);
+      border-color: var(--link);
+    }
   </style>
 </head>
 
@@ -291,8 +281,6 @@
 </div>
 
 <div class="grid2">
-
-  <!-- Draft panel -->
   <div class="panel">
     <h2>Draft Plan</h2>
     <div class="small">先在日历里选日期（Shift 可连选），再填名称/备注并保存成一条计划。</div>
@@ -312,7 +300,6 @@
     </div>
   </div>
 
-  <!-- Saved Plans panel -->
   <div class="panel">
     <h2>Saved Plans</h2>
     <div class="small">每次保存是一条计划。你可以继续新增、编辑或删除。</div>
@@ -331,7 +318,6 @@
       </table>
     </div>
   </div>
-
 </div>
 
 <div class="panel" style="margin-top:16px;">
@@ -355,10 +341,7 @@
 <script>
 /* =========================
    Singapore Public Holidays
-   =========================
-   说明：这里先内置 2026（你可以继续加 2027/2028）。
-   若遇到“调休/改期”，你手动更新这个表即可。
-*/
+   ========================= */
 const SG_PUBLIC_HOLIDAYS = {
   2026: {
     "2026-01-01": "New Year’s Day",
@@ -407,8 +390,6 @@ function saveJson(key, data){
 let draftDates = loadJson(STORAGE_DRAFT, {});
 let savedPlans = loadJson(STORAGE_SAVED, []);
 let lastClickedKey = null;
-
-// edit mode
 let editingPlanId = null;
 
 /* =========
@@ -424,12 +405,8 @@ function formatDateChinese(key){
   const {y,m,d} = parseYmd(key);
   return `${y}/${pad2(m)}/${pad2(d)}`;
 }
-function daysInMonth(year, month){ // month: 1-12
-  return new Date(year, month, 0).getDate();
-}
-function firstDow(year, month){ // 0=Sun..6=Sat
-  return new Date(year, month-1, 1).getDay();
-}
+function daysInMonth(year, month){ return new Date(year, month, 0).getDate(); }
+function firstDow(year, month){ return new Date(year, month-1, 1).getDay(); }
 function escapeHtml(str){
   return String(str).replace(/[&<>"']/g, (m) => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
@@ -438,13 +415,8 @@ function escapeHtml(str){
 function newId(){
   return "p_" + Math.random().toString(36).slice(2,10) + Date.now().toString(36);
 }
-function sortedKeys(obj){
-  return Object.keys(obj).sort();
-}
-function inSameMonth(a,b){
-  // a,b are "YYYY-MM-DD"
-  return a.slice(0,7) === b.slice(0,7);
-}
+function sortedKeys(obj){ return Object.keys(obj).sort(); }
+function inSameMonth(a,b){ return a.slice(0,7) === b.slice(0,7); }
 
 /* =================
    UI references
@@ -542,17 +514,14 @@ function renderCalendar(){
     `;
 
     cell.addEventListener("click", (e) => {
-      // Shift 连选：lastClickedKey -> key
       if(e.shiftKey && lastClickedKey){
         const range = buildRange(lastClickedKey, key);
         range.forEach(k => { draftDates[k] = true; });
       }else{
-        // toggle
         if(draftDates[key]) delete draftDates[key];
         else draftDates[key] = true;
         lastClickedKey = key;
       }
-
       saveJson(STORAGE_DRAFT, draftDates);
       updateDraftHint();
       renderCalendar();
@@ -564,11 +533,7 @@ function renderCalendar(){
 }
 
 function buildRange(a, b){
-  // 只对同一个月的范围做连选（避免跨月太复杂）
-  if(!inSameMonth(a,b)){
-    // 如果跨月，就当作普通点击：只选 b
-    return [b];
-  }
+  if(!inSameMonth(a,b)) return [b];
   const {y:ya, m:ma, d:da} = parseYmd(a);
   const {d:db} = parseYmd(b);
   const start = Math.min(da, db);
@@ -594,7 +559,6 @@ function renderDraftPreview(){
 }
 
 function updateDraftHint(){
-  const keys = sortedKeys(draftDates);
   const base = `✅ 点击日期：加入/取消 Draft 假期。按住 <b>Shift</b>：连续选择区间（先点起点，再 Shift 点终点）。<br/>🟧 标记 <b>PH</b> 的为新加坡公假（Public Holiday）。`;
   if(editingPlanId){
     draftHint.innerHTML = base + `<br/><span class="small">✏️ 当前处于编辑模式：修改后点 <b>Update Plan</b> 保存。</span>`;
@@ -604,7 +568,7 @@ function updateDraftHint(){
 }
 
 /* ==========
-   Saved plans render
+   ✅ Saved plans render（折叠关键在这里）
    ========== */
 function renderSavedPlans(){
   plansBody.innerHTML = "";
@@ -616,7 +580,6 @@ function renderSavedPlans(){
     return;
   }
 
-  // 按最早日期排序
   const sorted = savedPlans.slice().sort((a,b)=>{
     const aStart = (a.dates||[]).slice().sort()[0] || "9999-99-99";
     const bStart = (b.dates||[]).slice().sort()[0] || "9999-99-99";
@@ -628,12 +591,20 @@ function renderSavedPlans(){
     const pills = dates.map(k => `<span class="pill">${formatDateChinese(k)}</span>`).join("");
     const note = p.note ? escapeHtml(p.note) : `<span class="small">—</span>`;
 
+    // ✅ 默认收起：details 不加 open
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><b>${escapeHtml(p.name || "")}</b></td>
       <td>
         <div class="small">${dates.length} day(s)</div>
-        <div class="pills-wrap" style="margin-top:6px;">${pills}</div>
+
+        <details class="plan-details">
+          <summary>
+            <span class="chev"></span>
+            <span>Show dates</span>
+          </summary>
+          <div class="pills-wrap" style="margin-top:6px;">${pills}</div>
+        </details>
       </td>
       <td>${note}</td>
       <td>
@@ -644,9 +615,15 @@ function renderSavedPlans(){
       </td>
     `;
     plansBody.appendChild(tr);
+
+    // 让 summary 文案自动切换
+    const detailsEl = tr.querySelector("details.plan-details");
+    const summaryText = detailsEl.querySelector("summary span:last-child");
+    detailsEl.addEventListener("toggle", () => {
+      summaryText.textContent = detailsEl.open ? "Hide dates" : "Show dates";
+    });
   }
 
-  // bind edit
   plansBody.querySelectorAll("button[data-edit]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-edit");
@@ -664,7 +641,6 @@ function renderSavedPlans(){
       savePlanBtn.textContent = "Update Plan";
       cancelEditBtn.style.display = "inline-block";
 
-      // jump to month of first date
       const start = (plan.dates || []).slice().sort()[0];
       if(start){
         const {y,m} = parseYmd(start);
@@ -681,7 +657,6 @@ function renderSavedPlans(){
     });
   });
 
-  // bind delete
   plansBody.querySelectorAll("button[data-del]").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.getAttribute("data-del");
@@ -692,7 +667,6 @@ function renderSavedPlans(){
       savedPlans = savedPlans.filter(p => p.id !== id);
       saveJson(STORAGE_SAVED, savedPlans);
 
-      // 若删掉的是正在编辑的
       if(editingPlanId === id){
         exitEditMode(true);
       }
@@ -716,8 +690,7 @@ function renderYearlySummary(){
     return;
   }
 
-  // by year -> list of plans that have dates in that year
-  const byYear = {}; // { "2026": [ {name,note,datesInYear[]} ] }
+  const byYear = {};
 
   for(const p of savedPlans){
     const dates = (p.dates || []).slice().sort();
@@ -736,11 +709,9 @@ function renderYearlySummary(){
   const years = Object.keys(byYear).sort((a,b)=>Number(a)-Number(b));
 
   for(const y of years){
-    // 总天数
     const allDates = byYear[y].flatMap(p => p.dates);
     const days = allDates.length;
 
-    // Details: 按 plan 分组展示（每条 plan 一行块）
     const blocks = byYear[y]
       .slice()
       .sort((a,b)=>{
@@ -844,22 +815,15 @@ savePlanBtn.addEventListener("click", () => {
   const note = planNoteInput.value.trim();
 
   if(editingPlanId){
-    // Update
     const idx = savedPlans.findIndex(p => p.id === editingPlanId);
     if(idx === -1){
       alert("找不到要编辑的 Plan（可能已被删除）。");
       exitEditMode(true);
       return;
     }
-    savedPlans[idx] = {
-      ...savedPlans[idx],
-      name,
-      note,
-      dates
-    };
+    savedPlans[idx] = { ...savedPlans[idx], name, note, dates };
     saveJson(STORAGE_SAVED, savedPlans);
 
-    // done
     exitEditMode(true);
     renderSavedPlans();
     renderYearlySummary();
@@ -867,12 +831,10 @@ savePlanBtn.addEventListener("click", () => {
     return;
   }
 
-  // New save
   const plan = { id:newId(), name, note, dates };
   savedPlans.push(plan);
   saveJson(STORAGE_SAVED, savedPlans);
 
-  // clear draft for next plan
   draftDates = {};
   saveJson(STORAGE_DRAFT, draftDates);
   lastClickedKey = null;
