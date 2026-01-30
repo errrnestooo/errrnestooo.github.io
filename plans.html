@@ -29,6 +29,7 @@
       padding:6px 10px; border-radius:10px;
     }
     .nav a:hover{ background:var(--selected); color:var(--link); }
+    .nav a.active{ background:var(--selected); color:var(--link); }
 
     .wrap{
       background:var(--card); border:1px solid var(--line);
@@ -64,11 +65,12 @@
     .cell{
       background:#fff; border:1px solid var(--line);
       border-radius:14px; padding:10px;
-      min-height:58px;
+      min-height:62px;
       display:flex; flex-direction:column;
       gap:6px;
       cursor:pointer;
       transition: transform .05s ease, background .15s ease;
+      position: relative;
     }
     .cell:hover{ background: #fff7ed; }
     .cell:active{ transform: scale(0.99); }
@@ -116,6 +118,7 @@
     th{ background:#fff7ed; color:#4b3f35; }
     tr:last-child td{ border-bottom:none; }
     .small{ color:var(--muted); font-size:13px; }
+
     .pill{
       display:inline-block;
       padding:2px 8px;
@@ -127,21 +130,46 @@
       margin-right:6px;
       margin-top:6px;
     }
+
+    /* ===== Singapore Public Holiday styles ===== */
+    .cell.is-ph{
+      border-color:#d7b28a !important;
+      background:#fff6e8 !important;
+    }
+    .ph-tag{
+      position:absolute;
+      top:10px;
+      right:10px;
+      font-size:11px;
+      padding:2px 8px;
+      border-radius:999px;
+      border:1px solid #e8c9a6;
+      background:#fff;
+      color:#7a4e2d;
+    }
+    .ph-name{
+      margin-top: 4px;
+      font-size:12px;
+      color:#7a4e2d;
+      line-height:1.3;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      padding-right:8px;
+    }
   </style>
 </head>
 
 <body>
 
-<div class="nav">
-
   <header>
     <h1>Plans</h1>
     <div class="nav">
       <a href="index.html">Home</a>
-      <a href="index.html#diary">Diary</a>
-      <a href="index.html#travel">Travel</a>
-      <a href="plans.html">Plans</a>
-      <a href="index.html#about">About</a>
+      <a href="diary.html">Diary</a>
+      <a href="travel.html">Travel</a>
+      <a href="plans.html" class="active">Plans</a>
+      <a href="about.html">About</a>
     </div>
   </header>
 
@@ -167,7 +195,8 @@
     <div class="calendar" id="calendar"></div>
 
     <div class="hint">
-      ✅ 点击日期：加入/取消“计划假期”。右上角可填一个“假期名称”（可选），会记录到该日期。
+      ✅ 点击日期：加入/取消“计划假期”。右上角可填一个“假期名称”（可选），会记录到该日期。<br/>
+      🟨 标注 <b>PH</b> 的为新加坡公共假期（Public Holiday）。
     </div>
   </div>
 
@@ -189,6 +218,43 @@
   </div>
 
 <script>
+  // ===== Singapore Public Holidays (manual list) =====
+  // Key format: "YYYY-MM-DD"
+  const SG_PUBLIC_HOLIDAYS = {
+    2026: {
+      "2026-01-01": "New Year’s Day",
+      "2026-02-17": "Chinese New Year (Day 1)",
+      "2026-02-18": "Chinese New Year (Day 2)",
+      "2026-03-20": "Good Friday",
+      "2026-05-01": "Labour Day",
+      "2026-05-03": "Hari Raya Puasa",
+      "2026-05-24": "Vesak Day",
+      "2026-06-27": "Hari Raya Haji",
+      "2026-08-09": "National Day",
+      "2026-11-08": "Deepavali",
+      "2026-12-25": "Christmas Day"
+    },
+    2025: {
+      "2025-01-01": "New Year’s Day",
+      "2025-01-29": "Chinese New Year (Day 1)",
+      "2025-01-30": "Chinese New Year (Day 2)",
+      "2025-03-31": "Hari Raya Puasa",
+      "2025-04-18": "Good Friday",
+      "2025-05-01": "Labour Day",
+      "2025-05-12": "Vesak Day",
+      "2025-06-07": "Hari Raya Haji",
+      "2025-08-09": "National Day",
+      "2025-10-20": "Deepavali",
+      "2025-12-25": "Christmas Day"
+    }
+  };
+
+  function getPublicHolidayLabelByKey(key){
+    const y = Number(key.slice(0,4));
+    const map = SG_PUBLIC_HOLIDAYS[y] || {};
+    return map[key] || "";
+  }
+
   // --- Storage ---
   const STORAGE_KEY = "ernest_journal_plans_v1";
   function loadPlans(){
@@ -227,6 +293,12 @@
     return `${y}/${pad2(m)}/${pad2(d)}`;
   }
 
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, (m) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    })[m]);
+  }
+
   // --- UI refs ---
   const yearSelect = document.getElementById("yearSelect");
   const monthSelect = document.getElementById("monthSelect");
@@ -237,13 +309,13 @@
   const clearMonthBtn = document.getElementById("clearMonthBtn");
   const clearAllBtn = document.getElementById("clearAllBtn");
 
-  // --- Init selects (万年历：给你一个很大的范围，可按需改) ---
+  // --- Init selects ---
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth()+1;
 
-  const startYear = currentYear - 3;   // 向前 3 年
-  const endYear   = currentYear + 15;  // 向后 15 年（基本“万年历”够用了）
+  const startYear = currentYear - 3;
+  const endYear   = currentYear + 15;
 
   for(let y=startYear; y<=endYear; y++){
     const opt = document.createElement("option");
@@ -263,13 +335,13 @@
   yearSelect.value = currentYear;
   monthSelect.value = currentMonth;
 
-  // --- Render calendar ---
   const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 
+  // --- Render calendar ---
   function renderCalendar(){
     calendarEl.innerHTML = "";
 
-    // header row - day of week
+    // header row
     for(const d of dows){
       const div = document.createElement("div");
       div.className = "dow";
@@ -293,21 +365,28 @@
 
     for(let d=1; d<=total; d++){
       const key = ymd(y,m,d);
+
       const isSelected = !!plans[key];
       const label = plans[key]?.label?.trim() || "";
 
+      // PH check
+      const phLabel = getPublicHolidayLabelByKey(key);
+
       const cell = document.createElement("div");
-      cell.className = "cell" + (isSelected ? " selected" : "");
+      cell.className = "cell" + (isSelected ? " selected" : "") + (phLabel ? " is-ph" : "");
+
       cell.innerHTML = `
         <div class="date">
           <span>${d}</span>
           ${isSelected ? `<span class="tag">Planned</span>` : `<span></span>`}
         </div>
+
+        ${phLabel ? `<div class="ph-name">${escapeHtml(phLabel)}</div>` : ``}
         ${label ? `<div class="small">${escapeHtml(label)}</div>` : `<div class="small">&nbsp;</div>`}
+        ${phLabel ? `<div class="ph-tag">PH</div>` : ``}
       `;
 
       cell.addEventListener("click", () => {
-        // toggle
         if(plans[key]){
           delete plans[key];
         }else{
@@ -323,15 +402,8 @@
     }
   }
 
-  function escapeHtml(str){
-    return str.replace(/[&<>"']/g, (m) => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    })[m]);
-  }
-
   // --- Summary table ---
   function renderSummary(){
-    // group by year
     const byYear = {};
     Object.keys(plans).forEach(key => {
       const y = key.slice(0,4);
@@ -350,7 +422,7 @@
     }
 
     for(const y of years){
-      const keys = byYear[y].sort(); // YYYY-MM-DD string sort works
+      const keys = byYear[y].sort();
       const days = keys.length;
 
       const details = keys.map(k => {
@@ -396,6 +468,14 @@
     savePlans(plans);
     renderCalendar();
     renderSummary();
+  });
+
+  // --- Select change ---
+  yearSelect.addEventListener("change", () => {
+    renderCalendar();
+  });
+  monthSelect.addEventListener("change", () => {
+    renderCalendar();
   });
 
   // --- First render ---
