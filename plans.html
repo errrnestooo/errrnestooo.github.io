@@ -163,4 +163,241 @@
 
     <div class="calendar" id="calendar"></div>
 
-    <div cl
+    <div class="hint">
+      ✅ 点击日期：加入/取消“计划假期”。右上角可填一个“假期名称”（可选），会记录到该日期。
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Yearly Summary</h2>
+    <div class="small">按年份汇总你选中的假期日期：天数 + 日期清单（可带名称）。</div>
+    <div style="margin-top:12px; overflow:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:120px;">Year</th>
+            <th style="width:120px;">Days</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody id="summaryBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+  // --- Storage ---
+  const STORAGE_KEY = "ernest_journal_plans_v1";
+  function loadPlans(){
+    try{
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    }catch(e){
+      return {};
+    }
+  }
+  function savePlans(data){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  // data shape:
+  // plans["YYYY-MM-DD"] = { label: "Jordan Trip" }
+  let plans = loadPlans();
+
+  // --- Helpers ---
+  const pad2 = (n) => String(n).padStart(2, "0");
+  function ymd(y,m,d){ return `${y}-${pad2(m)}-${pad2(d)}`; }
+  function parseYmd(s){
+    const [y,m,d] = s.split("-").map(Number);
+    return {y,m,d};
+  }
+
+  function daysInMonth(year, month){ // month: 1-12
+    return new Date(year, month, 0).getDate();
+  }
+
+  function firstDow(year, month){ // 0=Sun..6=Sat
+    return new Date(year, month-1, 1).getDay();
+  }
+
+  function formatDateChinese(key){
+    const {y,m,d} = parseYmd(key);
+    return `${y}/${pad2(m)}/${pad2(d)}`;
+  }
+
+  // --- UI refs ---
+  const yearSelect = document.getElementById("yearSelect");
+  const monthSelect = document.getElementById("monthSelect");
+  const calendarEl = document.getElementById("calendar");
+  const summaryBody = document.getElementById("summaryBody");
+  const labelInput = document.getElementById("labelInput");
+  const todayBtn = document.getElementById("todayBtn");
+  const clearMonthBtn = document.getElementById("clearMonthBtn");
+  const clearAllBtn = document.getElementById("clearAllBtn");
+
+  // --- Init selects (万年历：给你一个很大的范围，可按需改) ---
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth()+1;
+
+  const startYear = currentYear - 3;   // 向前 3 年
+  const endYear   = currentYear + 15;  // 向后 15 年（基本“万年历”够用了）
+
+  for(let y=startYear; y<=endYear; y++){
+    const opt = document.createElement("option");
+    opt.value = y;
+    opt.textContent = y;
+    yearSelect.appendChild(opt);
+  }
+
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  for(let m=1; m<=12; m++){
+    const opt = document.createElement("option");
+    opt.value = m;
+    opt.textContent = `${m} (${monthNames[m-1]})`;
+    monthSelect.appendChild(opt);
+  }
+
+  yearSelect.value = currentYear;
+  monthSelect.value = currentMonth;
+
+  // --- Render calendar ---
+  const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  function renderCalendar(){
+    calendarEl.innerHTML = "";
+
+    // header row - day of week
+    for(const d of dows){
+      const div = document.createElement("div");
+      div.className = "dow";
+      div.textContent = d;
+      calendarEl.appendChild(div);
+    }
+
+    const y = Number(yearSelect.value);
+    const m = Number(monthSelect.value);
+
+    const total = daysInMonth(y,m);
+    const first = firstDow(y,m);
+
+    // leading blanks
+    for(let i=0;i<first;i++){
+      const blank = document.createElement("div");
+      blank.className = "cell muted";
+      blank.innerHTML = `<div class="date"><span></span><span></span></div>`;
+      calendarEl.appendChild(blank);
+    }
+
+    for(let d=1; d<=total; d++){
+      const key = ymd(y,m,d);
+      const isSelected = !!plans[key];
+      const label = plans[key]?.label?.trim() || "";
+
+      const cell = document.createElement("div");
+      cell.className = "cell" + (isSelected ? " selected" : "");
+      cell.innerHTML = `
+        <div class="date">
+          <span>${d}</span>
+          ${isSelected ? `<span class="tag">Planned</span>` : `<span></span>`}
+        </div>
+        ${label ? `<div class="small">${escapeHtml(label)}</div>` : `<div class="small">&nbsp;</div>`}
+      `;
+
+      cell.addEventListener("click", () => {
+        // toggle
+        if(plans[key]){
+          delete plans[key];
+        }else{
+          const labelVal = labelInput.value.trim();
+          plans[key] = { label: labelVal };
+        }
+        savePlans(plans);
+        renderCalendar();
+        renderSummary();
+      });
+
+      calendarEl.appendChild(cell);
+    }
+  }
+
+  function escapeHtml(str){
+    return str.replace(/[&<>"']/g, (m) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    })[m]);
+  }
+
+  // --- Summary table ---
+  function renderSummary(){
+    // group by year
+    const byYear = {};
+    Object.keys(plans).forEach(key => {
+      const y = key.slice(0,4);
+      if(!byYear[y]) byYear[y] = [];
+      byYear[y].push(key);
+    });
+
+    const years = Object.keys(byYear).sort((a,b)=>Number(a)-Number(b));
+    summaryBody.innerHTML = "";
+
+    if(years.length === 0){
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td colspan="3" class="small">还没有选择任何假期日期。</td>`;
+      summaryBody.appendChild(tr);
+      return;
+    }
+
+    for(const y of years){
+      const keys = byYear[y].sort(); // YYYY-MM-DD string sort works
+      const days = keys.length;
+
+      const details = keys.map(k => {
+        const label = plans[k]?.label?.trim();
+        if(label){
+          return `<span class="pill">${formatDateChinese(k)} · ${escapeHtml(label)}</span>`;
+        }
+        return `<span class="pill">${formatDateChinese(k)}</span>`;
+      }).join("");
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><b>${y}</b></td>
+        <td>${days}</td>
+        <td>${details}</td>
+      `;
+      summaryBody.appendChild(tr);
+    }
+  }
+
+  // --- Buttons ---
+  todayBtn.addEventListener("click", () => {
+    yearSelect.value = currentYear;
+    monthSelect.value = currentMonth;
+    renderCalendar();
+  });
+
+  clearMonthBtn.addEventListener("click", () => {
+    const y = Number(yearSelect.value);
+    const m = Number(monthSelect.value);
+    const prefix = `${y}-${pad2(m)}-`;
+    Object.keys(plans).forEach(k => {
+      if(k.startsWith(prefix)) delete plans[k];
+    });
+    savePlans(plans);
+    renderCalendar();
+    renderSummary();
+  });
+
+  clearAllBtn.addEventListener("click", () => {
+    if(!confirm("确定要清空全部计划假吗？")) return;
+    plans = {};
+    savePlans(plans);
+    renderCalendar();
+    renderSummary();
+  });
+
+  // --- First render ---
+  renderCalendar();
+  renderSummary();
+</script>
+</body>
+</html>
