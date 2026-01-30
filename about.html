@@ -1,1 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>About | Ernest's Journal</title>
+
+  <style>
+    :root{
+      --bg: #fbf7f0;
+      --card: #ffffff;
+      --text: #1f1f1f;
+      --muted: #6b5f54;
+      --border: #eadfce;
+      --accent: #7a4e2d;
+      --shadow: 0 10px 25px rgba(0,0,0,0.06);
+      --radius: 18px;
+    }
+
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height:1.8;
+    }
+
+    .container{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 44px 18px 80px;
+    }
+
+    h1{
+      text-align:center;
+      margin: 0 0 10px;
+      font-size: 40px;
+      letter-spacing: .2px;
+    }
+
+    .subtitle{
+      text-align:center;
+      color: var(--muted);
+      margin-bottom: 26px;
+      font-size: 14px;
+    }
+
+    .nav{
+      text-align:center;
+      margin: 18px 0 36px;
+    }
+    .nav a{
+      display:inline-block;
+      margin: 0 10px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      text-decoration:none;
+      color: var(--muted);
+    }
+    .nav a:hover{
+      background: #f2e7d6;
+      color: var(--accent);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h2{
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .kv{
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .kv li{
+      display:flex;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px dashed #efe5d7;
+    }
+    .kv li:last-child{ border-bottom:none; }
+    .k{ width: 130px; color: var(--muted); }
+    .v{ flex:1; }
+
+    .progress-wrap{
+      margin-top: 12px;
+      background: #f3eadb;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      overflow:hidden;
+      height: 14px;
+    }
+    .progress-bar{
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #c98b57, #8a5a34);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .stat{
+      background: #fff7eb;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 12px;
+    }
+    .stat .label{ color: var(--muted); font-size: 12px; }
+    .stat .value{ font-size: 18px; font-weight: 700; margin-top: 2px; }
+
+    .note{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    .timeline{
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+    .timeline li{ margin: 8px 0; }
+
+    .small{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer{
+      margin-top: 18px;
+      text-align:center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>About Ernest</h1>
+    <div class="subtitle">A small page to remember where I started.</div>
+
+    <div class="nav">
+      <a href="index.html">Home</a>
+      <a href="diary.html">Diary</a>
+      <a href="travel.html">Travel</a>
+      <a href="plans.html">Plans</a>
+      <a href="about.html">About</a>
+    </div>
+
+    <div class="grid">
+      <!-- Left: Bio -->
+      <div class="card">
+        <h2>Self Introduction</h2>
+        <p>
+          Hi, I’m Ernest. I use this website to record my diaries, travels, and plans — a quiet space to keep memories,
+          ideas, and growth in one place.
+        </p>
+
+        <ul class="kv">
+          <li><div class="k">Birthday</div><div class="v">1996-01-19</div></li>
+          <li><div class="k">Based in</div><div class="v">Singapore</div></li>
+          <li><div class="k">Work</div><div class="v">PwC (Assurance)</div></li>
+          <li><div class="k">Interests</div><div class="v">Travel · Writing · Learning</div></li>
+        </ul>
+
+        <h2 style="margin-top:18px;">Education</h2>
+        <ul class="timeline">
+          <li><strong>Master’s</strong> — (Write your program / school here)</li>
+          <li><strong>Bachelor’s</strong> — (Write your program / school here)</li>
+        </ul>
+
+        <h2 style="margin-top:18px;">Work Experience</h2>
+        <ul class="timeline">
+          <li><strong>PwC Singapore</strong> — Auditor / Senior Associate (Add years & key focus)</li>
+          <li><strong>Internships / Projects</strong> — (Optional)</li>
+        </ul>
+
+        <p class="small" style="margin-top:16px;">
+          If you’re reading this years later: keep going — and don’t forget why you started.
+        </p>
+      </div>
+
+      <!-- Right: Life Progress -->
+      <div class="card">
+        <h2>Life Progress (updated daily)</h2>
+        <div class="small">
+          Assumption: I will live to <strong>80</strong> years old.
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Current age</div>
+            <div class="value" id="ageText">—</div>
+          </div>
+          <div class="stat">
+            <div class="label">Life progress</div>
+            <div class="value" id="progressText">—</div>
+          </div>
+          <div class="stat">
+            <div class="label">Days lived</div>
+            <div class="value" id="daysLived">—</div>
+          </div>
+          <div class="stat">
+            <div class="label">Days remaining (to 80)</div>
+            <div class="value" id="daysLeft">—</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;">
+          <div class="small">Progress bar</div>
+          <div class="progress-wrap">
+            <div class="progress-bar" id="bar"></div>
+          </div>
+          <div class="note" id="targetText">—</div>
+        </div>
+
+        <div class="note">
+          Tip: this calculation uses your local time and updates every time the page loads.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">© Ernest's Journal</div>
+  </div>
+
+  <script>
+    // ===== Settings =====
+    const DOB = new Date(1996, 0, 19);       // 1996-01-19 (month is 0-based)
+    const TARGET_AGE = 80;
+    const targetDate = new Date(1996 + TARGET_AGE, 0, 19); // 2076-01-19
+
+    function daysBetween(a, b){
+      const msPerDay = 24 * 60 * 60 * 1000;
+      // Use noon to reduce DST edge cases
+      const aa = new Date(a.getFullYear(), a.getMonth(), a.getDate(), 12, 0, 0);
+      const bb = new Date(b.getFullYear(), b.getMonth(), b.getDate(), 12, 0, 0);
+      return Math.floor((bb - aa) / msPerDay);
+    }
+
+    function formatAge(dob, now){
+      let years = now.getFullYear() - dob.getFullYear();
+      let months = now.getMonth() - dob.getMonth();
+      let days = now.getDate() - dob.getDate();
+
+      if (days < 0) {
+        // borrow days from previous month
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        days += prevMonth;
+        months -= 1;
+      }
+      if (months < 0) {
+        months += 12;
+        years -= 1;
+      }
+      return { years, months, days };
+    }
+
+    function render(){
+      const now = new Date();
+
+      const lived = daysBetween(DOB, now);
+      const total = daysBetween(DOB, targetDate);
+      const left = Math.max(0, total - lived);
+
+      const pct = Math.min(100, Math.max(0, (lived / total) * 100));
+
+      const age = formatAge(DOB, now);
+
+      document.getElementById("ageText").textContent =
+        `${age.years}y ${age.months}m ${age.days}d`;
+
+      document.getElementById("progressText").textContent =
+        `${pct.toFixed(2)}%`;
+
+      document.getElementById("daysLived").textContent =
+        lived.toLocaleString();
+
+      document.getElementById("daysLeft").textContent =
+        left.toLocaleString();
+
+      document.getElementById("bar").style.width = `${pct.toFixed(2)}%`;
+
+      const targetStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
+      document.getElementById("targetText").textContent =
+        `Target date: ${targetStr} · Total days: ${total.toLocaleString()}`;
+    }
+
+    render();
+  </script>
+</body>
+</html>
 
