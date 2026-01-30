@@ -210,6 +210,8 @@
             <th style="width:120px;">Year</th>
             <th style="width:120px;">Days</th>
             <th>Details</th>
+<th style="width:260px;">Note</th>
+
           </tr>
         </thead>
         <tbody id="summaryBody"></tbody>
@@ -386,17 +388,24 @@
         ${phLabel ? `<div class="ph-tag">PH</div>` : ``}
       `;
 
-      cell.addEventListener("click", () => {
-        if(plans[key]){
-          delete plans[key];
-        }else{
-          const labelVal = labelInput.value.trim();
-          plans[key] = { label: labelVal };
-        }
-        savePlans(plans);
-        renderCalendar();
-        renderSummary();
-      });
+     cell.addEventListener("click", () => {
+  if(plans[key]){
+    // 已选：再点一次就取消
+    delete plans[key];
+  }else{
+    const labelVal = labelInput.value.trim();
+
+    // 新增：note（去哪里）
+    const noteVal = prompt("Note（去哪里/做什么，可留空）:", "") || "";
+
+    plans[key] = { label: labelVal, note: noteVal.trim() };
+  }
+
+  savePlans(plans);
+  renderCalendar();
+  renderSummary();
+});
+
 
       calendarEl.appendChild(cell);
     }
@@ -404,12 +413,93 @@
 
   // --- Summary table ---
   function renderSummary(){
-    const byYear = {};
-    Object.keys(plans).forEach(key => {
-      const y = key.slice(0,4);
-      if(!byYear[y]) byYear[y] = [];
-      byYear[y].push(key);
+  // group by year
+  const byYear = {};
+  Object.keys(plans).forEach(key => {
+    const y = key.slice(0,4);
+    if(!byYear[y]) byYear[y] = [];
+    byYear[y].push(key);
+  });
+
+  const years = Object.keys(byYear).sort((a,b)=>Number(a)-Number(b));
+  summaryBody.innerHTML = "";
+
+  if(years.length === 0){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="4" class="small">还没有选择任何假期日期。</td>`;
+    summaryBody.appendChild(tr);
+    return;
+  }
+
+  // helper: split into consecutive groups
+  function splitConsecutive(sortedKeys){
+    const groups = [];
+    let current = [];
+
+    function toDate(k){
+      const {y,m,d} = parseYmd(k);
+      return new Date(y, m-1, d);
+    }
+    function diffDays(a,b){
+      const ms = 24*60*60*1000;
+      return Math.round((toDate(b) - toDate(a)) / ms);
+    }
+
+    for(let i=0;i<sortedKeys.length;i++){
+      const k = sortedKeys[i];
+      if(current.length === 0){
+        current.push(k);
+        continue;
+      }
+      const prev = current[current.length-1];
+      if(diffDays(prev, k) === 1){
+        current.push(k);
+      }else{
+        groups.push(current);
+        current = [k];
+      }
+    }
+    if(current.length) groups.push(current);
+    return groups;
+  }
+
+  for(const y of years){
+    const keys = byYear[y].sort(); // YYYY-MM-DD string sort works
+    const groups = splitConsecutive(keys);
+
+    // 同一年可能多行：第 1 行显示 Year，后面行 Year 为空（更清爽）
+    groups.forEach((grp, idx) => {
+      const days = grp.length;
+
+      const details = grp.map(k => {
+        const label = plans[k]?.label?.trim();
+        if(label){
+          return `<span class="pill">${formatDateChinese(k)} · ${escapeHtml(label)}</span>`;
+        }
+        return `<span class="pill">${formatDateChinese(k)}</span>`;
+      }).join("");
+
+      // Note：把该段假期里所有 note 收集（去重）合并展示
+      const notesSet = new Set();
+      grp.forEach(k => {
+        const n = plans[k]?.note?.trim();
+        if(n) notesSet.add(n);
+      });
+      const noteText = Array.from(notesSet).join(" / ");
+      const noteHtml = noteText ? escapeHtml(noteText) : `<span class="small">—</span>`;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><b>${idx === 0 ? y : ""}</b></td>
+        <td>${days}</td>
+        <td>${details}</td>
+        <td>${noteHtml}</td>
+      `;
+      summaryBody.appendChild(tr);
     });
+  }
+}
+
 
     const years = Object.keys(byYear).sort((a,b)=>Number(a)-Number(b));
     summaryBody.innerHTML = "";
