@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Plans | Ernest's Journal</title>
+
+  <style>
+    :root{
+      --bg:#fbf7f0;
+      --card:#ffffffcc;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --line:#eadfce;
+      --link:#7a4e2d;
+      --selected:#f2e7d6;
+      --shadow: 0 6px 18px rgba(0,0,0,0.04);
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+      max-width:980px; margin:0 auto; padding:44px 18px;
+      background:var(--bg); color:var(--text); line-height:1.75;
+    }
+    header{ text-align:center; margin-bottom:18px; }
+    h1{ margin:0 0 8px 0; font-size:36px; letter-spacing:.2px; }
+    .nav{ text-align:center; margin:12px 0 24px; }
+    .nav a{
+      margin:0 10px; text-decoration:none; color:var(--muted);
+      padding:6px 10px; border-radius:10px;
+    }
+    .nav a:hover{ background:var(--selected); color:var(--link); }
+
+    .wrap{
+      background:var(--card); border:1px solid var(--line);
+      border-radius:18px; box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .controls{
+      display:flex; flex-wrap:wrap; gap:10px;
+      align-items:center; justify-content:space-between;
+      margin-bottom:12px;
+    }
+    .controls .left, .controls .right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    select, button, input{
+      border:1px solid var(--line);
+      background:#fff; border-radius:12px;
+      padding:8px 10px; font-size:14px;
+    }
+    button{ cursor:pointer; }
+    button:hover{ background:var(--selected); }
+    .hint{ color:var(--muted); font-size:13px; margin-top:8px; }
+
+    .calendar{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap:8px;
+    }
+    .dow{
+      font-weight:600; color:var(--muted);
+      text-align:center; padding:8px 0;
+    }
+    .cell{
+      background:#fff; border:1px solid var(--line);
+      border-radius:14px; padding:10px;
+      min-height:58px;
+      display:flex; flex-direction:column;
+      gap:6px;
+      cursor:pointer;
+      transition: transform .05s ease, background .15s ease;
+    }
+    .cell:hover{ background: #fff7ed; }
+    .cell:active{ transform: scale(0.99); }
+    .cell.muted{ opacity:.45; cursor:default; }
+    .cell.muted:hover{ background:#fff; }
+    .date{
+      font-weight:700;
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .tag{
+      font-size:11px; color:var(--link);
+      background:var(--selected);
+      border:1px solid var(--line);
+      padding:2px 8px; border-radius:999px;
+    }
+    .cell.selected{
+      background: var(--selected);
+      border-color:#d9c7ad;
+    }
+
+    .section{
+      margin-top:16px;
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    h2{ margin:0 0 10px 0; font-size:20px; }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:#fff;
+    }
+    th, td{
+      padding:10px 12px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      font-size:14px;
+    }
+    th{ background:#fff7ed; color:#4b3f35; }
+    tr:last-child td{ border-bottom:none; }
+    .small{ color:var(--muted); font-size:13px; }
+    .pill{
+      display:inline-block;
+      padding:2px 8px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      color:var(--muted);
+      font-size:12px;
+      margin-right:6px;
+      margin-top:6px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Plans</h1>
+    <div class="nav">
+      <a href="index.html">Home</a>
+      <a href="index.html#diary">Diary</a>
+      <a href="index.html#travel">Travel</a>
+      <a href="plans.html">Plans</a>
+      <a href="index.html#about">About</a>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="controls">
+      <div class="left">
+        <label class="small">Year</label>
+        <select id="yearSelect"></select>
+
+        <label class="small">Month</label>
+        <select id="monthSelect"></select>
+
+        <button id="todayBtn">Today</button>
+      </div>
+
+      <div class="right">
+        <input id="labelInput" placeholder="假期名称（可选）例如：Jordan Trip" />
+        <button id="clearMonthBtn">Clear This Month</button>
+        <button id="clearAllBtn">Clear All</button>
+      </div>
+    </div>
+
+    <div class="calendar" id="calendar"></div>
+
+    <div cl
