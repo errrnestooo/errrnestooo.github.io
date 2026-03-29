@@ -89,7 +89,6 @@
     }
     h2{ margin:0 0 10px 0; font-size:20px; }
 
-    /* Calendar */
     .calendar{
       margin-top:10px;
       display:grid;
@@ -132,7 +131,6 @@
       border-color:#d9c7ad;
     }
 
-    /* PH */
     .cell.is-ph{
       border-color:#d7b28a;
       background:#fff6e8;
@@ -155,7 +153,6 @@
       line-height:1.35;
     }
 
-    /* Tables */
     table{
       width:100%;
       border-collapse:collapse;
@@ -203,7 +200,6 @@
 
     .right-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
 
-    /* ✅ Saved Plans 可折叠：details/summary */
     .plan-details { margin-top: 6px; }
     .plan-details summary{
       cursor: pointer;
@@ -368,27 +364,55 @@ function getPublicHolidayLabel(dateObj){
 }
 
 /* =========
-   Storage
+   Storage / API
    ========= */
-const STORAGE_DRAFT = "ernest_plans_draft_v2";  // { "YYYY-MM-DD": true }
-const STORAGE_SAVED = "ernest_plans_saved_v2";  // [ {id,name,note,dates[]} ]
+const API_URL = "https://cool-water-2111.ydf756vf8h.workers.dev";
+const STORAGE_DRAFT = "ernest_plans_draft_v2";
 
-function loadJson(key, fallback){
+async function loadSavedPlansFromServer(){
   try{
-    return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+    const res = await fetch(API_URL);
+    if(!res.ok) throw new Error("Failed to load saved plans");
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
   }catch(e){
-    return fallback;
+    console.error(e);
+    return [];
   }
 }
-function saveJson(key, data){
-  localStorage.setItem(key, JSON.stringify(data));
+
+async function saveSavedPlansToServer(data){
+  try{
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+    if(!res.ok) throw new Error("Failed to save saved plans");
+  }catch(e){
+    console.error(e);
+    alert("保存失败，服务器没有成功写入。");
+  }
+}
+
+function loadDraft(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_DRAFT) || "{}");
+  }catch(e){
+    return {};
+  }
+}
+function saveDraft(){
+  localStorage.setItem(STORAGE_DRAFT, JSON.stringify(draftDates));
 }
 
 /* =========
    State
    ========= */
-let draftDates = loadJson(STORAGE_DRAFT, {});
-let savedPlans = loadJson(STORAGE_SAVED, []);
+let draftDates = loadDraft();
+let savedPlans = [];
 let lastClickedKey = null;
 let editingPlanId = null;
 
@@ -522,7 +546,7 @@ function renderCalendar(){
         else draftDates[key] = true;
         lastClickedKey = key;
       }
-      saveJson(STORAGE_DRAFT, draftDates);
+      saveDraft();
       updateDraftHint();
       renderCalendar();
       renderDraftPreview();
@@ -568,7 +592,7 @@ function updateDraftHint(){
 }
 
 /* ==========
-   ✅ Saved plans render（折叠关键在这里）
+   Saved plans render
    ========== */
 function renderSavedPlans(){
   plansBody.innerHTML = "";
@@ -591,7 +615,6 @@ function renderSavedPlans(){
     const pills = dates.map(k => `<span class="pill">${formatDateChinese(k)}</span>`).join("");
     const note = p.note ? escapeHtml(p.note) : `<span class="small">—</span>`;
 
-    // ✅ 默认收起：details 不加 open
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td><b>${escapeHtml(p.name || "")}</b></td>
@@ -616,7 +639,6 @@ function renderSavedPlans(){
     `;
     plansBody.appendChild(tr);
 
-    // 让 summary 文案自动切换
     const detailsEl = tr.querySelector("details.plan-details");
     const summaryText = detailsEl.querySelector("summary span:last-child");
     detailsEl.addEventListener("toggle", () => {
@@ -636,7 +658,7 @@ function renderSavedPlans(){
 
       draftDates = {};
       (plan.dates || []).forEach(d => draftDates[d] = true);
-      saveJson(STORAGE_DRAFT, draftDates);
+      saveDraft();
 
       savePlanBtn.textContent = "Update Plan";
       cancelEditBtn.style.display = "inline-block";
@@ -658,14 +680,14 @@ function renderSavedPlans(){
   });
 
   plansBody.querySelectorAll("button[data-del]").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const id = btn.getAttribute("data-del");
       const plan = savedPlans.find(p => p.id === id);
       const name = plan?.name || "this plan";
       if(!confirm(`确定删除：${name} ？`)) return;
 
       savedPlans = savedPlans.filter(p => p.id !== id);
-      saveJson(STORAGE_SAVED, savedPlans);
+      await saveSavedPlansToServer(savedPlans);
 
       if(editingPlanId === id){
         exitEditMode(true);
@@ -751,7 +773,7 @@ function exitEditMode(clearDraft){
   cancelEditBtn.style.display = "none";
   if(clearDraft){
     draftDates = {};
-    saveJson(STORAGE_DRAFT, draftDates);
+    saveDraft();
     planNameInput.value = "";
     planNoteInput.value = "";
     lastClickedKey = null;
@@ -780,7 +802,7 @@ clearMonthBtn.addEventListener("click", () => {
   Object.keys(draftDates).forEach(k => {
     if(k.startsWith(prefix)) delete draftDates[k];
   });
-  saveJson(STORAGE_DRAFT, draftDates);
+  saveDraft();
   renderCalendar();
   renderDraftPreview();
 });
@@ -788,7 +810,7 @@ clearMonthBtn.addEventListener("click", () => {
 clearDraftBtn.addEventListener("click", () => {
   if(!confirm("确定清空 Draft（所有月份）吗？Saved Plans 不会受影响。")) return;
   draftDates = {};
-  saveJson(STORAGE_DRAFT, draftDates);
+  saveDraft();
   lastClickedKey = null;
   renderCalendar();
   renderDraftPreview();
@@ -798,7 +820,7 @@ cancelEditBtn.addEventListener("click", () => {
   exitEditMode(true);
 });
 
-savePlanBtn.addEventListener("click", () => {
+savePlanBtn.addEventListener("click", async () => {
   const name = planNameInput.value.trim();
   if(!name){
     alert("请先填写 Plan Name（例如：Jordan Trip）");
@@ -822,7 +844,7 @@ savePlanBtn.addEventListener("click", () => {
       return;
     }
     savedPlans[idx] = { ...savedPlans[idx], name, note, dates };
-    saveJson(STORAGE_SAVED, savedPlans);
+    await saveSavedPlansToServer(savedPlans);
 
     exitEditMode(true);
     renderSavedPlans();
@@ -833,10 +855,10 @@ savePlanBtn.addEventListener("click", () => {
 
   const plan = { id:newId(), name, note, dates };
   savedPlans.push(plan);
-  saveJson(STORAGE_SAVED, savedPlans);
+  await saveSavedPlansToServer(savedPlans);
 
   draftDates = {};
-  saveJson(STORAGE_DRAFT, draftDates);
+  saveDraft();
   lastClickedKey = null;
   planNameInput.value = "";
   planNoteInput.value = "";
@@ -852,11 +874,16 @@ savePlanBtn.addEventListener("click", () => {
 /* ==========
    First render
    ========== */
-updateDraftHint();
-renderCalendar();
-renderDraftPreview();
-renderSavedPlans();
-renderYearlySummary();
+async function initPage(){
+  savedPlans = await loadSavedPlansFromServer();
+  updateDraftHint();
+  renderCalendar();
+  renderDraftPreview();
+  renderSavedPlans();
+  renderYearlySummary();
+}
+
+initPage();
 </script>
 
 </body>
