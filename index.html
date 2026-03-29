@@ -3,71 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <title>Ernest's Journal — A Life in Progress</title>
- <style>
-  :root{
-    --bg: #fbf7f0;        /* 奶油暖白 */
-    --card: #ffffffcc;     /* 半透明白卡片 */
-    --text: #1f1f1f;       /* 深灰黑 */
-    --muted: #6b5f54;      /* 暖灰 */
-    --line: #eadfce;       /* 暖色分割线 */
-    --link: #7a4e2d;       /* 暖棕 */
-  }
+  <style>
+    :root{
+      --bg: #fbf7f0;
+      --card: #ffffffcc;
+      --text: #1f1f1f;
+      --muted: #6b5f54;
+      --line: #eadfce;
+      --link: #7a4e2d;
+    }
 
-  body{
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "PingFang SC","Microsoft YaHei", sans-serif;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 56px 22px;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.8;
-  }
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, "PingFang SC","Microsoft YaHei", sans-serif;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 22px;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+    }
 
-  h1{
-    text-align: center;
-    letter-spacing: 0.5px;
-    margin: 0 0 18px 0;
-    font-size: 42px;
-  }
+    h1{
+      text-align: center;
+      letter-spacing: 0.5px;
+      margin: 0 0 18px 0;
+      font-size: 42px;
+    }
 
-  .nav{
-    text-align: center;
-    margin-bottom: 34px;
-  }
+    .nav{
+      text-align: center;
+      margin-bottom: 34px;
+    }
 
-  .nav a{
-    margin: 0 12px;
-    text-decoration: none;
-    color: var(--muted);
-    padding: 6px 8px;
-    border-radius: 10px;
-    transition: background .15s ease, color .15s ease;
-  }
+    .nav a{
+      margin: 0 12px;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 6px 8px;
+      border-radius: 10px;
+      transition: background .15s ease, color .15s ease;
+    }
 
-  .nav a:hover{
-    background: #f2e7d6;
-    color: var(--link);
-  }
+    .nav a:hover{
+      background: #f2e7d6;
+      color: var(--link);
+    }
 
-  .post{
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    padding: 22px 22px;
-    margin: 18px 0;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-  }
+    .post{
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px 22px;
+      margin: 18px 0;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+      scroll-margin-top: 24px;
+    }
 
-  .post h2{
-    margin: 0 0 10px 0;
-    font-size: 26px;
-  }
+    .post h2{
+      margin: 0 0 10px 0;
+      font-size: 26px;
+    }
 
-  .post p{
-    margin: 0;
-    color: #3a342f;
-  }
-</style>
+    .post p{
+      margin: 0 0 12px 0;
+      color: #3a342f;
+    }
+  </style>
 </head>
 <body>
 
@@ -81,19 +82,32 @@
   <a href="about.html">About</a>
 </div>
 
-<div class="post">
+<div class="post" id="post-2026-03-29">
+  <h2>2026-03-29 · Building My Website</h2>
+  <p>
+    今天终于把我的 Plans 页面做成了一个真正可以同步的数据系统。
+    不再只是本地保存，而是可以让朋友也看到我的计划。
+  </p>
+  <p>
+    从 GitHub Pages 到 Cloudflare Worker，再到 KV 数据库，
+    这是我第一次完整地搭建一个“前后端分离”的网站。
+  </p>
+</div>
+
+<div class="post" id="post-2026-01-30">
   <h2>2026-01-30 · Hello World</h2>
   <p>
     今天正式开始用 songyangao.com 记录人生。
     希望十年后回看，不会后悔今天的决定。
   </p>
   <p>
-    Ernest 的网站会永远保存下去 与你同行
+    Ernest 的网站会永远保存下去，与你同行。
   </p>
-  <p> 
+  <p>
     30 Jan 2026
   </p>
 </div>
+
 <script src="https://giscus.app/client.js"
         data-repo="errrnestooo/errrnestooo.github.io"
         data-repo-id="R_kgDORE4cDQ"
@@ -109,5 +123,6 @@
         crossorigin="anonymous"
         async>
 </script>
+
 </body>
 </html>
