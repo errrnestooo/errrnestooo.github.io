@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Stories from Ernest's Journal: reflective travel writing, fiction, diary fragments, and road novel sketches.">
+  <meta property="og:title" content="Stories | Ernest's Journal">
+  <meta property="og:description" content="A literary corner for long-form stories, road notes, and reflective essays.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://songyangao.com/stories.html">
+  <title>Stories | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    :root{
+      --bg:#fbf7f0;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --border:#eadfce;
+      --accent:#7a4e2d;
+      --selected:#f2e7d6;
+      --shadow:0 10px 25px rgba(0,0,0,.055);
+    }
+
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.85;
+    }
+
+    .container{
+      max-width:920px;
+      margin:0 auto;
+      padding:54px 20px 96px;
+    }
+
+    header{
+      text-align:center;
+      margin-bottom:38px;
+    }
+
+    h1{
+      margin:0 0 10px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:46px;
+      font-weight:500;
+      letter-spacing:.2px;
+    }
+
+    .subtitle{
+      max-width:560px;
+      margin:0 auto;
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .nav{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:26px 0 0;
+    }
+
+    .nav a{
+      text-decoration:none;
+      color:var(--muted);
+      padding:6px 10px;
+      border-radius:12px;
+    }
+
+    .nav a:hover,
+    .nav a.active{
+      background:var(--selected);
+      color:var(--accent);
+    }
+
+    .story-list{
+      display:grid;
+      gap:22px;
+    }
+
+    .story-card{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:28px;
+      align-items:start;
+      padding:28px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:rgba(255,255,255,.78);
+      box-shadow:var(--shadow);
+      text-decoration:none;
+      color:var(--text);
+    }
+
+    .story-card:hover{
+      border-color:#d9c7ad;
+      transform:translateY(-1px);
+      transition:transform .18s ease,border-color .18s ease;
+    }
+
+    .story-kicker{
+      color:var(--accent);
+      font-size:12px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .story-card h2{
+      margin:8px 0 10px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-weight:500;
+      font-size:30px;
+      line-height:1.22;
+    }
+
+    .excerpt{
+      margin:0;
+      color:#3a342f;
+      max-width:620px;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:16px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .tag{
+      border:1px solid var(--border);
+      background:#fffaf3;
+      color:var(--accent);
+      border-radius:999px;
+      padding:2px 8px;
+    }
+
+    .story-date{
+      color:var(--muted);
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:15px;
+      white-space:nowrap;
+      padding-top:8px;
+    }
+
+    .note{
+      margin-top:34px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:center;
+    }
+
+    @media (max-width:700px){
+      .container{ padding:38px 16px 82px; }
+      h1{ font-size:38px; }
+      .story-card{
+        grid-template-columns:1fr;
+        gap:8px;
+        padding:22px;
+      }
+      .story-card h2{ font-size:27px; }
+      .story-date{ padding-top:0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="fade-in">
+      <h1>Stories</h1>
+      <p class="subtitle">
+        Longer pieces from the same archive: travel fragments, imagined roads, diary-shaped essays,
+        and small attempts to keep a human voice on the page.
+      </p>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="diary.html">Diary</a>
+        <a href="stories.html" class="active">Stories</a>
+        <a href="travel.html">Travel</a>
+        <a href="plans.html">Plans</a>
+        <a href="about.html">About</a>
+      </nav>
+    </header>
+
+    <main class="story-list">
+      <a class="story-card fade-in" href="stories/road-to-petra.html">
+        <div>
+          <div class="story-kicker">Road Novel</div>
+          <h2>The Road Before Petra</h2>
+          <p class="excerpt">
+            A desert road, a rental car, and the strange quiet before arriving at a place that has already lived
+            inside your imagination for years.
+          </p>
+          <div class="meta">
+            <span class="tag">Travel</span>
+            <span class="tag">Road Novel</span>
+            <span>6 min read</span>
+          </div>
+        </div>
+        <div class="story-date">2026</div>
+      </a>
+
+      <a class="story-card fade-in" href="stories/rain-at-tanjong-pagar.html">
+        <div>
+          <div class="story-kicker">Diary Fiction</div>
+          <h2>Rain at Tanjong Pagar</h2>
+          <p class="excerpt">
+            In the hour after work, the city becomes reflective: glass towers, wet pavement,
+            and one small thought that follows a person home.
+          </p>
+          <div class="meta">
+            <span class="tag">Fiction</span>
+            <span class="tag">Diary</span>
+            <span>4 min read</span>
+          </div>
+        </div>
+        <div class="story-date">2026</div>
+      </a>
+    </main>
+
+    <p class="note">Future stories can be added as simple article pages or generated later from markdown-style entries.</p>
+  </div>
+
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

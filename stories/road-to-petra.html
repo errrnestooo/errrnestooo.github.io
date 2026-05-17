@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The Road Before Petra, a reflective road story from Ernest's Journal.">
+  <meta property="og:title" content="The Road Before Petra | Ernest's Journal">
+  <meta property="og:description" content="A desert road, a rental car, and the quiet before Petra.">
+  <meta property="og:type" content="article">
+  <title>The Road Before Petra | Ernest's Journal</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <style>
+    :root{
+      --bg:#fbf7f0;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --border:#eadfce;
+      --accent:#7a4e2d;
+      --selected:#f2e7d6;
+    }
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+      line-height:1.9;
+    }
+
+    .reading-progress{
+      position:fixed;
+      top:0;
+      left:0;
+      height:3px;
+      width:0%;
+      z-index:50;
+      background:linear-gradient(90deg,#c98b57,#7a4e2d);
+    }
+
+    .reader{
+      max-width:760px;
+      margin:0 auto;
+      padding:54px 22px 96px;
+    }
+
+    .back{
+      color:var(--accent);
+      text-decoration:none;
+      font-size:14px;
+    }
+
+    article{
+      margin-top:34px;
+      padding:34px 0;
+    }
+
+    h1{
+      margin:0 0 14px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:48px;
+      font-weight:500;
+      line-height:1.14;
+      letter-spacing:.1px;
+    }
+
+    .deck{
+      color:var(--muted);
+      font-size:18px;
+      margin:0 0 22px;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:44px;
+    }
+
+    .tag{
+      border:1px solid var(--border);
+      background:#fffaf3;
+      color:var(--accent);
+      border-radius:999px;
+      padding:2px 8px;
+    }
+
+    .story-body{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:20px;
+      color:#2b2621;
+    }
+
+    .story-body p{
+      margin:0 0 28px;
+    }
+
+    .story-body p:first-child::first-letter{
+      float:left;
+      font-size:58px;
+      line-height:.9;
+      padding-right:8px;
+      color:var(--accent);
+    }
+
+    .story-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      margin-top:54px;
+      padding-top:22px;
+      border-top:1px solid var(--border);
+      flex-wrap:wrap;
+    }
+
+    .story-nav a{
+      color:var(--accent);
+      text-decoration:none;
+    }
+
+    body.dark-mode .story-body{ color:#f2e8dc; }
+
+    @media (max-width:700px){
+      .reader{ padding:38px 18px 84px; }
+      h1{ font-size:38px; }
+      .deck{ font-size:16px; }
+      .story-body{ font-size:18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="reading-progress" id="readingProgress"></div>
+  <main class="reader fade-in">
+    <a class="back" href="../stories.html">← Stories</a>
+
+    <article>
+      <h1>The Road Before Petra</h1>
+      <p class="deck">A desert road, a rental car, and the quiet before arriving somewhere ancient.</p>
+      <div class="meta">
+        <span class="tag">Travel</span>
+        <span class="tag">Road Novel</span>
+        <span>6 min read</span>
+      </div>
+
+      <section class="story-body">
+        <p>The road to Petra did not announce itself. It did not rise like a curtain or arrive with music. It simply continued, pale and patient, through a country of stone.</p>
+        <p>I had expected the desert to feel empty. Instead, it felt occupied by time. Every hill seemed to be remembering something, every turn in the road carrying the pressure of footsteps older than any map in the car.</p>
+        <p>The rental car made a small domestic sound against the wide land. Air-conditioning, turn signal, the soft complaint of tires. These ordinary noises became comforting because everything outside the window was too large to speak to directly.</p>
+        <p>Before Petra, there is a strange hour when you are close enough to believe in arrival but still far enough to belong to the road. I think travel lives there most honestly: not in the landmark, not in the photograph, but in the unfinished approach.</p>
+        <p>Later, there would be stone walls and narrow passages and the first glimpse of a facade glowing through shadow. But before all that, there was this: a warm afternoon, a bottle of water rolling under the passenger seat, and the feeling that the world had briefly become older than fear.</p>
+      </section>
+
+      <nav class="story-nav">
+        <span></span>
+        <a href="rain-at-tanjong-pagar.html">Next story: Rain at Tanjong Pagar →</a>
+      </nav>
+    </article>
+  </main>
+
+  <script>
+    const progress = document.getElementById("readingProgress");
+    window.addEventListener("scroll", () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      progress.style.width = `${pct}%`;
+    });
+  </script>
+  <script src="../assets/js/site.js"></script>
+</body>
+</html>
