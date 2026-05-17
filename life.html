@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ernest's Journal 的新加坡生活仪表盘。">
+  <meta property="og:title" content="生活 | Ernest's Journal">
+  <meta property="og:description" content="一些安静的个人指标，用来观察生活如何累积。">
+  <meta property="og:type" content="website">
+  <title>生活 | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <main class="journal-page">
+    <nav class="nav">
+      <a href="index.html">首页</a><a href="diary.html">日记</a><a href="stories.html">小说</a><a href="field-notes.html">札记</a><a href="now.html">近况</a><a href="timeline.html">时间线</a><a href="travel.html">旅行</a><a href="travel-map.html">地图</a><a href="library.html">书影音</a><a href="photos.html">照片</a><a href="life.html" class="active">生活</a><a href="plans.html">计划</a><a href="about.html">关于</a>
+    </nav>
+    <header class="journal-hero fade-in">
+      <div class="journal-kicker">Personal operating system</div>
+      <h1 data-i18n="life.title">新加坡生活仪表盘</h1>
+      <p data-i18n="life.subtitle">一些安静的个人指标，用来观察生活如何累积。</p>
+    </header>
+    <section class="journal-grid">
+      <article class="journal-card"><h2 data-i18n="life.days">在新加坡的天数</h2><div class="metric-value" id="sgDays">-</div><div class="metric-bar"><span style="width:72%"></span></div></article>
+      <article class="journal-card"><h2 data-i18n="life.countries">去过的国家</h2><div class="metric-value">9</div><div class="metric-bar"><span style="width:45%"></span></div></article>
+      <article class="journal-card"><h2 data-i18n="life.articles">写下的文章</h2><div class="metric-value">8</div><div class="metric-bar"><span style="width:36%"></span></div></article>
+      <article class="journal-card"><h2 data-i18n="life.blood">献血次数</h2><div class="metric-value">1</div><div class="metric-bar"><span style="width:12%"></span></div></article>
+      <article class="journal-card"><h2 data-i18n="life.cycling">骑行距离</h2><div class="metric-value">--</div><div class="metric-bar"><span style="width:28%"></span></div></article>
+      <article class="journal-card"><h2 data-i18n="life.scaq">SCAQ 进度</h2><div class="metric-value">进行中</div><div class="metric-bar"><span style="width:42%"></span></div></article>
+      <article class="journal-card"><h2 data-i18n="life.books">今年读过的书</h2><div class="metric-value">--</div><div class="metric-bar"><span style="width:30%"></span></div></article>
+    </section>
+    <footer class="archive-footer" data-i18n="footer">Ernest's Journal - 在新加坡缓慢建造的个人档案</footer>
+  </main>
+  <script src="assets/js/i18n.js"></script>
+  <script>
+    const start = new Date(2019, 6, 1);
+    const now = new Date();
+    const days = Math.floor((new Date(now.getFullYear(), now.getMonth(), now.getDate()) - start) / 86400000);
+    document.getElementById("sgDays").textContent = days.toLocaleString();
+  </script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

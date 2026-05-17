@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ernest's Journal 的摄影网格。">
+  <meta property="og:title" content="照片 | Ernest's Journal">
+  <meta property="og:description" content="一些孤独但温暖的画面。">
+  <meta property="og:type" content="website">
+  <title>照片 | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <main class="journal-page">
+    <nav class="nav">
+      <a href="index.html">首页</a><a href="diary.html">日记</a><a href="stories.html">小说</a><a href="field-notes.html">札记</a><a href="now.html">近况</a><a href="timeline.html">时间线</a><a href="travel.html">旅行</a><a href="travel-map.html">地图</a><a href="library.html">书影音</a><a href="photos.html" class="active">照片</a><a href="life.html">生活</a><a href="plans.html">计划</a><a href="about.html">关于</a>
+    </nav>
+    <header class="journal-hero fade-in">
+      <div class="journal-kicker">Warm solitude</div>
+      <h1 data-i18n="photos.title">照片</h1>
+      <p data-i18n="photos.subtitle">一些孤独但温暖的画面：街道、机场、沙漠、新加坡、夜晚和移动中的光。</p>
+    </header>
+    <section class="photo-grid">
+      <figure class="photo-tile" style="--photo-color:#c9a27a;"><div class="photo-art"></div><figcaption data-i18n="photos.streets">街道</figcaption></figure>
+      <figure class="photo-tile" style="--photo-color:#9fa9ad;"><div class="photo-art"></div><figcaption data-i18n="photos.airports">机场</figcaption></figure>
+      <figure class="photo-tile" style="--photo-color:#b98655;"><div class="photo-art"></div><figcaption data-i18n="photos.desert">沙漠</figcaption></figure>
+      <figure class="photo-tile" style="--photo-color:#8aa08f;"><div class="photo-art"></div><figcaption data-i18n="photos.singapore">新加坡</figcaption></figure>
+      <figure class="photo-tile" style="--photo-color:#3d3733;"><div class="photo-art"></div><figcaption data-i18n="photos.night">夜晚</figcaption></figure>
+      <figure class="photo-tile" style="--photo-color:#b7a17d;"><div class="photo-art"></div><figcaption data-i18n="photos.motion">移动</figcaption></figure>
+    </section>
+  </main>
+  <div class="lightbox" id="lightbox"><div class="lightbox-content"><div class="photo-art" id="lightboxArt"></div></div></div>
+  <script src="assets/js/i18n.js"></script>
+  <script>
+    const lightbox = document.getElementById("lightbox");
+    const art = document.getElementById("lightboxArt");
+    document.querySelectorAll(".photo-tile").forEach((tile) => {
+      tile.addEventListener("click", () => {
+        art.style.setProperty("--photo-color", tile.style.getPropertyValue("--photo-color"));
+        lightbox.classList.add("is-open");
+      });
+    });
+    lightbox.addEventListener("click", () => lightbox.classList.remove("is-open"));
+  </script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

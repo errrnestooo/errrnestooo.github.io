@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ernest's Journal 的互动世界地图和旅行笔记。">
+  <meta property="og:title" content="世界地图 | Ernest's Journal">
+  <meta property="og:description" content="那些把生活坐标悄悄改写过的国家。">
+  <meta property="og:type" content="website">
+  <title>世界地图 | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+  <main class="journal-page">
+    <nav class="nav">
+      <a href="index.html">首页</a><a href="diary.html">日记</a><a href="stories.html">小说</a><a href="field-notes.html">札记</a><a href="now.html">近况</a><a href="timeline.html">时间线</a><a href="travel.html">旅行</a><a href="travel-map.html" class="active">地图</a><a href="library.html">书影音</a><a href="photos.html">照片</a><a href="life.html">生活</a><a href="plans.html">计划</a><a href="about.html">关于</a>
+    </nav>
+    <header class="journal-hero fade-in">
+      <div class="journal-kicker">Cinematic travel archive</div>
+      <h1 data-i18n="map.title">世界地图</h1>
+      <p data-i18n="map.subtitle">那些把生活坐标悄悄改写过的国家。</p>
+    </header>
+    <section class="map-stage fade-in" aria-label="Visited countries map">
+      <button class="map-pin active" style="left:74%;top:58%;" data-country="Singapore">Singapore</button>
+      <button class="map-pin" style="left:57%;top:47%;" data-country="Oman">Oman</button>
+      <button class="map-pin" style="left:51%;top:42%;" data-country="Jordan">Jordan</button>
+      <button class="map-pin" style="left:49%;top:39%;" data-country="Israel">Israel</button>
+      <button class="map-pin" style="left:47%;top:34%;" data-country="Turkey">Turkey</button>
+      <button class="map-pin" style="left:61%;top:33%;" data-country="Uzbekistan">Uzbekistan</button>
+      <button class="map-pin" style="left:54%;top:45%;" data-country="Bahrain">Bahrain</button>
+      <button class="map-pin" style="left:79%;top:52%;" data-country="Thailand">Thailand</button>
+      <button class="map-pin" style="left:82%;top:78%;" data-country="Australia">Australia</button>
+    </section>
+    <p class="journal-hero" style="margin-top:-6px;" data-i18n="map.hint">点击国家卡片，查看一条短短的路上笔记。</p>
+    <section class="journal-grid" id="countryCards"></section>
+  </main>
+  <script src="assets/js/i18n.js"></script>
+  <script>
+    const countries = [
+      {name:"Singapore", year:"2019-", route:"Singapore", zh:"工作、学习、生活在这里慢慢叠起来。", en:"Work, study, and daily life slowly accumulating here."},
+      {name:"Oman", year:"2025", route:"Muscat - Nizwa", zh:"黎明前的海风，让城市显得格外克制。", en:"Sea wind before dawn made the city feel beautifully restrained."},
+      {name:"Jordan", year:"2025", route:"Amman - Petra - Wadi Rum", zh:"红色岩石和漫长公路，让时间变得可触摸。", en:"Red stone and long roads made time feel almost touchable."},
+      {name:"Israel", year:"2025", route:"Jerusalem - Tel Aviv", zh:"冬天的石头、安静的街和复杂的历史。", en:"Winter stone, quiet streets, and history with too many layers."},
+      {name:"Turkey", year:"2024", route:"Istanbul", zh:"海峡把大陆分开，也把许多想法接在一起。", en:"The strait separates continents and connects many thoughts."},
+      {name:"Uzbekistan", year:"2024", route:"Tashkent - Samarkand", zh:"夜车、蓝色穹顶，以及中亚干燥的风。", en:"Night buses, blue domes, and the dry wind of Central Asia."},
+      {name:"Bahrain", year:"2025", route:"Manama", zh:"一个小岛国家，带着海湾夜晚的微光。", en:"A small island country carrying the low glow of the Gulf night."},
+      {name:"Thailand", year:"2023", route:"Bangkok", zh:"热、拥挤、轻松，也很适合短暂逃离。", en:"Hot, crowded, loose around the edges, and good for a brief escape."},
+      {name:"Australia", year:"2023", route:"Sydney - Melbourne", zh:"南半球的光让城市显得更开阔。", en:"Southern light made the cities feel wider."}
+    ];
+    const cards = document.getElementById("countryCards");
+    function renderCards(active = "Singapore"){
+      cards.innerHTML = countries.map((country) => {
+        const lang = window.ErnestI18n?.lang?.() || "zh";
+        return `<article class="journal-card ${country.name === active ? "active" : ""}">
+          <div class="journal-meta">${country.year} / ${country.route}</div>
+          <h2>${country.name}</h2>
+          <p>${country[lang]}</p>
+        </article>`;
+      }).join("");
+    }
+    document.querySelectorAll(".map-pin").forEach((pin) => {
+      pin.addEventListener("click", () => {
+        document.querySelectorAll(".map-pin").forEach((item) => item.classList.remove("active"));
+        pin.classList.add("active");
+        renderCards(pin.dataset.country);
+      });
+    });
+    renderCards();
+    window.addEventListener("ernest:languagechange", () => renderCards(document.querySelector(".map-pin.active")?.dataset.country || "Singapore"));
+  </script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
