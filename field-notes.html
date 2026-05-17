@@ -3,44 +3,186 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ernest's Journal 的 Field Notes：旅行、城市和夜晚的短章。">
+  <meta name="description" content="Ernest's Journal Field Notes: road notes, cities, and memory.">
   <meta property="og:title" content="Field Notes | Ernest's Journal">
-  <meta property="og:description" content="路上的短章，城市边缘的声音，以及还没有长成小说的记忆。">
+  <meta property="og:description" content="Road notes, city edges, and memories before they become stories.">
   <meta property="og:type" content="website">
   <title>Field Notes | Ernest's Journal</title>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    :root{
+      --bg:#fbf7f0;
+      --card:#ffffffcc;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --line:#eadfce;
+      --link:#7a4e2d;
+      --selected:#f2e7d6;
+    }
+
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+      max-width:980px;
+      margin:0 auto;
+      padding:56px 22px 80px;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.8;
+    }
+
+    .nav{
+      text-align:center;
+      margin-bottom:34px;
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .nav a{
+      margin:0;
+      text-decoration:none;
+      color:var(--muted);
+      padding:6px 8px;
+      border-radius:10px;
+      transition:background .15s ease,color .15s ease;
+    }
+
+    .nav a:hover,
+    .nav a.active{
+      background:var(--selected);
+      color:var(--link);
+    }
+
+    .notes-hero{
+      text-align:center;
+      max-width:720px;
+      margin:0 auto 38px;
+    }
+
+    .notes-kicker{
+      color:var(--muted);
+      font-size:13px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      margin:10px 0 14px;
+      font-size:clamp(36px,5vw,56px);
+      letter-spacing:0;
+    }
+
+    .notes-hero p{
+      margin:0 auto;
+      max-width:640px;
+      color:var(--muted);
+    }
+
+    .notes-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:18px;
+    }
+
+    .note-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 10px 25px rgba(0,0,0,.05);
+      transition:transform .18s ease,border-color .18s ease;
+    }
+
+    .note-card:hover{
+      transform:translateY(-3px);
+      border-color:#d9c8b4;
+    }
+
+    .note-meta{
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:10px;
+    }
+
+    .note-card h2{
+      margin:0 0 10px;
+      font-size:24px;
+    }
+
+    .note-card p{
+      margin:0;
+      color:#3a342f;
+    }
+
+    .page-end{
+      margin-top:46px;
+      color:var(--muted);
+      text-align:center;
+      font-size:12px;
+    }
+
+    @media (max-width:700px){
+      body{ padding:34px 16px 70px; }
+      .notes-grid{ grid-template-columns:1fr; }
+      .note-card{ padding:18px; }
+    }
+  </style>
 </head>
 <body>
-  <main class="journal-page">
-    <nav class="nav">
-      <a href="index.html">首页</a>
-      <a href="diary.html">日记</a>
-      <a href="stories.html">小说</a>
-      <a href="field-notes.html" class="active">札记</a>
-      <a href="now.html">近况</a>
-      <a href="timeline.html">时间线</a>
-      <a href="travel.html">旅行</a>
-      <a href="travel-map.html">地图</a>
-      <a href="library.html">书影音</a>
-      <a href="photos.html">照片</a>
-      <a href="life.html">生活</a>
-      <a href="plans.html">计划</a>
-      <a href="about.html">关于</a>
-    </nav>
-    <header class="journal-hero fade-in">
-      <div class="journal-kicker">Modern road literature</div>
-      <h1 data-i18n="notes.title">Field Notes</h1>
-      <p data-i18n="notes.subtitle">路上的短章，城市边缘的声音，以及一些还没有长成小说的记忆。</p>
+  <div class="nav">
+    <a href="index.html">&#x9996;&#x9875;</a>
+    <a href="diary.html">&#x65E5;&#x8BB0;</a>
+    <a href="stories.html">&#x5C0F;&#x8BF4;</a>
+    <a href="field-notes.html" class="active">&#x672D;&#x8BB0;</a>
+    <a href="now.html">&#x8FD1;&#x51B5;</a>
+    <a href="timeline.html">&#x65F6;&#x95F4;&#x7EBF;</a>
+    <a href="travel.html">&#x65C5;&#x884C;</a>
+    <a href="travel-map.html">&#x5730;&#x56FE;</a>
+    <a href="library.html">&#x4E66;&#x5F71;&#x97F3;</a>
+    <a href="photos.html">&#x7167;&#x7247;</a>
+    <a href="life.html">&#x751F;&#x6D3B;</a>
+    <a href="plans.html">&#x8BA1;&#x5212;</a>
+    <a href="about.html">&#x5173;&#x4E8E;</a>
+  </div>
+
+  <main>
+    <header class="notes-hero fade-in">
+      <div class="notes-kicker">Modern road literature</div>
+      <h1>Field Notes</h1>
+      <p>&#x8DEF;&#x4E0A;&#x7684;&#x77ED;&#x7AE0;&#xFF0C;&#x57CE;&#x5E02;&#x8FB9;&#x7F18;&#x7684;&#x58F0;&#x97F3;&#xFF0C;&#x4EE5;&#x53CA;&#x4E00;&#x4E9B;&#x8FD8;&#x6CA1;&#x6709;&#x957F;&#x6210;&#x5C0F;&#x8BF4;&#x7684;&#x8BB0;&#x5FC6;&#x3002;</p>
     </header>
-    <section class="journal-grid two">
-      <article class="journal-card"><div class="journal-meta">Uzbekistan / night road</div><h2 data-i18n="notes.note1.title">去撒马尔罕的夜车</h2><p data-i18n="notes.note1.body">车窗像一块黑色玻璃，把中亚的夜色和自己的脸叠在一起。</p></article>
-      <article class="journal-card"><div class="journal-meta">Oman / coast</div><h2 data-i18n="notes.note2.title">黎明前的马斯喀特</h2><p data-i18n="notes.note2.body">城市还没有完全醒来，海边的风先替它说话。</p></article>
-      <article class="journal-card"><div class="journal-meta">Israel / winter</div><h2 data-i18n="notes.note3.title">冬天的耶路撒冷</h2><p data-i18n="notes.note3.body">石头在冷空气里显得更古老，人群却像日常一样经过。</p></article>
-      <article class="journal-card"><div class="journal-meta">Singapore / after work</div><h2 data-i18n="notes.note4.title">丹戎巴葛，凌晨一点</h2><p data-i18n="notes.note4.body">办公楼安静下来以后，街道才开始露出自己的体温。</p></article>
+
+    <section class="notes-grid">
+      <article class="note-card fade-in">
+        <div class="note-meta">Uzbekistan / night road</div>
+        <h2>&#x53BB;&#x6492;&#x9A6C;&#x5C14;&#x7F55;&#x7684;&#x591C;&#x8F66;</h2>
+        <p>&#x8F66;&#x7A97;&#x50CF;&#x4E00;&#x5757;&#x9ED1;&#x8272;&#x73BB;&#x7483;&#xFF0C;&#x628A;&#x4E2D;&#x4E9A;&#x7684;&#x591C;&#x8272;&#x548C;&#x81EA;&#x5DF1;&#x7684;&#x8138;&#x53E0;&#x5728;&#x4E00;&#x8D77;&#x3002;</p>
+      </article>
+
+      <article class="note-card fade-in">
+        <div class="note-meta">Oman / coast</div>
+        <h2>&#x9ECE;&#x660E;&#x524D;&#x7684;&#x9A6C;&#x65AF;&#x5580;&#x7279;</h2>
+        <p>&#x57CE;&#x5E02;&#x8FD8;&#x6CA1;&#x6709;&#x5B8C;&#x5168;&#x9192;&#x6765;&#xFF0C;&#x6D77;&#x8FB9;&#x7684;&#x98CE;&#x5148;&#x66FF;&#x5B83;&#x8BF4;&#x8BDD;&#x3002;</p>
+      </article>
+
+      <article class="note-card fade-in">
+        <div class="note-meta">Israel / winter</div>
+        <h2>&#x51AC;&#x5929;&#x7684;&#x8036;&#x8DEF;&#x6492;&#x51B7;</h2>
+        <p>&#x77F3;&#x5934;&#x5728;&#x51B7;&#x7A7A;&#x6C14;&#x91CC;&#x663E;&#x5F97;&#x66F4;&#x53E4;&#x8001;&#xFF0C;&#x4EBA;&#x7FA4;&#x5374;&#x50CF;&#x65E5;&#x5E38;&#x4E00;&#x6837;&#x7ECF;&#x8FC7;&#x3002;</p>
+      </article>
+
+      <article class="note-card fade-in">
+        <div class="note-meta">Singapore / after work</div>
+        <h2>&#x4E39;&#x620E;&#x5DF4;&#x845B;&#xFF0C;&#x51CC;&#x6668;&#x4E00;&#x70B9;</h2>
+        <p>&#x529E;&#x516C;&#x697C;&#x5B89;&#x9759;&#x4E0B;&#x6765;&#x4EE5;&#x540E;&#xFF0C;&#x8857;&#x9053;&#x624D;&#x5F00;&#x59CB;&#x9732;&#x51FA;&#x81EA;&#x5DF1;&#x7684;&#x4F53;&#x6E29;&#x3002;</p>
+      </article>
     </section>
-    <footer class="archive-footer" data-i18n="footer">Ernest's Journal - 在新加坡缓慢建造的个人档案</footer>
+
+    <div class="page-end">Ernest's Journal - &#x5728;&#x65B0;&#x52A0;&#x5761;&#x7F13;&#x6162;&#x5EFA;&#x9020;&#x7684;&#x4E2A;&#x4EBA;&#x6863;&#x6848;</div>
   </main>
+
   <script src="assets/js/i18n.js"></script>
   <script src="assets/js/site.js"></script>
 </body>
