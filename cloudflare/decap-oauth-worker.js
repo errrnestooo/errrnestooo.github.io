@@ -1,78 +1,31 @@
 const GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize";
 const GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token";
 const GITHUB_USER_URL = "https://api.github.com/user";
+const ADMIN_URL = "https://songyangao.com/admin/";
+
+function textResponse(body, status = 200) {
+  return new Response(body, {
+    status,
+    headers: {
+      "content-type": "text/plain; charset=UTF-8",
+      "cache-control": "no-store"
+    }
+  });
+}
 
 function htmlResponse(body, status = 200, extraHeaders = {}) {
   return new Response(body, {
     status,
     headers: {
       "content-type": "text/html; charset=UTF-8",
+      "cache-control": "no-store",
       ...extraHeaders
     }
   });
 }
 
-function textResponse(body, status = 200) {
-  return new Response(body, {
-    status,
-    headers: { "content-type": "text/plain; charset=UTF-8" }
-  });
-}
-
-function jsonScript(value) {
+function safeJson(value) {
   return JSON.stringify(value).replace(/</g, "\\u003c");
-}
-
-function buildCallbackHtml(content, isError = false) {
-  const state = isError ? "error" : "success";
-  const message = `authorization:github:${state}:${jsonScript(content)}`;
-
-  return `<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Authorizing Ernest's Journal</title>
-  <style>
-    body{
-      margin:0;
-      min-height:100vh;
-      display:grid;
-      place-items:center;
-      background:#fbf7f0;
-      color:#6b5f54;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    }
-    main{
-      max-width:420px;
-      padding:24px;
-      text-align:center;
-      line-height:1.7;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <h1>${isError ? "Login failed" : "Login complete"}</h1>
-    <p>${isError ? "Please close this window and try again." : "Returning to the admin page..."}</p>
-  </main>
-  <script>
-    (function(){
-      function sendMessage(event){
-        if (!window.opener) return;
-        window.opener.postMessage(${JSON.stringify(message)}, event.origin);
-        window.removeEventListener("message", sendMessage, false);
-        setTimeout(function(){ window.close(); }, 250);
-      }
-
-      if (window.opener) {
-        window.addEventListener("message", sendMessage, false);
-        window.opener.postMessage("authorizing:github", "*");
-      }
-    })();
-  </script>
-</body>
-</html>`;
 }
 
 function getCookie(request, name) {
@@ -87,8 +40,100 @@ function clearStateCookie() {
 
 function allowedDomain(siteId, allowedDomains) {
   if (!allowedDomains) return true;
-  const domains = allowedDomains.split(",").map((item) => item.trim()).filter(Boolean);
-  return domains.includes(siteId);
+  return allowedDomains
+    .split(",")
+    .map((domain) => domain.trim())
+    .filter(Boolean)
+    .includes(siteId);
+}
+
+function callbackHtml(payload, status) {
+  const isSuccess = status === "success";
+  const message = `authorization:github:${status}:${safeJson(payload)}`;
+
+  return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${isSuccess ? "登录完成" : "登录失败"} | Ernest's Journal</title>
+  <style>
+    :root{
+      --bg:#fbf7f0;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --line:#eadfce;
+      --accent:#7a4e2d;
+    }
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      background:var(--bg);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    }
+    main{
+      max-width:420px;
+      padding:28px;
+      text-align:center;
+      line-height:1.75;
+    }
+    h1{
+      margin:0 0 8px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-weight:500;
+    }
+    p{ color:var(--muted); margin:0; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>${isSuccess ? "登录完成" : "登录失败"}</h1>
+    <p>${isSuccess ? "正在返回 Ernest's Journal Admin..." : "请关闭此窗口后重试。"}</p>
+  </main>
+  <script>
+    (function(){
+      var message = ${JSON.stringify(message)};
+      var adminUrl = ${JSON.stringify(ADMIN_URL)};
+
+      function closePopup(){
+        setTimeout(function(){
+          window.close();
+          if (!window.closed) window.location.replace(adminUrl);
+        }, 250);
+      }
+
+      if (window.opener && !window.opener.closed) {
+        var sent = false;
+        function sendAuthorization(event){
+          if (sent) return;
+          sent = true;
+          window.opener.postMessage(message, event.origin || adminUrl);
+          closePopup();
+        }
+
+        window.addEventListener("message", function(event){
+          if (event.data === "authorizing:github") sendAuthorization(event);
+        });
+
+        window.opener.postMessage("authorizing:github", "*");
+
+        setTimeout(function(){
+          if (!sent) {
+            sent = true;
+            window.opener.postMessage(message, adminUrl);
+            closePopup();
+          }
+        }, 800);
+      } else {
+        window.location.replace(adminUrl);
+      }
+    })();
+  </script>
+</body>
+</html>`;
 }
 
 async function handleAuth(request, env) {
@@ -120,6 +165,7 @@ async function handleAuth(request, env) {
     status: 302,
     headers: {
       location: `${GITHUB_AUTHORIZE_URL}?${params.toString()}`,
+      "cache-control": "no-store",
       "set-cookie": `decap_oauth_state=${state}; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`
     }
   });
@@ -160,20 +206,21 @@ async function handleCallback(request, env) {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const savedState = getCookie(request, "decap_oauth_state");
+  const responseHeaders = { "set-cookie": clearStateCookie() };
 
   if (!code || !state) {
     return htmlResponse(
-      buildCallbackHtml({ error: "GitHub did not return an authorization code.", provider: "github" }, true),
+      callbackHtml({ error: "GitHub did not return an authorization code." }, "error"),
       400,
-      { "set-cookie": clearStateCookie() }
+      responseHeaders
     );
   }
 
   if (!savedState || state !== savedState) {
     return htmlResponse(
-      buildCallbackHtml({ error: "OAuth state check failed.", provider: "github" }, true),
+      callbackHtml({ error: "OAuth state check failed." }, "error"),
       403,
-      { "set-cookie": clearStateCookie() }
+      responseHeaders
     );
   }
 
@@ -182,9 +229,9 @@ async function handleCallback(request, env) {
 
   if (!token) {
     return htmlResponse(
-      buildCallbackHtml({ error: tokenResult.error_description || "Could not obtain a GitHub access token.", provider: "github" }, true),
+      callbackHtml({ error: tokenResult.error_description || "Could not obtain a GitHub token." }, "error"),
       502,
-      { "set-cookie": clearStateCookie() }
+      responseHeaders
     );
   }
 
@@ -192,17 +239,17 @@ async function handleCallback(request, env) {
     const user = await getGitHubUser(token);
     if (!user || user.login.toLowerCase() !== env.GITHUB_ALLOWED_LOGIN.toLowerCase()) {
       return htmlResponse(
-        buildCallbackHtml({ error: "This GitHub account is not allowed to edit Ernest's Journal.", provider: "github" }, true),
+        callbackHtml({ error: "This GitHub account is not allowed to edit Ernest's Journal." }, "error"),
         403,
-        { "set-cookie": clearStateCookie() }
+        responseHeaders
       );
     }
   }
 
   return htmlResponse(
-    buildCallbackHtml({ token, provider: "github" }),
+    callbackHtml({ token, provider: "github" }, "success"),
     200,
-    { "set-cookie": clearStateCookie() }
+    responseHeaders
   );
 }
 
