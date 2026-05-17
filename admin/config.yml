@@ -3,8 +3,9 @@ backend:
   repo: errrnestooo/errrnestooo.github.io
   branch: main
   site_domain: songyangao.com
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
+  base_url: https://cms-auth.songyangao.com
+  auth_endpoint: /auth
+  auth_scope: public_repo
 
 site_url: https://songyangao.com
 display_url: https://songyangao.com
