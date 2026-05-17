@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Diary entries from Ernest's Journal, with tags, moods, reading time, and expandable article cards.">
-  <meta property="og:title" content="Diary | Ernest's Journal">
-  <meta property="og:description" content="A quiet diary archive for days, moods, and small turning points.">
+  <meta name="description" content="Ernest's Journal 的日记档案，包含标签、心情、阅读时间和可展开文章卡片。">
+  <meta property="og:title" content="日记 | Ernest's Journal">
+  <meta property="og:description" content="一个安静的日记档案，记录日子、心情和小小的转折。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://songyangao.com/diary.html">
-  <title>Diary | Ernest's Journal</title>
+  <title>日记 | Ernest's Journal</title>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/site.css">
   <style>
@@ -186,16 +186,16 @@
   </style>
 </head>
 <body>
-  <h1 data-i18n="diary.title">Diary</h1>
-  <div class="subtitle" data-i18n="diary.subtitle">Small records, moods, and moments worth returning to.</div>
+  <h1 data-i18n="diary.title">日记</h1>
+  <div class="subtitle" data-i18n="diary.subtitle">小小的记录、心情，和以后还想回来看的片刻。</div>
 
   <div class="nav">
-    <a href="index.html">Home</a>
-    <a href="diary.html" class="active">Diary</a>
-    <a href="stories.html">Stories</a>
-    <a href="travel.html">Travel</a>
-    <a href="plans.html">Plans</a>
-    <a href="about.html">About</a>
+    <a href="index.html">首页</a>
+    <a href="diary.html" class="active">日记</a>
+    <a href="stories.html">小说</a>
+    <a href="travel.html">旅行</a>
+    <a href="plans.html">计划</a>
+    <a href="about.html">关于</a>
   </div>
 
   <main id="diaryList"></main>
@@ -205,45 +205,46 @@
     const diaryEntries = [
       {
         date:"2026-03-29",
-        title:"Building My Website",
-        location:"Singapore",
-        mood:"Focused",
-        tags:["website","plans","learning"],
+        title:{ zh:"搭建我的网站", en:"Building My Website" },
+        location:{ zh:"新加坡", en:"Singapore" },
+        mood:{ zh:"专注", en:"Focused" },
+        tags:{ zh:["网站","计划","学习"], en:["website","plans","learning"] },
         minutes:2,
         url:"posts/2026-03-29.html",
-        body:[
-          "Today I kept shaping the Plans page into something that can sync and grow.",
-          "From GitHub Pages to Cloudflare Worker and KV, this is my first complete front-end and back-end split for the site."
-        ]
+        body:{
+          zh:["今天我继续把 Plans 页面打磨成一个可以同步、也可以慢慢生长的小系统。","从 GitHub Pages 到 Cloudflare Worker 和 KV，这是我第一次完整搭建前后端分离的网站。"],
+          en:["Today I kept shaping the Plans page into something that can sync and grow.","From GitHub Pages to Cloudflare Worker and KV, this is my first complete front-end and back-end split for the site."]
+        }
       },
       {
         date:"2026-01-30",
-        title:"Hello World",
-        location:"Singapore",
-        mood:"Hopeful",
-        tags:["beginning","journal","archive"],
+        title:{ zh:"Hello World", en:"Hello World" },
+        location:{ zh:"新加坡", en:"Singapore" },
+        mood:{ zh:"期待", en:"Hopeful" },
+        tags:{ zh:["开始","日记","档案"], en:["beginning","journal","archive"] },
         minutes:1,
         url:"posts/2026-01-30.html",
-        body:[
-          "Today I officially started using songyangao.com to record life.",
-          "I hope that ten years later, looking back, I will not regret starting here."
-        ]
+        body:{
+          zh:["今天我正式开始用 songyangao.com 记录生活。","希望十年后回头看，我不会后悔从这里开始。"],
+          en:["Today I officially started using songyangao.com to record life.","I hope that ten years later, looking back, I will not regret starting here."]
+        }
       }
     ];
 
     function renderDiary(){
+      const lang = window.ErnestI18n?.lang?.() || localStorage.getItem("ernest_journal_lang") || "zh";
       const list = document.getElementById("diaryList");
       list.innerHTML = diaryEntries.map((entry, index) => `
         <article class="diary-card fade-in ${index === 0 ? "is-open" : ""}">
           <button class="diary-toggle" type="button" aria-expanded="${index === 0}">
             <div class="diary-head">
               <div>
-                <h2 class="diary-title">${entry.date} - ${entry.title}</h2>
+                <h2 class="diary-title">${entry.date} - ${entry.title[lang]}</h2>
                 <div class="diary-meta">
-                  <span>${entry.location}</span>
-                  <span>${entry.minutes} min read</span>
-                  <span class="mood">${entry.mood}</span>
-                  ${entry.tags.map(tag => `<span class="tag">#${tag}</span>`).join("")}
+                  <span>${entry.location[lang]}</span>
+                  <span>${entry.minutes} ${window.ErnestI18n?.t?.("diary.minutes") || (lang === "zh" ? "分钟阅读" : "min read")}</span>
+                  <span class="mood">${entry.mood[lang]}</span>
+                  ${entry.tags[lang].map(tag => `<span class="tag">#${tag}</span>`).join("")}
                 </div>
               </div>
               <span class="chev"></span>
@@ -252,13 +253,13 @@
           <div class="diary-body">
             <div class="diary-body-inner">
               <div class="entry-text">
-                ${entry.body.map(paragraph => `<p>${paragraph}</p>`).join("")}
+                ${entry.body[lang].map(paragraph => `<p>${paragraph}</p>`).join("")}
               </div>
               <div class="entry-actions">
-                <a href="${entry.url}" data-i18n="diary.read">Read full entry -></a>
+                <a href="${entry.url}" data-i18n="diary.read">${lang === "zh" ? "阅读全文 ->" : "Read full entry ->"}</a>
                 <span>
-                  ${index < diaryEntries.length - 1 ? `<a href="#entry-${index + 1}" data-open="${index + 1}" data-i18n="diary.previous">Previous</a>` : ""}
-                  ${index > 0 ? `<a href="#entry-${index - 1}" data-open="${index - 1}" data-i18n="diary.next">Next</a>` : ""}
+                  ${index < diaryEntries.length - 1 ? `<a href="#entry-${index + 1}" data-open="${index + 1}" data-i18n="diary.previous">${lang === "zh" ? "上一篇" : "Previous"}</a>` : ""}
+                  ${index > 0 ? `<a href="#entry-${index - 1}" data-open="${index - 1}" data-i18n="diary.next">${lang === "zh" ? "下一篇" : "Next"}</a>` : ""}
                 </span>
               </div>
             </div>
@@ -285,7 +286,7 @@
     }
 
     renderDiary();
-    window.ErnestI18n?.apply();
+    window.addEventListener("ernest:languagechange", renderDiary);
   </script>
   <script src="assets/js/site.js"></script>
 </body>

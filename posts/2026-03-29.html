@@ -3,91 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Building My Website - a diary entry about GitHub Pages, Cloudflare, and plans sync.">
-  <meta property="og:title" content="Building My Website | Ernest's Journal">
-  <meta property="og:description" content="A note on building the Plans page and shaping a personal website.">
+  <meta name="description" content="搭建我的网站：关于 GitHub Pages、Cloudflare 和 Plans 同步的一篇日记。">
+  <meta property="og:title" content="搭建我的网站 | Ernest's Journal">
+  <meta property="og:description" content="关于搭建 Plans 页面和塑造个人网站的记录。">
   <meta property="og:type" content="article">
-  <title>Building My Website | Ernest's Journal</title>
+  <title>搭建我的网站 | Ernest's Journal</title>
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/css/site.css">
   <style>
-    :root{
-      --bg:#fbf7f0;
-      --card:#ffffff;
-      --text:#1f1f1f;
-      --muted:#6b5f54;
-      --border:#eadfce;
-      --accent:#7a4e2d;
-    }
-
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-      max-width:720px;
-      margin:0 auto;
-      padding:42px 20px 80px;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.8;
-    }
-
-    a{ color:var(--accent); text-decoration:none; }
-    a:hover{ text-decoration:underline; }
-
-    article{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:24px;
-      box-shadow:0 10px 25px rgba(0,0,0,.05);
-    }
-
+    :root{ --bg:#fbf7f0; --card:#ffffff; --text:#1f1f1f; --muted:#6b5f54; --border:#eadfce; --accent:#7a4e2d; }
+    body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; max-width:720px; margin:0 auto; padding:42px 20px 80px; background:var(--bg); color:var(--text); line-height:1.8; }
+    a{ color:var(--accent); text-decoration:none; } a:hover{ text-decoration:underline; }
+    article{ background:var(--card); border:1px solid var(--border); border-radius:18px; padding:24px; box-shadow:0 10px 25px rgba(0,0,0,.05); }
     h1{ margin-top:0; }
-
-    .meta{
-      color:var(--muted);
-      font-size:13px;
-      margin-bottom:20px;
-    }
-
-    .post-nav{
-      display:flex;
-      justify-content:space-between;
-      gap:12px;
-      margin-top:22px;
-      padding-top:16px;
-      border-top:1px dashed #efe5d7;
-      flex-wrap:wrap;
-    }
+    .meta{ color:var(--muted); font-size:13px; margin-bottom:20px; }
+    .post-nav{ display:flex; justify-content:space-between; gap:12px; margin-top:22px; padding-top:16px; border-top:1px dashed #efe5d7; flex-wrap:wrap; }
   </style>
 </head>
 <body>
-  <p><a href="../diary.html">← Back to Diary</a></p>
-
+  <p><a href="../diary.html" data-i18n="post.back">返回日记</a></p>
   <article class="fade-in">
-    <h1>2026-03-29 - Building My Website</h1>
-    <div class="meta">Singapore - Focused - 2 min read - #website #plans #learning</div>
-
-    <p>
-      Today I finally made the Plans page feel like a real data system. It is no longer only a local note;
-      it can become something friends can see too.
-    </p>
-
-    <p>
-      From GitHub Pages to Cloudflare Worker, and then toward KV storage, this is my first complete attempt
-      at separating the front end and the back end for this little website.
-    </p>
-
-    <p>
-      It still feels simple, but the simplicity now has a frame. The site is slowly becoming a personal archive
-      that can hold travel ideas, diary entries, and future plans together.
-    </p>
-
+    <h1 data-i18n="post.building.title">2026-03-29 - 搭建我的网站</h1>
+    <div class="meta" data-i18n="post.building.meta">新加坡 - 专注 - 2 分钟阅读 - #网站 #计划 #学习</div>
+    <p data-i18n="post.building.p1">今天我终于让 Plans 页面像一个真正的数据系统。它不再只是本地笔记，也开始具备让朋友看到计划的可能。</p>
+    <p data-i18n="post.building.p2">从 GitHub Pages 到 Cloudflare Worker，再到 KV 存储，这是我第一次完整尝试为这个小网站做前后端分离。</p>
+    <p data-i18n="post.building.p3">它仍然很简单，但这种简单现在有了框架。这个网站正在慢慢成为一个可以同时保存旅行念头、日记和未来计划的个人档案。</p>
     <nav class="post-nav">
-      <a href="2026-01-30.html">← Previous entry: Hello World</a>
+      <a href="2026-01-30.html" data-i18n="post.prev.hello"><- 上一篇：Hello World</a>
       <span></span>
     </nav>
   </article>
-
   <script src="../assets/js/site.js"></script>
 </body>
 </html>

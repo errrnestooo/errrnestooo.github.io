@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="About Ernest, life progress, countdown, and personal milestones.">
-  <meta property="og:title" content="About | Ernest's Journal">
-  <meta property="og:description" content="A small page to remember where Ernest started and how time is passing.">
+  <meta name="description" content="关于 Ernest：生命进度、倒计时和个人人生节点。">
+  <meta property="og:title" content="关于 | Ernest's Journal">
+  <meta property="og:description" content="一个小小的页面，用来记住 Ernest 从哪里开始，以及时间如何流过。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://songyangao.com/about.html">
-  <title>About | Ernest's Journal</title>
+  <title>关于 | Ernest's Journal</title>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/site.css">
 
@@ -223,75 +223,74 @@
 
 <body>
   <div class="container">
-    <h1 data-i18n="about.title">About Ernest</h1>
-    <div class="subtitle" data-i18n="about.subtitle">A small page to remember where I started.</div>
+    <h1 data-i18n="about.title">关于 Ernest</h1>
+    <div class="subtitle" data-i18n="about.subtitle">一个用来记住自己从哪里开始的小页面。</div>
 
     <div class="nav">
-      <a href="index.html">Home</a>
-      <a href="diary.html">Diary</a>
-      <a href="stories.html">Stories</a>
-      <a href="travel.html">Travel</a>
-      <a href="plans.html">Plans</a>
-      <a href="about.html" class="active">About</a>
+      <a href="index.html">首页</a>
+      <a href="diary.html">日记</a>
+      <a href="stories.html">小说</a>
+      <a href="travel.html">旅行</a>
+      <a href="plans.html">计划</a>
+      <a href="about.html" class="active">关于</a>
     </div>
 
     <div class="grid">
       <section class="card fade-in">
-        <h2 data-i18n="about.self">Self Introduction</h2>
+        <h2 data-i18n="about.self">自我介绍</h2>
         <p data-i18n="about.intro">
-          Hi, I'm Ernest. I use this website to record diaries, travels, and plans:
-          a quiet space to keep memories, ideas, and growth in one place.
+          Hi，我是 Ernest。我用这个网站记录日记、旅行和计划：把回忆、想法和成长放在一个安静的地方。
         </p>
 
         <ul class="kv">
-          <li><div class="k" data-i18n="about.birthday">Birthday</div><div class="v">1996-01-19</div></li>
-          <li><div class="k" data-i18n="about.based">Based in</div><div class="v">Singapore</div></li>
-          <li><div class="k" data-i18n="about.work">Work</div><div class="v">PwC Singapore</div></li>
-          <li><div class="k" data-i18n="about.interests">Interests</div><div class="v">Travel - Writing - Learning</div></li>
+          <li><div class="k" data-i18n="about.birthday">生日</div><div class="v">1996-01-19</div></li>
+          <li><div class="k" data-i18n="about.based">所在地</div><div class="v" data-i18n="about.basedValue">新加坡</div></li>
+          <li><div class="k" data-i18n="about.work">工作</div><div class="v">PwC Singapore</div></li>
+          <li><div class="k" data-i18n="about.interests">兴趣</div><div class="v" data-i18n="about.interestsValue">旅行 - 写作 - 学习</div></li>
         </ul>
 
-        <h2 style="margin-top:18px;" data-i18n="about.milestones">Life Milestones</h2>
+        <h2 style="margin-top:18px;" data-i18n="about.milestones">人生节点</h2>
         <ul class="timeline">
-          <li><strong>1996</strong><br><span class="small">Born, and the clock quietly began.</span></li>
-          <li><strong>Beijing Institute of Technology</strong><br><span class="small">Bachelor's years: study, growth, and leaving familiar rooms.</span></li>
-          <li><strong>Singapore Management University</strong><br><span class="small">Master's years in Singapore.</span></li>
-          <li><strong>PwC Singapore</strong><br><span class="small">Senior Associate, building a professional life.</span></li>
-          <li><strong>2026</strong><br><span class="small">songyangao.com becomes a personal life archive.</span></li>
+          <li><strong>1996</strong><br><span class="small" data-i18n="about.timeline.birth">出生，时间安静地开始往前走。</span></li>
+          <li><strong>Beijing Institute of Technology</strong><br><span class="small" data-i18n="about.timeline.bit">本科几年：学习、成长，也开始离开熟悉的房间。</span></li>
+          <li><strong>Singapore Management University</strong><br><span class="small" data-i18n="about.timeline.smu">在新加坡读硕士的日子。</span></li>
+          <li><strong>PwC Singapore</strong><br><span class="small" data-i18n="about.timeline.pwc">Senior Associate，慢慢搭建自己的职业生活。</span></li>
+          <li><strong>2026</strong><br><span class="small" data-i18n="about.timeline.site">songyangao.com 成为个人生活档案。</span></li>
         </ul>
       </section>
 
       <section class="card fade-in">
-        <h2 data-i18n="about.progress">Life Progress</h2>
-        <div class="small" data-i18n="about.assumption">Assumption: I will live to 80 years old.</div>
+        <h2 data-i18n="about.progress">生命进度</h2>
+        <div class="small" data-i18n="about.assumption">假设：我会活到 80 岁。</div>
 
         <div class="stats">
           <div class="stat">
-            <div class="label" data-i18n="about.age">Current age</div>
+            <div class="label" data-i18n="about.age">当前年龄</div>
             <div class="value" id="ageText">-</div>
           </div>
           <div class="stat">
-            <div class="label" data-i18n="about.completed">Life completed</div>
+            <div class="label" data-i18n="about.completed">已完成</div>
             <div class="value" id="progressText">-</div>
           </div>
           <div class="stat">
-            <div class="label" data-i18n="about.daysLived">Days lived</div>
+            <div class="label" data-i18n="about.daysLived">已生活天数</div>
             <div class="value" id="daysLived">-</div>
           </div>
           <div class="stat">
-            <div class="label" data-i18n="about.daysLeft">Estimated days remaining</div>
+            <div class="label" data-i18n="about.daysLeft">预计剩余天数</div>
             <div class="value" id="daysLeft">-</div>
           </div>
         </div>
 
         <div style="margin-top:14px;">
-          <div class="small" data-i18n="about.progressBar">Progress bar</div>
+          <div class="small" data-i18n="about.progressBar">进度条</div>
           <div class="progress-wrap">
             <div class="progress-bar" id="bar"></div>
           </div>
           <div class="note" id="targetText">-</div>
         </div>
 
-        <div class="countdown" id="countdownText">Calculating countdown...</div>
+        <div class="countdown" id="countdownText">正在计算倒计时...</div>
       </section>
     </div>
 
@@ -338,20 +337,27 @@
       const minutes = Math.floor((remainingMs / (1000 * 60)) % 60);
       const seconds = Math.floor((remainingMs / 1000) % 60);
 
-      document.getElementById("ageText").textContent = `${age.years}y ${age.months}m ${age.days}d`;
+      const lang = window.ErnestI18n?.lang?.() || localStorage.getItem("ernest_journal_lang") || "zh";
+      document.getElementById("ageText").textContent = lang === "zh"
+        ? `${age.years} 岁 ${age.months} 个月 ${age.days} 天`
+        : `${age.years}y ${age.months}m ${age.days}d`;
       document.getElementById("progressText").textContent = `${pct.toFixed(2)}%`;
       document.getElementById("daysLived").textContent = lived.toLocaleString();
       document.getElementById("daysLeft").textContent = left.toLocaleString();
       document.getElementById("bar").style.width = `${pct.toFixed(2)}%`;
 
       const targetStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
-      document.getElementById("targetText").textContent = `Target date: ${targetStr} - Total days: ${total.toLocaleString()}`;
-      document.getElementById("countdownText").textContent =
-        `${left.toLocaleString()} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds remaining to 80.`;
+      document.getElementById("targetText").textContent = lang === "zh"
+        ? `目标日期：${targetStr} - 总天数：${total.toLocaleString()}`
+        : `Target date: ${targetStr} - Total days: ${total.toLocaleString()}`;
+      document.getElementById("countdownText").textContent = lang === "zh"
+        ? `距离 80 岁还有 ${left.toLocaleString()} 天 ${hours} 小时 ${minutes} 分钟 ${seconds} 秒。`
+        : `${left.toLocaleString()} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds remaining to 80.`;
     }
 
     render();
     setInterval(render, 1000);
+    window.addEventListener("ernest:languagechange", render);
   </script>
   <script src="assets/js/site.js"></script>
 </body>

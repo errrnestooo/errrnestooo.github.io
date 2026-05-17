@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Ernest's travel archive with country cards, filters, memories, budgets, and planned journeys.">
-<meta property="og:title" content="Travel | Ernest's Journal">
-<meta property="og:description" content="A warm visual archive of completed and planned journeys.">
+<meta name="description" content="Ernest 的旅行档案：国家卡片、筛选、回忆、预算和未来旅程。">
+<meta property="og:title" content="旅行 | Ernest's Journal">
+<meta property="og:description" content="一个温暖的视觉旅行档案，保存去过和将去的地方。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://songyangao.com/travel.html">
-<title>Travel | Ernest's Journal</title>
+<title>旅行 | Ernest's Journal</title>
 <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/css/site.css">
 
@@ -236,30 +236,30 @@ select{
 
 <body>
 <div class="container">
-  <h1 data-i18n="travel.title">Travel Map</h1>
-  <div class="subtitle" data-i18n="travel.subtitle">Places I have been - places I will go.</div>
+  <h1 data-i18n="travel.title">旅行地图</h1>
+  <div class="subtitle" data-i18n="travel.subtitle">去过的地方，和将要抵达的地方。</div>
 
   <div class="nav">
-    <a href="index.html">Home</a>
-    <a href="diary.html">Diary</a>
-    <a href="stories.html">Stories</a>
-    <a href="travel.html" class="active">Travel</a>
-    <a href="plans.html">Plans</a>
-    <a href="about.html">About</a>
+    <a href="index.html">首页</a>
+    <a href="diary.html">日记</a>
+    <a href="stories.html">小说</a>
+    <a href="travel.html" class="active">旅行</a>
+    <a href="plans.html">计划</a>
+    <a href="about.html">关于</a>
   </div>
 
   <section class="map-band fade-in">
     <div class="filters">
       <div>
-        <label for="continentFilter" data-i18n="travel.continent">Continent</label>
+        <label for="continentFilter" data-i18n="travel.continent">大洲</label>
         <select id="continentFilter">
-          <option value="all" data-i18n="travel.allContinents">All continents</option>
+          <option value="all" data-i18n="travel.allContinents">所有大洲</option>
         </select>
       </div>
       <div>
-        <label for="yearFilter" data-i18n="travel.year">Year</label>
+        <label for="yearFilter" data-i18n="travel.year">年份</label>
         <select id="yearFilter">
-          <option value="all" data-i18n="travel.allYears">All years</option>
+          <option value="all" data-i18n="travel.allYears">所有年份</option>
         </select>
       </div>
     </div>
@@ -267,42 +267,42 @@ select{
     <div class="travel-grid" id="travelGrid"></div>
   </section>
 
-  <div class="footer" data-i18n="travel.footer">Every journey leaves a mark.</div>
+  <div class="footer" data-i18n="travel.footer">每一次旅行都会留下痕迹。</div>
 </div>
 
 <script>
 const trips = [
   {
-    country:"Jordan",
-    city:"Petra / Wadi Rum",
+    country:{ zh:"约旦", en:"Jordan" },
+    city:{ zh:"佩特拉 / 瓦迪拉姆", en:"Petra / Wadi Rum" },
     year:"2025",
     continent:"Asia",
-    transportation:"Self-drive",
+    transportation:{ zh:"自驾", en:"Self-drive" },
     status:"completed",
-    memories:"Desert camping, red stone, and the feeling of driving through an ancient silence.",
-    budget:"TBD",
+    memories:{ zh:"沙漠露营、红色岩石，以及开车穿过古老寂静时的感觉。", en:"Desert camping, red stone, and the feeling of driving through an ancient silence." },
+    budget:{ zh:"待整理", en:"TBD" },
     color:"#c98b57"
   },
   {
-    country:"Madagascar",
-    city:"Antananarivo / Baobab Avenue",
+    country:{ zh:"马达加斯加", en:"Madagascar" },
+    city:{ zh:"塔那那利佛 / 猴面包树大道", en:"Antananarivo / Baobab Avenue" },
     year:"2026",
     continent:"Africa",
-    transportation:"Flight",
+    transportation:{ zh:"飞机", en:"Flight" },
     status:"planned",
-    memories:"A planned journey for baobabs, island roads, and slow notebooks.",
-    budget:"Planning",
+    memories:{ zh:"一场正在计划中的旅行：猴面包树、岛上的路，以及慢慢写下来的笔记。", en:"A planned journey for baobabs, island roads, and slow notebooks." },
+    budget:{ zh:"计划中", en:"Planning" },
     color:"#9f7f52"
   },
   {
-    country:"Iceland",
-    city:"Ring Road",
-    year:"Future",
+    country:{ zh:"冰岛", en:"Iceland" },
+    city:{ zh:"环岛公路", en:"Ring Road" },
+    year:{ zh:"未来", en:"Future" },
     continent:"Europe",
-    transportation:"Road trip",
+    transportation:{ zh:"公路旅行", en:"Road trip" },
     status:"planned",
-    memories:"Northern lights, long roads, waterfalls, and a winter sky worth waiting for.",
-    budget:"Dream",
+    memories:{ zh:"极光、长路、瀑布，以及值得等待的冬天夜空。", en:"Northern lights, long roads, waterfalls, and a winter sky worth waiting for." },
+    budget:{ zh:"梦想清单", en:"Dream" },
     color:"#8aa0a8"
   }
 ];
@@ -315,39 +315,41 @@ function fillFilters(){
   [...new Set(trips.map(trip => trip.continent))].sort().forEach(continent => {
     continentFilter.insertAdjacentHTML("beforeend", `<option value="${continent}">${continent}</option>`);
   });
-  [...new Set(trips.map(trip => trip.year))].sort().forEach(year => {
-    yearFilter.insertAdjacentHTML("beforeend", `<option value="${year}">${year}</option>`);
+  [...new Set(trips.map(trip => typeof trip.year === "object" ? trip.year.en : trip.year))].sort().forEach(year => {
+    const label = year === "Future" ? "未来" : year;
+    yearFilter.insertAdjacentHTML("beforeend", `<option value="${year}">${label}</option>`);
   });
 }
 
 function renderTrips(){
+  const lang = window.ErnestI18n?.lang?.() || localStorage.getItem("ernest_journal_lang") || "zh";
   const continent = continentFilter.value;
   const year = yearFilter.value;
   const filtered = trips.filter(trip =>
     (continent === "all" || trip.continent === continent) &&
-    (year === "all" || trip.year === year)
+    (year === "all" || (typeof trip.year === "object" ? trip.year.en : trip.year) === year)
   );
 
   travelGrid.innerHTML = filtered.map(trip => `
     <article class="travel-card" style="--photo:${trip.color}">
       <div class="photo-placeholder">
-        <div class="country">${trip.country}</div>
+        <div class="country">${trip.country[lang]}</div>
       </div>
       <div class="travel-body">
         <div class="travel-meta">
-          <span>${trip.city}</span>
-          <span>${trip.year} - ${trip.transportation}</span>
-          <span class="status ${trip.status}">${trip.status}</span>
+          <span>${trip.city[lang]}</span>
+          <span>${(typeof trip.year === "object" ? trip.year[lang] : trip.year)} - ${trip.transportation[lang]}</span>
+          <span class="status ${trip.status}">${window.ErnestI18n?.t?.(`travel.${trip.status}`) || trip.status}</span>
         </div>
-        <button class="detail-toggle" type="button" data-i18n="travel.details">View details</button>
+        <button class="detail-toggle" type="button" data-i18n="travel.details">${window.ErnestI18n?.t?.("travel.details") || "查看详情"}</button>
         <div class="travel-detail">
           <div class="travel-detail-inner">
             <div class="memory">
-              <strong data-i18n="travel.memory">Memory</strong><br>
-              ${trip.memories}
+              <strong data-i18n="travel.memory">${window.ErnestI18n?.t?.("travel.memory") || "记忆"}</strong><br>
+              ${trip.memories[lang]}
               <br><br>
-              <strong data-i18n="travel.budget">Budget</strong><br>
-              ${trip.budget}
+              <strong data-i18n="travel.budget">${window.ErnestI18n?.t?.("travel.budget") || "预算"}</strong><br>
+              ${trip.budget[lang]}
             </div>
           </div>
         </div>
@@ -367,10 +369,21 @@ function renderTrips(){
   window.ErnestI18n?.apply();
 }
 
+function updateTravelFilterLabels(){
+  const lang = window.ErnestI18n?.lang?.() || localStorage.getItem("ernest_journal_lang") || "zh";
+  [...yearFilter.options].forEach(option => {
+    if(option.value === "Future") option.textContent = lang === "zh" ? "未来" : "Future";
+  });
+}
+
 continentFilter.addEventListener("change", renderTrips);
 yearFilter.addEventListener("change", renderTrips);
 fillFilters();
 renderTrips();
+window.addEventListener("ernest:languagechange", () => {
+  updateTravelFilterLabels();
+  renderTrips();
+});
 </script>
 <script src="assets/js/site.js"></script>
 </body>
