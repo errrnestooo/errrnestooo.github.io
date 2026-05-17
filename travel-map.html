@@ -16,11 +16,7 @@
     <nav class="nav">
       <a href="index.html">首页</a><a href="diary.html">日记</a><a href="stories.html">小说</a><a href="field-notes.html">札记</a><a href="now.html">近况</a><a href="timeline.html">时间线</a><a href="travel.html">旅行</a><a href="travel-map.html" class="active">地图</a><a href="library.html">书影音</a><a href="photos.html">照片</a><a href="life.html">生活</a><a href="plans.html">计划</a><a href="about.html">关于</a>
     </nav>
-    <header class="journal-hero fade-in">
-      <div class="journal-kicker">Cinematic travel archive</div>
-      <h1 data-i18n="map.title">世界地图</h1>
-      <p data-i18n="map.subtitle">那些把生活坐标悄悄改写过的国家。</p>
-    </header>
+    <header class="journal-hero fade-in"><div class="journal-kicker">Cinematic travel archive</div><h1 data-i18n="map.title">世界地图</h1><p data-i18n="map.subtitle">那些把生活坐标悄悄改写过的国家。</p></header>
     <section class="map-stage fade-in" aria-label="Visited countries map">
       <button class="map-pin active" style="left:74%;top:58%;" data-country="Singapore">Singapore</button>
       <button class="map-pin" style="left:57%;top:47%;" data-country="Oman">Oman</button>
@@ -50,14 +46,8 @@
     ];
     const cards = document.getElementById("countryCards");
     function renderCards(active = "Singapore"){
-      cards.innerHTML = countries.map((country) => {
-        const lang = window.ErnestI18n?.lang?.() || "zh";
-        return `<article class="journal-card ${country.name === active ? "active" : ""}">
-          <div class="journal-meta">${country.year} / ${country.route}</div>
-          <h2>${country.name}</h2>
-          <p>${country[lang]}</p>
-        </article>`;
-      }).join("");
+      const lang = window.ErnestI18n?.lang?.() || "zh";
+      cards.innerHTML = countries.map((country) => `<article class="journal-card ${country.name === active ? "active" : ""}"><div class="journal-meta">${country.year} / ${country.route}</div><h2>${country.name}</h2><p>${country[lang]}</p></article>`).join("");
     }
     document.querySelectorAll(".map-pin").forEach((pin) => {
       pin.addEventListener("click", () => {

@@ -15,7 +15,6 @@
     "nav.life": "生活",
     "nav.plans": "计划",
     "nav.about": "关于",
-
     "theme.dark": "夜色",
     "theme.light": "日间",
     "loading": "正在加载",
@@ -79,6 +78,7 @@
     "story.rain.p3": "这一天并没有戏剧性地困难，只是太满了：会议、数字、办公室里礼貌的天气。但雨一来，他身体里某个地方就松开了一点。",
     "story.rain.p4": "路对面，一辆出租车缓慢穿过红绿灯的倒影。有一秒钟，整座城市像是画在水上。他想，也许记忆也是这样：保存的不是事物本身，而是它留下的微光。",
     "story.rain.p5": "雨小下来的时候，他朝地铁站走去。鞋湿了，包也比刚才更重。但这个傍晚给了他一个可以带回家的小句子，而此刻这已经足够。",
+
     "post.back": "返回日记",
     "post.next.building": "下一篇：搭建我的网站 ->",
     "post.prev.hello": "<- 上一篇：Hello World",
@@ -115,11 +115,9 @@
     "travel.footer": "每一次旅行都会留下痕迹。",
     "travel.completed": "已完成",
     "travel.planned": "计划中",
-
     "map.title": "世界地图",
     "map.subtitle": "那些把生活坐标悄悄改写过的国家。",
     "map.hint": "点击国家卡片，查看一条短短的路上笔记。",
-    "map.open": "查看笔记",
 
     "now.title": "近况",
     "now.date": "更新于 2026 年 5 月",
@@ -186,6 +184,7 @@
     "life.cycling": "骑行距离",
     "life.scaq": "SCAQ 进度",
     "life.books": "今年读过的书",
+    "life.inProgress": "进行中",
 
     "plans.title": "计划",
     "plans.year": "年份",
@@ -261,7 +260,6 @@
     "nav.life": "Life",
     "nav.plans": "Plans",
     "nav.about": "About",
-
     "theme.dark": "Night",
     "theme.light": "Day",
     "loading": "Loading",
@@ -276,7 +274,6 @@
     "music.preset.train": "Train",
     "music.preset.city": "Night city",
     "music.preset.desert": "Desert wind",
-
     "home.subtitle": "A life archive, slowly built in Singapore.",
     "home.meta.building": "Diary - 2026-03-29 - Building",
     "home.meta.hello": "Diary - 2026-01-30 - Beginning",
@@ -287,14 +284,12 @@
     "home.excerpt.hello.1": "Today I officially started using songyangao.com to record life. I hope this beginning still feels worth keeping ten years from now.",
     "home.excerpt.hello.2": "Ernest's website will stay here, holding ordinary days with care.",
     "home.read": "Read full entry ->",
-
     "diary.title": "Diary",
     "diary.subtitle": "Small records, moods, and moments worth returning to.",
     "diary.read": "Read full entry ->",
     "diary.previous": "Previous",
     "diary.next": "Next",
     "diary.minutes": "min read",
-
     "stories.title": "Stories",
     "stories.subtitle": "Longer pieces from the same archive: travel fragments, imagined roads, diary-shaped essays, and small attempts to keep a human voice on the page.",
     "stories.note": "Future stories can remain simple article pages, or grow from markdown-style entries.",
@@ -336,7 +331,6 @@
     "post.building.p1": "Today I finally made the Plans page feel like a real data system. It is no longer only a local note; it can become something friends can see too.",
     "post.building.p2": "From GitHub Pages to Cloudflare Worker, and then toward KV storage, this is my first complete attempt at separating the front end and the back end for this little website.",
     "post.building.p3": "It still feels simple, but the simplicity now has a frame. The site is slowly becoming a personal archive that can hold travel ideas, diary entries, and future plans together.",
-
     "notes.title": "Field Notes",
     "notes.subtitle": "Short pieces from the road, city edges, and memories not yet large enough to become stories.",
     "notes.note1.title": "Night Bus to Samarkand",
@@ -347,7 +341,6 @@
     "notes.note3.body": "Stone felt older in the cold air; people still passed through it as daily life.",
     "notes.note4.title": "Tanjong Pagar, 1AM",
     "notes.note4.body": "After the office towers quieted down, the street recovered its own temperature.",
-
     "travel.title": "Travel Map",
     "travel.subtitle": "Places I have been, and places I am still moving toward.",
     "travel.continent": "Continent",
@@ -361,12 +354,9 @@
     "travel.footer": "Every journey leaves a mark.",
     "travel.completed": "completed",
     "travel.planned": "planned",
-
     "map.title": "World Map",
     "map.subtitle": "Countries that quietly rewrote the coordinates of my life.",
     "map.hint": "Click a country card to read a short travel note.",
-    "map.open": "Open note",
-
     "now.title": "Now",
     "now.date": "Updated May 2026",
     "now.subtitle": "Quietly building a long-term life in Singapore.",
@@ -382,7 +372,6 @@
     "now.traveling.body": "Organizing notes from the Middle East and Central Asia while leaving room for the next road.",
     "now.fitness.body": "Cycling, sleep, blood donations, and not letting the body fall behind ambition.",
     "now.thoughts.body": "The truly long-term things usually do not look very loud.",
-
     "timeline.title": "Life Timeline",
     "timeline.subtitle": "Not a resume, but a line showing how a life slowly takes shape.",
     "timeline.singapore": "Coming to Singapore",
@@ -401,7 +390,6 @@
     "timeline.promotion.body": "Professional life grew denser, and long-term growth had to become more deliberate.",
     "timeline.journal": "Building Ernest's Journal",
     "timeline.journal.body": "A quiet entrance for diary, travel, plans, reading, and life metrics.",
-
     "library.title": "Reading / Watching / Listening",
     "library.subtitle": "A quiet curation shelf: not recommendations, just things keeping me company.",
     "library.reading": "Reading",
@@ -413,7 +401,6 @@
     "library.film2": "Quiet travel films that remind me not to mistake arrival for the whole purpose.",
     "library.music1": "Rain, trains, night cities: low backgrounds for writing.",
     "library.music2": "Music that does not push emotion, only lets the room settle.",
-
     "photos.title": "Photography",
     "photos.subtitle": "Lonely but warm frames: streets, airports, desert, Singapore, night, and light in motion.",
     "photos.streets": "Streets",
@@ -422,7 +409,6 @@
     "photos.singapore": "Singapore",
     "photos.night": "Night",
     "photos.motion": "Motion",
-
     "life.title": "Singapore Life Dashboard",
     "life.subtitle": "Quiet personal metrics for watching how a life accumulates.",
     "life.days": "Days in Singapore",
@@ -432,7 +418,7 @@
     "life.cycling": "Cycling distance",
     "life.scaq": "SCAQ progress",
     "life.books": "Books read this year",
-
+    "life.inProgress": "In progress",
     "plans.title": "Plans",
     "plans.year": "Year",
     "plans.month": "Month",
@@ -466,7 +452,6 @@
     "plans.statThisYear": "This year",
     "plans.statPH": "Public holidays shown",
     "plans.future": "Future structure prepared: AI travel summaries, AI diary assistant, itinerary generator, Cloudflare KV sync, and login can connect to the same plan objects without changing the page layout.",
-
     "about.title": "About Ernest",
     "about.subtitle": "A small page to remember where I started.",
     "about.self": "Self Introduction",
@@ -512,24 +497,19 @@
     document.querySelectorAll("[data-i18n]").forEach((node) => {
       node.textContent = t(node.getAttribute("data-i18n"), safeLang);
     });
-
     document.querySelectorAll("[data-i18n-html]").forEach((node) => {
       node.innerHTML = t(node.getAttribute("data-i18n-html"), safeLang);
     });
-
     document.querySelectorAll("[data-i18n-placeholder]").forEach((node) => {
       node.setAttribute("placeholder", t(node.getAttribute("data-i18n-placeholder"), safeLang));
     });
-
     document.querySelectorAll("[data-i18n-aria]").forEach((node) => {
       node.setAttribute("aria-label", t(node.getAttribute("data-i18n-aria"), safeLang));
     });
-
     document.querySelectorAll("[data-lang-option]").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.langOption === safeLang);
       btn.setAttribute("aria-pressed", String(btn.dataset.langOption === safeLang));
     });
-
     window.dispatchEvent(new CustomEvent("ernest:languagechange", { detail: { lang: safeLang } }));
   }
 
