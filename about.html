@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -223,8 +223,8 @@
 
 <body>
   <div class="container">
-    <h1>About Ernest</h1>
-    <div class="subtitle">A small page to remember where I started.</div>
+    <h1 data-i18n="about.title">About Ernest</h1>
+    <div class="subtitle" data-i18n="about.subtitle">A small page to remember where I started.</div>
 
     <div class="nav">
       <a href="index.html">Home</a>
@@ -237,20 +237,20 @@
 
     <div class="grid">
       <section class="card fade-in">
-        <h2>Self Introduction</h2>
-        <p>
+        <h2 data-i18n="about.self">Self Introduction</h2>
+        <p data-i18n="about.intro">
           Hi, I'm Ernest. I use this website to record diaries, travels, and plans:
           a quiet space to keep memories, ideas, and growth in one place.
         </p>
 
         <ul class="kv">
-          <li><div class="k">Birthday</div><div class="v">1996-01-19</div></li>
-          <li><div class="k">Based in</div><div class="v">Singapore</div></li>
-          <li><div class="k">Work</div><div class="v">PwC Singapore</div></li>
-          <li><div class="k">Interests</div><div class="v">Travel - Writing - Learning</div></li>
+          <li><div class="k" data-i18n="about.birthday">Birthday</div><div class="v">1996-01-19</div></li>
+          <li><div class="k" data-i18n="about.based">Based in</div><div class="v">Singapore</div></li>
+          <li><div class="k" data-i18n="about.work">Work</div><div class="v">PwC Singapore</div></li>
+          <li><div class="k" data-i18n="about.interests">Interests</div><div class="v">Travel - Writing - Learning</div></li>
         </ul>
 
-        <h2 style="margin-top:18px;">Life Milestones</h2>
+        <h2 style="margin-top:18px;" data-i18n="about.milestones">Life Milestones</h2>
         <ul class="timeline">
           <li><strong>1996</strong><br><span class="small">Born, and the clock quietly began.</span></li>
           <li><strong>Beijing Institute of Technology</strong><br><span class="small">Bachelor's years: study, growth, and leaving familiar rooms.</span></li>
@@ -261,30 +261,30 @@
       </section>
 
       <section class="card fade-in">
-        <h2>Life Progress</h2>
-        <div class="small">Assumption: I will live to <strong>80</strong> years old.</div>
+        <h2 data-i18n="about.progress">Life Progress</h2>
+        <div class="small" data-i18n="about.assumption">Assumption: I will live to 80 years old.</div>
 
         <div class="stats">
           <div class="stat">
-            <div class="label">Current age</div>
+            <div class="label" data-i18n="about.age">Current age</div>
             <div class="value" id="ageText">-</div>
           </div>
           <div class="stat">
-            <div class="label">Life completed</div>
+            <div class="label" data-i18n="about.completed">Life completed</div>
             <div class="value" id="progressText">-</div>
           </div>
           <div class="stat">
-            <div class="label">Days lived</div>
+            <div class="label" data-i18n="about.daysLived">Days lived</div>
             <div class="value" id="daysLived">-</div>
           </div>
           <div class="stat">
-            <div class="label">Estimated days remaining</div>
+            <div class="label" data-i18n="about.daysLeft">Estimated days remaining</div>
             <div class="value" id="daysLeft">-</div>
           </div>
         </div>
 
         <div style="margin-top:14px;">
-          <div class="small">Progress bar</div>
+          <div class="small" data-i18n="about.progressBar">Progress bar</div>
           <div class="progress-wrap">
             <div class="progress-bar" id="bar"></div>
           </div>

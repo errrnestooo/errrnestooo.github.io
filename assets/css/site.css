@@ -86,7 +86,8 @@ body.dark-mode button{
   align-items:flex-end;
 }
 
-.theme-toggle{
+.theme-toggle,
+.language-switch{
   border:1px solid var(--journal-line);
   background:rgba(255,255,255,.82);
   color:var(--journal-accent);
@@ -95,6 +96,27 @@ body.dark-mode button{
   cursor:pointer;
   box-shadow:0 6px 18px rgba(0,0,0,.06);
   backdrop-filter:blur(10px);
+}
+
+.language-switch{
+  display:flex;
+  gap:4px;
+  padding:4px;
+}
+
+.language-switch button{
+  border:0;
+  background:transparent;
+  color:var(--journal-muted);
+  border-radius:999px;
+  padding:5px 8px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.language-switch button.active{
+  background:var(--journal-soft);
+  color:var(--journal-accent);
 }
 
 .music-player,

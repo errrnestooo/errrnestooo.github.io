@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -236,8 +236,8 @@ select{
 
 <body>
 <div class="container">
-  <h1>Travel Map</h1>
-  <div class="subtitle">Places I have been - places I will go.</div>
+  <h1 data-i18n="travel.title">Travel Map</h1>
+  <div class="subtitle" data-i18n="travel.subtitle">Places I have been - places I will go.</div>
 
   <div class="nav">
     <a href="index.html">Home</a>
@@ -251,15 +251,15 @@ select{
   <section class="map-band fade-in">
     <div class="filters">
       <div>
-        <label for="continentFilter">Continent</label>
+        <label for="continentFilter" data-i18n="travel.continent">Continent</label>
         <select id="continentFilter">
-          <option value="all">All continents</option>
+          <option value="all" data-i18n="travel.allContinents">All continents</option>
         </select>
       </div>
       <div>
-        <label for="yearFilter">Year</label>
+        <label for="yearFilter" data-i18n="travel.year">Year</label>
         <select id="yearFilter">
-          <option value="all">All years</option>
+          <option value="all" data-i18n="travel.allYears">All years</option>
         </select>
       </div>
     </div>
@@ -267,7 +267,7 @@ select{
     <div class="travel-grid" id="travelGrid"></div>
   </section>
 
-  <div class="footer">Every journey leaves a mark.</div>
+  <div class="footer" data-i18n="travel.footer">Every journey leaves a mark.</div>
 </div>
 
 <script>
@@ -339,14 +339,14 @@ function renderTrips(){
           <span>${trip.year} - ${trip.transportation}</span>
           <span class="status ${trip.status}">${trip.status}</span>
         </div>
-        <button class="detail-toggle" type="button">View details</button>
+        <button class="detail-toggle" type="button" data-i18n="travel.details">View details</button>
         <div class="travel-detail">
           <div class="travel-detail-inner">
             <div class="memory">
-              <strong>Memory</strong><br>
+              <strong data-i18n="travel.memory">Memory</strong><br>
               ${trip.memories}
               <br><br>
-              <strong>Budget</strong><br>
+              <strong data-i18n="travel.budget">Budget</strong><br>
               ${trip.budget}
             </div>
           </div>
@@ -359,9 +359,12 @@ function renderTrips(){
     button.addEventListener("click", () => {
       const card = button.closest(".travel-card");
       const open = card.classList.toggle("is-open");
-      button.textContent = open ? "Hide details" : "View details";
+      const key = open ? "travel.hide" : "travel.details";
+      button.dataset.i18n = key;
+      button.textContent = window.ErnestI18n ? window.ErnestI18n.t(key) : (open ? "Hide details" : "View details");
     });
   });
+  window.ErnestI18n?.apply();
 }
 
 continentFilter.addEventListener("change", renderTrips);

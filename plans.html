@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
   <meta charset="UTF-8" />
@@ -540,7 +540,7 @@
 <body>
 
 <header>
-  <h1>Plans</h1>
+  <h1 data-i18n="plans.title">Plans</h1>
   <div class="nav">
     <a href="index.html">Home</a>
     <a href="diary.html">Diary</a>
@@ -554,30 +554,30 @@
 <div class="wrap">
   <div class="controls">
     <div class="left">
-      <label class="small">Year</label>
+      <label class="small" data-i18n="plans.year">Year</label>
       <select id="yearSelect"></select>
 
-      <label class="small">Month</label>
+      <label class="small" data-i18n="plans.month">Month</label>
       <select id="monthSelect"></select>
 
-      <button id="todayBtn">Today</button>
+      <button id="todayBtn" data-i18n="plans.today">Today</button>
     </div>
 
     <div class="right">
-      <button id="clearMonthBtn">Clear Draft (This Month)</button>
-      <button id="clearDraftBtn">Clear Draft (All)</button>
+      <button id="clearMonthBtn" data-i18n="plans.clearMonth">Clear Draft (This Month)</button>
+      <button id="clearDraftBtn" data-i18n="plans.clearAll">Clear Draft (All)</button>
     </div>
   </div>
 
   <div class="calendar" id="calendar"></div>
 
-  <div class="hint" id="draftHint">
-    ✅ 点击日期：加入/取消 Draft 假期。按住 <b>Shift</b>：连续选择区间（先点起点，再 Shift 点终点）。<br/>
-    🟧 标记 <b>PH</b> 的为新加坡公假（Public Holiday）。
+  <div class="hint" id="draftHint" data-i18n="plans.helper">
+    鉁?鐐瑰嚮鏃ユ湡锛氬姞鍏?鍙栨秷 Draft 鍋囨湡銆傛寜浣?<b>Shift</b>锛氳繛缁€夋嫨鍖洪棿锛堝厛鐐硅捣鐐癸紝鍐?Shift 鐐圭粓鐐癸級銆?br/>
+    馃煣 鏍囪 <b>PH</b> 鐨勪负鏂板姞鍧″叕鍋囷紙Public Holiday锛夈€?
   </div>
   <div class="sync-toolbar">
     <div class="left">
-      <span class="small">Cloud sync ready: API + local draft + JSON backup</span>
+      <span class="small" data-i18n="plans.sync">Cloud sync ready: API + local draft + JSON backup</span>
       <select id="planColorInput" class="plan-color-select" aria-label="Trip color label">
         <option value="#c98b57">Amber label</option>
         <option value="#7a4e2d">Cocoa label</option>
@@ -586,8 +586,8 @@
       </select>
     </div>
     <div class="right">
-      <button id="exportPlansBtn">Export JSON</button>
-      <button id="importPlansBtn">Import JSON</button>
+      <button id="exportPlansBtn" data-i18n="plans.export">Export JSON</button>
+      <button id="importPlansBtn" data-i18n="plans.import">Import JSON</button>
       <input id="importPlansFile" type="file" accept="application/json,.json" hidden>
     </div>
   </div>
@@ -595,27 +595,27 @@
 
 <div class="grid2">
   <div class="panel">
-    <h2>Draft Plan</h2>
-    <div class="small">先在日历里选日期（Shift 可连选），再填名称/备注并保存成一条计划。</div>
+    <h2 data-i18n="plans.draftTitle">Draft Plan</h2>
+    <div class="small" data-i18n="plans.draftHelp">Choose dates in the calendar, then add a name, color, and note before saving.</div>
 
     <div style="margin-top:12px;" class="stack">
-      <input id="planNameInput" class="wide" placeholder="Plan Name（必填）例如：Jordan Trip" />
-      <button id="savePlanBtn" class="primary">Save Plan</button>
-      <button id="cancelEditBtn" style="display:none;">Cancel Edit</button>
+      <input id="planNameInput" class="wide" placeholder="Plan Name锛堝繀濉級渚嬪锛欽ordan Trip" />
+      <button id="savePlanBtn" class="primary" data-i18n="plans.save">Save Plan</button>
+      <button id="cancelEditBtn" style="display:none;" data-i18n="plans.cancel">Cancel Edit</button>
     </div>
 
     <div style="margin-top:10px;">
-      <textarea id="planNoteInput" class="full" placeholder="Note（可选）例如：去哪里、和谁、主题、预算等"></textarea>
+      <textarea id="planNoteInput" class="full" placeholder="Note锛堝彲閫夛級渚嬪锛氬幓鍝噷銆佸拰璋併€佷富棰樸€侀绠楃瓑"></textarea>
     </div>
 
     <div style="margin-top:10px;" class="mutebox" id="draftPreview">
-      Draft 日期：<span class="small">（还没选）</span>
+      Draft dates: <span class="small">none selected</span>
     </div>
   </div>
 
   <div class="panel">
-    <h2>Saved Plans</h2>
-    <div class="small">每次保存是一条计划。你可以继续新增、编辑或删除。</div>
+    <h2 data-i18n="plans.savedTitle">Saved Plans</h2>
+    <div class="small" data-i18n="plans.savedHelp">Each save creates one plan. You can keep adding, editing, or deleting.</div>
 
     <div class="table-scroll">
       <table class="saved-plans-table">
@@ -634,8 +634,8 @@
 </div>
 
 <div class="panel" style="margin-top:16px;">
-  <h2>Yearly Summary</h2>
-  <div class="small">按年份汇总你所有 Saved Plans 的日期：总天数 + 明细（按 Plan 分组）。</div>
+  <h2 data-i18n="plans.summaryTitle">Yearly Summary</h2>
+  <div class="small" data-i18n="plans.summaryHelp">Summarizes all saved plan dates by year: total days and details.</div>
 
   <div class="table-scroll">
     <table>
@@ -652,31 +652,31 @@
 </div>
 
 <div class="panel" style="margin-top:16px;">
-  <h2>Travel Statistics</h2>
-  <div class="small">A quiet planning dashboard for annual vacation usage and future AI/cloud features.</div>
+  <h2 data-i18n="plans.statsTitle">Travel Statistics</h2>
+  <div class="small" data-i18n="plans.statsHelp">A quiet planning dashboard for annual vacation usage and future AI/cloud features.</div>
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="small">Saved plans</div>
+      <div class="small" data-i18n="plans.statPlans">Saved plans</div>
       <div class="value" id="statPlans">0</div>
     </div>
     <div class="stat-card">
-      <div class="small">Planned days</div>
+      <div class="small" data-i18n="plans.statDays">Planned days</div>
       <div class="value" id="statDays">0</div>
     </div>
     <div class="stat-card">
-      <div class="small">This year</div>
+      <div class="small" data-i18n="plans.statThisYear">This year</div>
       <div class="value" id="statThisYear">0</div>
     </div>
     <div class="stat-card">
-      <div class="small">Public holidays shown</div>
+      <div class="small" data-i18n="plans.statPH">Public holidays shown</div>
       <div class="value" id="statPublicHolidays">0</div>
     </div>
   </div>
 
   <div class="usage-chart" id="usageChart"></div>
 
-  <div class="future-note">
+  <div class="future-note" data-i18n="plans.future">
     Future structure prepared: AI travel summaries, AI diary assistant, itinerary generator,
     Cloudflare KV sync, and login can connect to the same plan objects without changing the page layout.
   </div>
@@ -688,7 +688,7 @@
    ========================= */
 const SG_PUBLIC_HOLIDAYS = {
   2026: {
-    "2026-01-01": "New Year’s Day",
+    "2026-01-01": "New Year鈥檚 Day",
     "2026-02-17": "Chinese New Year (Day 1)",
     "2026-02-18": "Chinese New Year (Day 2)",
     "2026-03-20": "Good Friday",
@@ -741,7 +741,7 @@ async function saveSavedPlansToServer(data){
     if(!res.ok) throw new Error("Failed to save saved plans");
   }catch(e){
     console.error(e);
-    alert("保存失败，服务器没有成功写入。");
+    alert("Save failed. The server did not write successfully.");
   }
 }
 
@@ -967,20 +967,30 @@ function buildRange(a, b){
 function renderDraftPreview(){
   const keys = sortedKeys(draftDates);
   if(!keys.length){
-    draftPreview.innerHTML = `Draft 日期：<span class="small">（还没选）</span>`;
+    draftPreview.innerHTML = `Draft dates: <span class="small">none selected</span>`;
     return;
   }
   const pills = keys.map(k => `<span class="pill">${formatDateChinese(k)}</span>`).join("");
-  draftPreview.innerHTML = `Draft 日期（${keys.length} 天）：<div class="pills-wrap" style="margin-top:8px;">${pills}</div>`;
+  draftPreview.innerHTML = `Draft dates (${keys.length} day(s)): <div class="pills-wrap" style="margin-top:8px;">${pills}</div>`;
 }
 
 function updateDraftHint(){
-  const base = `✅ 点击日期：加入/取消 Draft 假期。按住 <b>Shift</b>：连续选择区间（先点起点，再 Shift 点终点）。<br/>🟧 标记 <b>PH</b> 的为新加坡公假（Public Holiday）。`;
+  const isEn = localStorage.getItem("ernest_journal_lang") === "en";
+  const base = isEn
+    ? `Click or drag dates to add/remove Draft days. Hold <b>Shift</b> to select a same-month range.<br/>PH marks Singapore public holidays.`
+    : `点击或拖动日期加入/取消 Draft；按住 <b>Shift</b> 可连续选择同月区间。<br/>PH 表示新加坡公假。`;
   if(editingPlanId){
-    draftHint.innerHTML = base + `<br/><span class="small">✏️ 当前处于编辑模式：修改后点 <b>Update Plan</b> 保存。</span>`;
+    const editText = isEn
+      ? `Editing mode: click <b>Update Plan</b> to save changes.`
+      : `当前处于编辑模式：修改后点击 <b>Update Plan</b> 保存。`;
+    draftHint.innerHTML = base + `<br/><span class="small">${editText}</span>`;
   }else{
     draftHint.innerHTML = base;
   }
+}
+
+function planText(key, zh, en){
+  return localStorage.getItem("ernest_journal_lang") === "en" ? en : zh;
 }
 
 /* ==========
@@ -992,7 +1002,7 @@ function renderSavedPlans(){
   if(!savedPlans.length){
     const tr = document.createElement("tr");
     tr.className = "empty-plan-row";
-    tr.innerHTML = `<td colspan="4" class="small">还没有保存任何计划。先在左边 Draft 里选日期并 Save。</td>`;
+    tr.innerHTML = `<td colspan="4" class="small">杩樻病鏈変繚瀛樹换浣曡鍒掋€傚厛鍦ㄥ乏杈?Draft 閲岄€夋棩鏈熷苟 Save銆?/td>`;
     plansBody.appendChild(tr);
     return;
   }
@@ -1092,7 +1102,8 @@ function renderSavedPlans(){
       (plan.dates || []).forEach(d => draftDates[d] = true);
       saveDraft();
 
-      savePlanBtn.textContent = "Update Plan";
+      savePlanBtn.dataset.i18n = "plans.update";
+      savePlanBtn.textContent = planText("plans.update", "更新计划", "Update Plan");
       cancelEditBtn.style.display = "inline-block";
 
       const start = (plan.dates || []).slice().sort()[0];
@@ -1117,7 +1128,7 @@ function renderSavedPlans(){
       const id = btn.getAttribute("data-del");
       const plan = savedPlans.find(p => p.id === id);
       const name = plan?.name || "this plan";
-      if(!confirm(`确定删除：${name} ？`)) return;
+      if(!confirm(`Delete ${name}?`)) return;
 
       savedPlans = savedPlans.filter(p => p.id !== id);
       await saveSavedPlansToServer(savedPlans);
@@ -1141,7 +1152,7 @@ function renderYearlySummary(){
 
   if(!savedPlans.length){
     const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="3" class="small">还没有 Saved Plans。</td>`;
+    tr.innerHTML = `<td colspan="3" class="small">杩樻病鏈?Saved Plans銆?/td>`;
     summaryBody.appendChild(tr);
     return;
   }
@@ -1282,7 +1293,8 @@ async function importPlans(file){
    ========== */
 function exitEditMode(clearDraft){
   editingPlanId = null;
-  savePlanBtn.textContent = "Save Plan";
+  savePlanBtn.dataset.i18n = "plans.save";
+  savePlanBtn.textContent = planText("plans.save", "保存计划", "Save Plan");
   cancelEditBtn.style.display = "none";
   if(clearDraft){
     draftDates = {};
@@ -1342,7 +1354,7 @@ clearMonthBtn.addEventListener("click", () => {
 });
 
 clearDraftBtn.addEventListener("click", () => {
-  if(!confirm("确定清空 Draft（所有月份）吗？Saved Plans 不会受影响。")) return;
+  if(!confirm("Clear all draft dates? Saved Plans will not be affected.")) return;
   draftDates = {};
   saveDraft();
   lastClickedKey = null;
@@ -1357,14 +1369,14 @@ cancelEditBtn.addEventListener("click", () => {
 savePlanBtn.addEventListener("click", async () => {
   const name = planNameInput.value.trim();
   if(!name){
-    alert("请先填写 Plan Name（例如：Jordan Trip）");
+    alert("Please enter a plan name, for example: Jordan Trip.");
     planNameInput.focus();
     return;
   }
 
   const dates = sortedKeys(draftDates);
   if(!dates.length){
-    alert("你还没选任何日期。先在日历里点选（可 Shift 连选）。");
+    alert("No dates selected yet. Choose dates in the calendar first.");
     return;
   }
 
@@ -1374,7 +1386,7 @@ savePlanBtn.addEventListener("click", async () => {
   if(editingPlanId){
     const idx = savedPlans.findIndex(p => p.id === editingPlanId);
     if(idx === -1){
-      alert("找不到要编辑的 Plan（可能已被删除）。");
+      alert("Could not find the plan to edit. It may have been deleted.");
       exitEditMode(true);
       return;
     }
@@ -1385,7 +1397,7 @@ savePlanBtn.addEventListener("click", async () => {
     renderSavedPlans();
     renderYearlySummary();
     renderTravelStats();
-    alert("已更新 ✅");
+    alert("Updated.");
     return;
   }
 
@@ -1405,7 +1417,7 @@ savePlanBtn.addEventListener("click", async () => {
   renderDraftPreview();
   renderSavedPlans();
   renderYearlySummary();
-  alert("已保存 ✅ 现在可以开始选下一个计划了。");
+  alert("Saved. You can start choosing the next plan now.");
 });
 
 /* ==========

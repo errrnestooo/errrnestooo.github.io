@@ -186,8 +186,8 @@
   </style>
 </head>
 <body>
-  <h1>Diary</h1>
-  <div class="subtitle">Small records, moods, and moments worth returning to.</div>
+  <h1 data-i18n="diary.title">Diary</h1>
+  <div class="subtitle" data-i18n="diary.subtitle">Small records, moods, and moments worth returning to.</div>
 
   <div class="nav">
     <a href="index.html">Home</a>
@@ -255,10 +255,10 @@
                 ${entry.body.map(paragraph => `<p>${paragraph}</p>`).join("")}
               </div>
               <div class="entry-actions">
-                <a href="${entry.url}">Read full entry -></a>
+                <a href="${entry.url}" data-i18n="diary.read">Read full entry -></a>
                 <span>
-                  ${index < diaryEntries.length - 1 ? `<a href="#entry-${index + 1}" data-open="${index + 1}">Previous</a>` : ""}
-                  ${index > 0 ? `<a href="#entry-${index - 1}" data-open="${index - 1}">Next</a>` : ""}
+                  ${index < diaryEntries.length - 1 ? `<a href="#entry-${index + 1}" data-open="${index + 1}" data-i18n="diary.previous">Previous</a>` : ""}
+                  ${index > 0 ? `<a href="#entry-${index - 1}" data-open="${index - 1}" data-i18n="diary.next">Next</a>` : ""}
                 </span>
               </div>
             </div>
@@ -285,6 +285,7 @@
     }
 
     renderDiary();
+    window.ErnestI18n?.apply();
   </script>
   <script src="assets/js/site.js"></script>
 </body>
