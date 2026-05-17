@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <title>Admin | Ernest's Journal</title>
+  <title>管理后台 | Ernest's Journal</title>
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <style>
     :root{
       --bg:#fbf7f0;
-      --card:#fffdf8;
+      --paper:#fffdf8;
+      --card:#ffffff;
       --text:#1f1f1f;
       --muted:#6b5f54;
       --line:#eadfce;
@@ -25,37 +26,47 @@
       margin:0;
       min-height:100%;
       background:
-        radial-gradient(circle at 20% 0%, rgba(242,231,214,.72), transparent 34%),
-        var(--bg);
+        radial-gradient(circle at 18% 0%, rgba(242,231,214,.74), transparent 34%),
+        linear-gradient(180deg,#fbf7f0 0%,#f8efe2 100%);
       color:var(--text);
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
     }
 
     body{
       min-height:100vh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
       padding:42px 16px 56px;
     }
 
     .admin-page{
-      width:min(920px, 100%);
+      width:min(940px,100%);
+      margin:0 auto;
     }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      margin-bottom:16px;
+    }
+
+    .back-link{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+    }
+
+    .back-link:hover{ color:var(--accent); }
 
     .language-toggle{
-      display:flex;
-      justify-content:flex-end;
-      margin-bottom:14px;
-    }
-
-    .language-toggle-inner{
       display:inline-flex;
+      align-items:center;
       gap:4px;
       padding:4px;
       border:1px solid var(--line);
       border-radius:999px;
-      background:rgba(255,255,255,.72);
+      background:rgba(255,255,255,.76);
+      box-shadow:0 6px 18px rgba(87,65,42,.04);
     }
 
     .language-toggle button{
@@ -63,7 +74,7 @@
       border-radius:999px;
       background:transparent;
       color:var(--muted);
-      padding:6px 10px;
+      padding:6px 12px;
       cursor:pointer;
       font-size:13px;
     }
@@ -75,94 +86,136 @@
 
     .admin-card{
       display:grid;
-      grid-template-columns:1fr minmax(320px, 420px);
-      gap:28px;
-      align-items:center;
+      grid-template-columns:minmax(0,1fr) minmax(320px,420px);
+      gap:30px;
+      align-items:stretch;
       padding:34px;
       border:1px solid var(--line);
-      border-radius:28px;
-      background:rgba(255,253,248,.86);
+      border-radius:30px;
+      background:rgba(255,253,248,.9);
       box-shadow:var(--shadow);
       backdrop-filter:blur(14px);
     }
 
     .intro{
-      padding:8px 0;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      padding:10px 0;
     }
 
     .eyebrow{
       margin:0 0 10px;
       color:var(--accent);
       font-size:12px;
-      letter-spacing:.08em;
+      letter-spacing:.12em;
       text-transform:uppercase;
     }
 
     .admin-title{
       margin:0;
-      font-family:Georgia,"Times New Roman",serif;
+      font-family:Georgia,"Times New Roman","Songti SC",serif;
       font-size:42px;
-      line-height:1.1;
+      line-height:1.12;
       font-weight:500;
     }
 
     .admin-note{
       margin:16px 0 0;
-      max-width:520px;
+      max-width:540px;
       color:var(--muted);
-      line-height:1.8;
+      line-height:1.85;
       font-size:15px;
+    }
+
+    .permission-note,
+    .status-note,
+    .footer-note{
+      color:var(--muted);
+      line-height:1.7;
+      font-size:13px;
     }
 
     .permission-note{
       display:inline-block;
+      width:max-content;
+      max-width:100%;
       margin-top:18px;
       padding:8px 12px;
       border:1px solid var(--line);
       border-radius:999px;
       background:rgba(255,255,255,.72);
       color:var(--accent);
-      font-size:13px;
+    }
+
+    .login-column{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
     }
 
     .decap-panel{
-      min-height:300px;
+      min-height:310px;
       padding:18px;
       border:1px solid var(--line);
-      border-radius:22px;
-      background:#fff;
+      border-radius:24px;
+      background:var(--card);
       box-shadow:0 10px 28px rgba(87,65,42,.06);
       overflow:hidden;
     }
 
-    #nc-root{
-      min-height:260px;
+    .status-note{
+      padding:10px 12px;
+      border:1px dashed var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.58);
     }
 
-    /* Decap renders its own login UI; these constraints keep it centered and prevent overlap. */
+    .footer-note{
+      margin:18px auto 0;
+      text-align:center;
+    }
+
+    .i18n-fade{
+      transition:opacity .18s ease, transform .18s ease;
+    }
+
+    .i18n-fade.is-switching{
+      opacity:.35;
+      transform:translateY(2px);
+    }
+
+    #nc-root{
+      min-height:270px;
+    }
+
+    /* Decap renders the real login UI here. Keep it centered without changing OAuth behavior. */
     #nc-root,
     #nc-root > div{
-      min-height:260px !important;
+      min-height:270px !important;
       position:relative !important;
       z-index:1;
     }
 
+    #nc-root main,
     #nc-root section,
-    #nc-root main{
+    #nc-root article{
       min-height:auto !important;
+      height:auto !important;
     }
 
     #nc-root button{
       display:flex !important;
       align-items:center !important;
       justify-content:center !important;
-      width:min(100%, 290px) !important;
-      min-height:44px !important;
-      margin:12px auto !important;
+      width:min(100%, 300px) !important;
+      min-height:46px !important;
+      margin:14px auto !important;
       border-radius:999px !important;
       box-shadow:none !important;
       line-height:1.2 !important;
       white-space:normal !important;
+      text-align:center !important;
     }
 
     #nc-root input{
@@ -177,106 +230,255 @@
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif !important;
     }
 
-    @media (max-width:760px){
-      body{
-        display:block;
-        padding:24px 12px 40px;
-      }
+    @media (max-width:780px){
+      body{ padding:24px 12px 40px; }
 
-      .language-toggle{
+      .topbar{
         justify-content:center;
+        flex-wrap:wrap;
       }
 
       .admin-card{
         grid-template-columns:1fr;
-        gap:20px;
+        gap:22px;
         padding:22px;
-        border-radius:22px;
+        border-radius:24px;
+      }
+
+      .intro,
+      .admin-note,
+      .eyebrow{
+        text-align:center;
       }
 
       .admin-title{
+        text-align:center;
         font-size:34px;
-        text-align:center;
-      }
-
-      .eyebrow,
-      .admin-note,
-      .intro{
-        text-align:center;
       }
 
       .permission-note{
+        width:auto;
         border-radius:18px;
       }
 
       .decap-panel{
+        min-height:286px;
         padding:14px;
-        min-height:280px;
+        border-radius:20px;
       }
     }
   </style>
 </head>
 <body>
   <div class="admin-page">
-    <nav class="language-toggle" aria-label="Language">
-      <div class="language-toggle-inner">
-        <button type="button" class="active" data-lang="zh">CN</button>
-        <button type="button" data-lang="en">EN</button>
-      </div>
-    </nav>
+    <div class="topbar">
+      <a class="back-link i18n-fade" href="../index.html" data-i18n="back">返回网站</a>
+      <nav class="language-toggle" aria-label="Language">
+        <button type="button" class="active" data-lang="zh">中文</button>
+        <button type="button" data-lang="en">ENGLISH</button>
+      </nav>
+    </div>
 
     <main class="admin-card">
-      <section class="intro">
+      <section class="intro i18n-fade">
         <p class="eyebrow" data-i18n="eyebrow">私人写作后台</p>
         <h1 class="admin-title" data-i18n="title">Ernest's Journal Admin</h1>
-        <p class="admin-note" data-i18n="note">
-          一个安静的写作入口，用来编辑日记、故事、旅行记录和关于页面。请使用拥有仓库权限的 GitHub 账号登录。
+        <p class="admin-note" data-i18n="description">
+          这里是 Ernest's Journal 的内容管理入口。你可以在这里整理日记、故事、旅行记录和关于页面，让这个小小的档案馆继续安静生长。
         </p>
         <div class="permission-note" data-i18n="permission">
-          Visitors can read the site. Only approved GitHub users can edit.
+          访客只能阅读网站。只有已授权的 GitHub 用户可以编辑内容。
         </div>
       </section>
 
-      <section class="decap-panel" aria-label="CMS login area">
-        <div id="nc-root"></div>
+      <section class="login-column">
+        <div class="status-note i18n-fade" id="adminStatus" data-i18n="status">
+          请使用拥有仓库权限的 GitHub 账号登录。
+        </div>
+        <section class="decap-panel" aria-label="CMS login area">
+          <div id="nc-root" data-loading-text="正在加载登录界面..."></div>
+        </section>
       </section>
     </main>
+
+    <footer class="footer-note i18n-fade" data-i18n="footer">
+      登录授权由 GitHub 和 Cloudflare Worker 完成，密钥不会出现在前端页面。
+    </footer>
   </div>
 
   <script>
     (function(){
+      const langKey = "ernest_admin_lang";
+      const root = document.documentElement;
       const dictionary = {
         zh: {
+          back: "返回网站",
           eyebrow: "私人写作后台",
           title: "Ernest's Journal Admin",
-          note: "一个安静的写作入口，用来编辑日记、故事、旅行记录和关于页面。请使用拥有仓库权限的 GitHub 账号登录。",
-          permission: "Visitors can read the site. Only approved GitHub users can edit."
+          description: "这里是 Ernest's Journal 的内容管理入口。你可以在这里整理日记、故事、旅行记录和关于页面，让这个小小的档案馆继续安静生长。",
+          permission: "访客只能阅读网站。只有已授权的 GitHub 用户可以编辑内容。",
+          status: "请使用拥有仓库权限的 GitHub 账号登录。",
+          footer: "登录授权由 GitHub 和 Cloudflare Worker 完成，密钥不会出现在前端页面。",
+          loading: "正在加载登录界面...",
+          loginGithub: "使用 GitHub 登录",
+          login: "登录",
+          loggingIn: "正在连接 GitHub...",
+          authenticating: "正在验证身份...",
+          loadingCms: "正在加载内容管理系统...",
+          error: "登录出现问题，请稍后重试。",
+          configError: "配置读取失败，请检查 admin/config.yml。",
+          repoError: "无法读取仓库，请确认 GitHub 权限。"
         },
         en: {
+          back: "Back to site",
           eyebrow: "Private writing desk",
           title: "Ernest's Journal Admin",
-          note: "A quiet writing entrance for diary posts, stories, travel notes, and about-page content. Sign in with the GitHub account that has repository access.",
-          permission: "Visitors can read the site. Only approved GitHub users can edit."
+          description: "This is the content desk for Ernest's Journal. Use it to tend diary posts, stories, travel notes, and the about page while keeping the archive quiet and alive.",
+          permission: "Visitors can read the site. Only approved GitHub users can edit.",
+          status: "Sign in with the GitHub account that has repository access.",
+          footer: "Authentication is handled by GitHub and a Cloudflare Worker. Secrets never appear in frontend files.",
+          loading: "Loading the login screen...",
+          loginGithub: "Login with GitHub",
+          login: "Login",
+          loggingIn: "Connecting to GitHub...",
+          authenticating: "Authenticating...",
+          loadingCms: "Loading the content manager...",
+          error: "Something went wrong. Please try again.",
+          configError: "Could not load the configuration. Check admin/config.yml.",
+          repoError: "Could not read the repository. Please check GitHub permissions."
         }
       };
 
-      function applyLanguage(lang){
-        const safeLang = dictionary[lang] ? lang : "zh";
-        localStorage.setItem("ernest_admin_lang", safeLang);
-        document.documentElement.lang = safeLang === "zh" ? "zh-CN" : "en";
-        document.querySelectorAll("[data-i18n]").forEach((node) => {
-          node.textContent = dictionary[safeLang][node.dataset.i18n];
-        });
-        document.querySelectorAll("[data-lang]").forEach((button) => {
-          button.classList.toggle("active", button.dataset.lang === safeLang);
+      const decapTextMap = {
+        "Login with GitHub": "loginGithub",
+        "Log in with GitHub": "loginGithub",
+        "使用 GitHub 登录": "loginGithub",
+        "Login": "login",
+        "Log in": "login",
+        "登录": "login",
+        "Logging in": "loggingIn",
+        "正在连接 GitHub...": "loggingIn",
+        "Authenticating": "authenticating",
+        "正在验证身份...": "authenticating",
+        "Loading": "loadingCms",
+        "Loading...": "loadingCms",
+        "正在加载内容管理系统...": "loadingCms",
+        "Error": "error",
+        "登录出现问题，请稍后重试。": "error",
+        "Failed to load config": "configError",
+        "Failed to load configuration": "configError",
+        "配置读取失败，请检查 admin/config.yml。": "configError",
+        "Unable to access repository": "repoError",
+        "无法读取仓库，请确认 GitHub 权限。": "repoError"
+      };
+
+      let translatingDecap = false;
+
+      function getLang(){
+        const saved = localStorage.getItem(langKey);
+        return dictionary[saved] ? saved : "zh";
+      }
+
+      function t(key){
+        return dictionary[getLang()][key] || dictionary.zh[key] || key;
+      }
+
+      function setSwitching(on){
+        document.querySelectorAll(".i18n-fade").forEach((node) => {
+          node.classList.toggle("is-switching", on);
         });
       }
 
+      function translateStatic(lang){
+        root.lang = lang === "zh" ? "zh-CN" : "en";
+        document.title = lang === "zh" ? "管理后台 | Ernest's Journal" : "Admin | Ernest's Journal";
+        document.querySelectorAll("[data-i18n]").forEach((node) => {
+          node.textContent = dictionary[lang][node.dataset.i18n];
+        });
+        document.querySelectorAll("[data-lang]").forEach((button) => {
+          button.classList.toggle("active", button.dataset.lang === lang);
+        });
+        document.getElementById("nc-root").setAttribute("data-loading-text", dictionary[lang].loading);
+      }
+
+      function translateDecapNode(node){
+        if (!node || node.nodeType !== Node.TEXT_NODE) return;
+        const original = node.nodeValue.trim();
+        if (!original) return;
+
+        const directKey = decapTextMap[original];
+        if (directKey) {
+          node.nodeValue = node.nodeValue.replace(original, t(directKey));
+          return;
+        }
+
+        Object.keys(decapTextMap).forEach((phrase) => {
+          if (node.nodeValue.includes(phrase)) {
+            node.nodeValue = node.nodeValue.replaceAll(phrase, t(decapTextMap[phrase]));
+          }
+        });
+      }
+
+      function translateDecapAttributes(rootNode){
+        rootNode.querySelectorAll("button,input,a,[aria-label]").forEach((node) => {
+          ["value", "placeholder", "aria-label", "title"].forEach((attr) => {
+            const value = node.getAttribute(attr);
+            if (!value) return;
+            const key = decapTextMap[value.trim()];
+            if (key) node.setAttribute(attr, t(key));
+          });
+        });
+      }
+
+      function translateDecap(){
+        if (translatingDecap) return;
+        translatingDecap = true;
+        const decapRoot = document.getElementById("nc-root");
+        if (!decapRoot) {
+          translatingDecap = false;
+          return;
+        }
+
+        const walker = document.createTreeWalker(decapRoot, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        while (walker.nextNode()) textNodes.push(walker.currentNode);
+        textNodes.forEach(translateDecapNode);
+        translateDecapAttributes(decapRoot);
+        translatingDecap = false;
+      }
+
+      function applyLanguage(lang, animate){
+        const safeLang = dictionary[lang] ? lang : "zh";
+        localStorage.setItem(langKey, safeLang);
+        if (animate) setSwitching(true);
+        window.setTimeout(() => {
+          translateStatic(safeLang);
+          translateDecap();
+          setSwitching(false);
+        }, animate ? 120 : 0);
+      }
+
       document.querySelectorAll("[data-lang]").forEach((button) => {
-        button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+        button.addEventListener("click", () => applyLanguage(button.dataset.lang, true));
       });
 
-      applyLanguage(localStorage.getItem("ernest_admin_lang") || "zh");
+      applyLanguage(getLang(), false);
+
+      const observer = new MutationObserver(() => {
+        window.requestAnimationFrame(translateDecap);
+      });
+      observer.observe(document.getElementById("nc-root"), {
+        childList: true,
+        subtree: true,
+        characterData: true
+      });
+
+      window.addEventListener("message", (event) => {
+        if (typeof event.data !== "string") return;
+        if (event.data.includes("authorizing:github")) {
+          document.getElementById("adminStatus").textContent = t("authenticating");
+        }
+      });
     })();
   </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
