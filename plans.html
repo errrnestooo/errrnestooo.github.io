@@ -45,6 +45,7 @@
       margin-bottom:12px;
     }
     .controls .left, .controls .right{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .table-scroll{ margin-top:12px; overflow:auto; }
 
     select, button, input, textarea{
       border:1px solid var(--line);
@@ -199,6 +200,7 @@
     }
 
     .right-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
+    .mobile-plan-toggle, .mobile-plan-panel{ display:none; }
 
     .plan-details { margin-top: 6px; }
     .plan-details summary{
@@ -233,6 +235,197 @@
     .plan-details[open] .chev{
       transform: rotate(-135deg);
       border-color: var(--link);
+    }
+
+    @media (max-width: 640px){
+      body{
+        padding:28px 12px 42px;
+        line-height:1.65;
+      }
+      h1{ font-size:30px; }
+      .nav{
+        display:flex;
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:8px;
+        margin-bottom:22px;
+      }
+      .nav a{
+        margin:0;
+        padding:7px 10px;
+        background:rgba(255,255,255,.45);
+      }
+      .wrap, .panel{
+        border-radius:16px;
+        padding:14px;
+        box-shadow:0 4px 14px rgba(87,65,42,.045);
+      }
+      .grid2{ gap:12px; }
+      .controls{
+        align-items:stretch;
+        gap:12px;
+      }
+      .controls .left,
+      .controls .right,
+      .stack{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+      }
+      .controls .left label{
+        align-self:center;
+      }
+      .controls .left select,
+      .controls .right button,
+      .stack input,
+      .stack button,
+      textarea{
+        width:100%;
+        box-sizing:border-box;
+      }
+      .stack input,
+      textarea,
+      .stack button.primary{
+        grid-column:1 / -1;
+      }
+      .calendar{
+        gap:4px;
+      }
+      .dow{
+        padding:4px 0;
+        font-size:11px;
+      }
+      .cell{
+        min-height:48px;
+        padding:6px;
+        border-radius:10px;
+        gap:3px;
+      }
+      .date{
+        font-size:13px;
+      }
+      .tag,
+      .ph-tag{
+        font-size:0;
+        width:7px;
+        height:7px;
+        padding:0;
+        border-radius:50%;
+      }
+      .ph-tag{
+        top:8px;
+        right:8px;
+      }
+      .ph-name{
+        display:none;
+      }
+      .hint,
+      .mutebox{
+        font-size:12px;
+      }
+      .table-scroll{
+        overflow:visible;
+      }
+      .saved-plans-table,
+      .saved-plans-table tbody,
+      .saved-plans-table tr,
+      .saved-plans-table td{
+        display:block;
+        width:100%;
+        box-sizing:border-box;
+      }
+      .saved-plans-table{
+        border:0;
+        background:transparent;
+      }
+      .saved-plans-table thead,
+      .saved-plans-table td.plan-dates,
+      .saved-plans-table td.plan-note,
+      .saved-plans-table td.plan-actions{
+        display:none;
+      }
+      .saved-plans-table td.plan-name > b{
+        display:none;
+      }
+      .saved-plans-table tr{
+        margin:0 0 10px;
+        border:1px solid var(--line);
+        border-radius:14px;
+        background:#fffdf9;
+        box-shadow:0 4px 14px rgba(87,65,42,.04);
+        overflow:hidden;
+      }
+      .saved-plans-table td{
+        border:0;
+        padding:0;
+      }
+      .saved-plans-table .empty-plan-row td{
+        padding:13px 14px;
+      }
+      .mobile-plan-toggle{
+        display:flex;
+        width:100%;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding:13px 14px;
+        border:0;
+        border-radius:0;
+        background:transparent;
+        color:var(--text);
+        text-align:left;
+      }
+      .mobile-plan-toggle:hover{
+        background:#fff7ed;
+      }
+      .mobile-plan-title{
+        display:block;
+        font-weight:700;
+      }
+      .mobile-plan-meta{
+        display:block;
+        color:var(--muted);
+        font-size:12px;
+        margin-top:2px;
+      }
+      .mobile-plan-panel{
+        display:grid;
+        grid-template-rows:0fr;
+        opacity:0;
+        transition:grid-template-rows .28s ease, opacity .22s ease;
+      }
+      .mobile-plan-panel-inner{
+        overflow:hidden;
+        padding:0 14px;
+      }
+      .plan-row.is-open .mobile-plan-panel{
+        grid-template-rows:1fr;
+        opacity:1;
+      }
+      .plan-row.is-open .mobile-plan-panel-inner{
+        padding-bottom:14px;
+      }
+      .plan-row.is-open .mobile-plan-toggle{
+        background:#fff7ed;
+      }
+      .plan-row.is-open .mobile-plan-toggle .chev{
+        transform:rotate(-135deg);
+        border-color:var(--link);
+      }
+      .mobile-plan-section{
+        padding-top:10px;
+        border-top:1px dashed #efe5d7;
+      }
+      .mobile-plan-section + .mobile-plan-section{
+        margin-top:10px;
+      }
+      .mobile-plan-panel .right-actions{
+        justify-content:flex-start;
+      }
+      .mobile-plan-panel .right-actions button{
+        flex:1;
+      }
     }
   </style>
 </head>
@@ -300,8 +493,8 @@
     <h2>Saved Plans</h2>
     <div class="small">每次保存是一条计划。你可以继续新增、编辑或删除。</div>
 
-    <div style="margin-top:12px; overflow:auto;">
-      <table>
+    <div class="table-scroll">
+      <table class="saved-plans-table">
         <thead>
           <tr>
             <th style="width:150px;">Name</th>
@@ -320,7 +513,7 @@
   <h2>Yearly Summary</h2>
   <div class="small">按年份汇总你所有 Saved Plans 的日期：总天数 + 明细（按 Plan 分组）。</div>
 
-  <div style="margin-top:12px; overflow:auto;">
+  <div class="table-scroll">
     <table>
       <thead>
         <tr>
@@ -599,6 +792,7 @@ function renderSavedPlans(){
 
   if(!savedPlans.length){
     const tr = document.createElement("tr");
+    tr.className = "empty-plan-row";
     tr.innerHTML = `<td colspan="4" class="small">还没有保存任何计划。先在左边 Draft 里选日期并 Save。</td>`;
     plansBody.appendChild(tr);
     return;
@@ -613,12 +807,43 @@ function renderSavedPlans(){
   for(const p of sorted){
     const dates = (p.dates||[]).slice().sort();
     const pills = dates.map(k => `<span class="pill">${formatDateChinese(k)}</span>`).join("");
-    const note = p.note ? escapeHtml(p.note) : `<span class="small">—</span>`;
+    const noteText = p.note ? escapeHtml(p.note) : "";
+    const note = noteText || `<span class="small">-</span>`;
+    const planId = escapeHtml(p.id);
+    const planName = escapeHtml(p.name || "");
 
     const tr = document.createElement("tr");
+    tr.className = "plan-row";
     tr.innerHTML = `
-      <td><b>${escapeHtml(p.name || "")}</b></td>
-      <td>
+      <td class="plan-name">
+        <b>${planName}</b>
+        <button class="mobile-plan-toggle" type="button" aria-expanded="false">
+          <span>
+            <span class="mobile-plan-title">${planName}</span>
+            <span class="mobile-plan-meta">${dates.length} day(s)</span>
+          </span>
+          <span class="chev"></span>
+        </button>
+        <div class="mobile-plan-panel">
+          <div class="mobile-plan-panel-inner">
+            <div class="mobile-plan-section">
+              <div class="small">Dates</div>
+              <div class="pills-wrap" style="margin-top:6px;">${pills}</div>
+            </div>
+            <div class="mobile-plan-section">
+              <div class="small">Note</div>
+              <div>${noteText || `<span class="small">No note</span>`}</div>
+            </div>
+            <div class="mobile-plan-section">
+              <div class="right-actions">
+                <button data-edit="${planId}">Edit</button>
+                <button class="danger" data-del="${planId}">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+      <td class="plan-dates">
         <div class="small">${dates.length} day(s)</div>
 
         <details class="plan-details">
@@ -629,11 +854,11 @@ function renderSavedPlans(){
           <div class="pills-wrap" style="margin-top:6px;">${pills}</div>
         </details>
       </td>
-      <td>${note}</td>
-      <td>
+      <td class="plan-note">${note}</td>
+      <td class="plan-actions">
         <div class="right-actions">
-          <button data-edit="${escapeHtml(p.id)}">Edit</button>
-          <button class="danger" data-del="${escapeHtml(p.id)}">Delete</button>
+          <button data-edit="${planId}">Edit</button>
+          <button class="danger" data-del="${planId}">Delete</button>
         </div>
       </td>
     `;
@@ -643,6 +868,12 @@ function renderSavedPlans(){
     const summaryText = detailsEl.querySelector("summary span:last-child");
     detailsEl.addEventListener("toggle", () => {
       summaryText.textContent = detailsEl.open ? "Hide dates" : "Show dates";
+    });
+
+    const mobileToggle = tr.querySelector(".mobile-plan-toggle");
+    mobileToggle.addEventListener("click", () => {
+      const isOpen = tr.classList.toggle("is-open");
+      mobileToggle.setAttribute("aria-expanded", String(isOpen));
     });
   }
 
