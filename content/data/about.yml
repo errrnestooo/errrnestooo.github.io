@@ -1,0 +1,21 @@
+title: "About Ernest"
+subtitle: "A small page to remember where I started."
+introduction: "Hi, I'm Ernest. I use this website to record diaries, travels, and plans: a quiet space to keep memories, ideas, and growth in one place."
+birthday: "1996-01-19"
+based_in: "Singapore"
+work: "PwC Singapore"
+interests:
+  - Travel
+  - Writing
+  - Learning
+milestones:
+  - title: "1996"
+    description: "Born, and the clock quietly began."
+  - title: "Beijing Institute of Technology"
+    description: "Bachelor's years: study, growth, and leaving familiar rooms."
+  - title: "Singapore Management University"
+    description: "Master's years in Singapore."
+  - title: "PwC Singapore"
+    description: "Senior Associate, building a professional life."
+  - title: "2026"
+    description: "songyangao.com becomes a personal life archive."

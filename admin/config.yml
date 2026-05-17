@@ -1,0 +1,114 @@
+backend:
+  name: github
+  repo: errrnestooo/errrnestooo.github.io
+  branch: main
+  site_domain: songyangao.com
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+site_url: https://songyangao.com
+display_url: https://songyangao.com
+logo_url: /assets/icons/favicon.svg
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+publish_mode: editorial_workflow
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: "diary"
+    label: "Diary Posts"
+    label_singular: "Diary Post"
+    folder: "content/diary"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    preview_path: "diary.html"
+    editor:
+      preview: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "Mood", name: "mood", widget: "string", required: false }
+      - { label: "Location", name: "location", widget: "string", required: false, default: "Singapore" }
+      - { label: "Tags", name: "tags", widget: "list", required: false, default: ["Diary"] }
+      - { label: "Estimated Reading Time", name: "reading_time", widget: "string", required: false, default: "3 min read" }
+      - { label: "Excerpt", name: "excerpt", widget: "text", required: false }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "stories"
+    label: "Stories"
+    label_singular: "Story"
+    folder: "content/stories"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    preview_path: "stories.html"
+    editor:
+      preview: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Subtitle", name: "subtitle", widget: "text", required: false }
+      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - label: "Story Type"
+        name: "story_type"
+        widget: "select"
+        options: ["Travel", "Fiction", "Diary", "Road Novel"]
+      - { label: "Tags", name: "tags", widget: "list", required: false, default: ["Story"] }
+      - { label: "Estimated Reading Time", name: "reading_time", widget: "string", required: false, default: "5 min read" }
+      - { label: "Excerpt", name: "excerpt", widget: "text" }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "travel"
+    label: "Travel Entries"
+    files:
+      - label: "Travel Archive"
+        name: "travel_archive"
+        file: "content/data/travel.yml"
+        fields:
+          - label: "Trips"
+            name: "trips"
+            widget: "list"
+            summary: "{{fields.country}} - {{fields.city}}"
+            fields:
+              - { label: "Country", name: "country", widget: "string" }
+              - { label: "City / Area", name: "city", widget: "string" }
+              - { label: "Year", name: "year", widget: "string" }
+              - { label: "Continent", name: "continent", widget: "select", options: ["Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica"] }
+              - { label: "Transportation", name: "transportation", widget: "string", required: false }
+              - { label: "Status", name: "status", widget: "select", options: ["completed", "planned"] }
+              - { label: "Memories", name: "memories", widget: "text", required: false }
+              - { label: "Budget", name: "budget", widget: "string", required: false }
+              - { label: "Photo", name: "photo", widget: "image", required: false }
+              - { label: "Accent Color", name: "color", widget: "color", required: false, default: "#c98b57" }
+
+  - name: "about"
+    label: "About Page"
+    files:
+      - label: "About Content"
+        name: "about_content"
+        file: "content/data/about.yml"
+        fields:
+          - { label: "Page Title", name: "title", widget: "string" }
+          - { label: "Subtitle", name: "subtitle", widget: "string" }
+          - { label: "Introduction", name: "introduction", widget: "text" }
+          - { label: "Birthday", name: "birthday", widget: "string" }
+          - { label: "Based In", name: "based_in", widget: "string" }
+          - { label: "Work", name: "work", widget: "string" }
+          - { label: "Interests", name: "interests", widget: "list" }
+          - label: "Life Milestones"
+            name: "milestones"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
