@@ -1,155 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="About Ernest, life progress, countdown, and personal milestones.">
+  <meta property="og:title" content="About | Ernest's Journal">
+  <meta property="og:description" content="A small page to remember where Ernest started and how time is passing.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://songyangao.com/about.html">
   <title>About | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
 
   <style>
     :root{
-      --bg: #fbf7f0;
-      --card: #ffffff;
-      --text: #1f1f1f;
-      --muted: #6b5f54;
-      --border: #eadfce;
-      --accent: #7a4e2d;
-      --shadow: 0 10px 25px rgba(0,0,0,0.06);
-      --radius: 18px;
+      --bg:#fbf7f0;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --border:#eadfce;
+      --accent:#7a4e2d;
+      --selected:#f2e7d6;
+      --shadow:0 10px 25px rgba(0,0,0,.06);
+      --radius:18px;
     }
 
     body{
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background:var(--bg);
+      color:var(--text);
       line-height:1.8;
     }
 
     .container{
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 44px 18px 80px;
+      max-width:980px;
+      margin:0 auto;
+      padding:44px 18px 90px;
     }
 
     h1{
       text-align:center;
-      margin: 0 0 10px;
-      font-size: 40px;
-      letter-spacing: .2px;
+      margin:0 0 10px;
+      font-size:40px;
+      letter-spacing:.2px;
     }
 
     .subtitle{
       text-align:center;
-      color: var(--muted);
-      margin-bottom: 26px;
-      font-size: 14px;
+      color:var(--muted);
+      margin-bottom:26px;
+      font-size:14px;
     }
 
     .nav{
       text-align:center;
-      margin: 18px 0 36px;
+      margin:18px 0 36px;
     }
+
     .nav a{
       display:inline-block;
-      margin: 0 10px;
-      padding: 6px 10px;
-      border-radius: 12px;
+      margin:0 10px;
+      padding:6px 10px;
+      border-radius:12px;
       text-decoration:none;
-      color: var(--muted);
+      color:var(--muted);
     }
-    .nav a:hover{
-      background: #f2e7d6;
-      color: var(--accent);
+
+    .nav a:hover,
+    .nav a.active{
+      background:var(--selected);
+      color:var(--accent);
     }
 
     .grid{
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 18px;
-    }
-    @media (max-width: 860px){
-      .grid{ grid-template-columns: 1fr; }
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
     }
 
     .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 20px;
-      box-shadow: var(--shadow);
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow:var(--shadow);
     }
 
     .card h2{
-      margin: 0 0 10px;
-      font-size: 18px;
+      margin:0 0 10px;
+      font-size:18px;
     }
 
     .kv{
-      margin: 10px 0 0;
-      padding: 0;
-      list-style: none;
+      margin:10px 0 0;
+      padding:0;
+      list-style:none;
     }
+
     .kv li{
       display:flex;
-      gap: 10px;
-      padding: 6px 0;
-      border-bottom: 1px dashed #efe5d7;
+      gap:10px;
+      padding:6px 0;
+      border-bottom:1px dashed #efe5d7;
     }
+
     .kv li:last-child{ border-bottom:none; }
-    .k{ width: 130px; color: var(--muted); }
+    .k{ width:130px; color:var(--muted); }
     .v{ flex:1; }
 
     .progress-wrap{
-      margin-top: 12px;
-      background: #f3eadb;
-      border: 1px solid var(--border);
-      border-radius: 999px;
+      margin-top:12px;
+      background:#f3eadb;
+      border:1px solid var(--border);
+      border-radius:999px;
       overflow:hidden;
-      height: 14px;
+      height:16px;
     }
+
     .progress-bar{
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #c98b57, #8a5a34);
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#c98b57,#8a5a34);
+      transition:width 1.2s ease;
     }
 
     .stats{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:14px;
     }
-    .stat{
-      background: #fff7eb;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 12px;
-    }
-    .stat .label{ color: var(--muted); font-size: 12px; }
-    .stat .value{ font-size: 18px; font-weight: 700; margin-top: 2px; }
 
-    .note{
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 10px;
+    .stat{
+      background:#fff7eb;
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .stat .label{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .stat .value{
+      font-size:18px;
+      font-weight:700;
+      margin-top:2px;
+    }
+
+    .countdown{
+      margin-top:14px;
+      padding:12px;
+      border:1px dashed var(--border);
+      border-radius:14px;
+      color:var(--muted);
+      background:#fffdf8;
     }
 
     .timeline{
-      margin: 10px 0 0;
-      padding-left: 18px;
+      margin:14px 0 0;
+      padding:0;
+      list-style:none;
     }
-    .timeline li{ margin: 8px 0; }
 
-    .small{
-      color: var(--muted);
-      font-size: 13px;
+    .timeline li{
+      position:relative;
+      padding:0 0 14px 22px;
+      border-left:1px solid var(--border);
+    }
+
+    .timeline li::before{
+      content:"";
+      position:absolute;
+      left:-5px;
+      top:7px;
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--accent);
+    }
+
+    .timeline li:last-child{
+      border-left-color:transparent;
+      padding-bottom:0;
+    }
+
+    .small,
+    .note{
+      color:var(--muted);
+      font-size:13px;
     }
 
     .footer{
-      margin-top: 18px;
+      margin-top:18px;
       text-align:center;
-      color: var(--muted);
-      font-size: 12px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media (max-width:860px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width:640px){
+      .container{ padding:34px 16px 78px; }
+      h1{ font-size:34px; }
+      .nav{
+        display:flex;
+        justify-content:center;
+        flex-wrap:wrap;
+        gap:8px;
+      }
+      .nav a{ margin:0; background:rgba(255,255,255,.45); }
+      .stats{ grid-template-columns:1fr; }
+      .kv li{ display:block; }
+      .k{ width:auto; }
     }
   </style>
 </head>
@@ -164,64 +231,54 @@
       <a href="diary.html">Diary</a>
       <a href="travel.html">Travel</a>
       <a href="plans.html">Plans</a>
-      <a href="about.html">About</a>
+      <a href="about.html" class="active">About</a>
     </div>
 
     <div class="grid">
-      <!-- Left: Bio -->
-      <div class="card">
+      <section class="card fade-in">
         <h2>Self Introduction</h2>
         <p>
-          Hi, I’m Ernest. I use this website to record my diaries, travels, and plans — a quiet space to keep memories,
-          ideas, and growth in one place.
+          Hi, I'm Ernest. I use this website to record diaries, travels, and plans:
+          a quiet space to keep memories, ideas, and growth in one place.
         </p>
 
         <ul class="kv">
           <li><div class="k">Birthday</div><div class="v">1996-01-19</div></li>
           <li><div class="k">Based in</div><div class="v">Singapore</div></li>
           <li><div class="k">Work</div><div class="v">PwC Singapore</div></li>
-          <li><div class="k">Interests</div><div class="v">Travel · Writing · Learning</div></li>
+          <li><div class="k">Interests</div><div class="v">Travel - Writing - Learning</div></li>
         </ul>
 
-        <h2 style="margin-top:18px;">Education</h2>
+        <h2 style="margin-top:18px;">Life Milestones</h2>
         <ul class="timeline">
-          <li><strong>Master’s</strong> — Singapore Management University </li>
-          <li><strong>Bachelor’s</strong> — Beijing Institute of Technology</li>
+          <li><strong>1996</strong><br><span class="small">Born, and the clock quietly began.</span></li>
+          <li><strong>Beijing Institute of Technology</strong><br><span class="small">Bachelor's years: study, growth, and leaving familiar rooms.</span></li>
+          <li><strong>Singapore Management University</strong><br><span class="small">Master's years in Singapore.</span></li>
+          <li><strong>PwC Singapore</strong><br><span class="small">Senior Associate, building a professional life.</span></li>
+          <li><strong>2026</strong><br><span class="small">songyangao.com becomes a personal life archive.</span></li>
         </ul>
+      </section>
 
-        <h2 style="margin-top:18px;">Work Experience</h2>
-        <ul class="timeline">
-          <li><strong>PwC Singapore</strong> — Senior Associate </li>
-        </ul>
-
-        <p class="small" style="margin-top:16px;">
-          If you’re reading this years later: keep going — and don’t forget why you started.
-        </p>
-      </div>
-
-      <!-- Right: Life Progress -->
-      <div class="card">
-        <h2>Life Progress </h2>
-        <div class="small">
-          Assumption: I will live to <strong>80</strong> years old.
-        </div>
+      <section class="card fade-in">
+        <h2>Life Progress</h2>
+        <div class="small">Assumption: I will live to <strong>80</strong> years old.</div>
 
         <div class="stats">
           <div class="stat">
             <div class="label">Current age</div>
-            <div class="value" id="ageText">—</div>
+            <div class="value" id="ageText">-</div>
           </div>
           <div class="stat">
-            <div class="label">Life progress</div>
-            <div class="value" id="progressText">—</div>
+            <div class="label">Life completed</div>
+            <div class="value" id="progressText">-</div>
           </div>
           <div class="stat">
             <div class="label">Days lived</div>
-            <div class="value" id="daysLived">—</div>
+            <div class="value" id="daysLived">-</div>
           </div>
           <div class="stat">
-            <div class="label">Days remaining (to 80)</div>
-            <div class="value" id="daysLeft">—</div>
+            <div class="label">Estimated days remaining</div>
+            <div class="value" id="daysLeft">-</div>
           </div>
         </div>
 
@@ -230,27 +287,24 @@
           <div class="progress-wrap">
             <div class="progress-bar" id="bar"></div>
           </div>
-          <div class="note" id="targetText">—</div>
+          <div class="note" id="targetText">-</div>
         </div>
 
-        <div class="note">
-          Tip: this calculation uses your local time and updates every time the page loads.
-        </div>
-      </div>
+        <div class="countdown" id="countdownText">Calculating countdown...</div>
+      </section>
     </div>
 
     <div class="footer">© Ernest's Journal</div>
   </div>
 
   <script>
-    // ===== Settings =====
-    const DOB = new Date(1996, 0, 19);       // 1996-01-19 (month is 0-based)
+    // Life progress uses local time and updates the countdown every second.
+    const DOB = new Date(1996, 0, 19);
     const TARGET_AGE = 80;
-    const targetDate = new Date(1996 + TARGET_AGE, 0, 19); // 2076-01-19
+    const targetDate = new Date(1996 + TARGET_AGE, 0, 19);
 
     function daysBetween(a, b){
       const msPerDay = 24 * 60 * 60 * 1000;
-      // Use noon to reduce DST edge cases
       const aa = new Date(a.getFullYear(), a.getMonth(), a.getDate(), 12, 0, 0);
       const bb = new Date(b.getFullYear(), b.getMonth(), b.getDate(), 12, 0, 0);
       return Math.floor((bb - aa) / msPerDay);
@@ -260,14 +314,11 @@
       let years = now.getFullYear() - dob.getFullYear();
       let months = now.getMonth() - dob.getMonth();
       let days = now.getDate() - dob.getDate();
-
-      if (days < 0) {
-        // borrow days from previous month
-        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-        days += prevMonth;
+      if(days < 0){
+        days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
         months -= 1;
       }
-      if (months < 0) {
+      if(months < 0){
         months += 12;
         years -= 1;
       }
@@ -276,36 +327,31 @@
 
     function render(){
       const now = new Date();
-
       const lived = daysBetween(DOB, now);
       const total = daysBetween(DOB, targetDate);
       const left = Math.max(0, total - lived);
-
       const pct = Math.min(100, Math.max(0, (lived / total) * 100));
-
       const age = formatAge(DOB, now);
+      const remainingMs = Math.max(0, targetDate - now);
+      const hours = Math.floor((remainingMs / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((remainingMs / (1000 * 60)) % 60);
+      const seconds = Math.floor((remainingMs / 1000) % 60);
 
-      document.getElementById("ageText").textContent =
-        `${age.years}y ${age.months}m ${age.days}d`;
-
-      document.getElementById("progressText").textContent =
-        `${pct.toFixed(2)}%`;
-
-      document.getElementById("daysLived").textContent =
-        lived.toLocaleString();
-
-      document.getElementById("daysLeft").textContent =
-        left.toLocaleString();
-
+      document.getElementById("ageText").textContent = `${age.years}y ${age.months}m ${age.days}d`;
+      document.getElementById("progressText").textContent = `${pct.toFixed(2)}%`;
+      document.getElementById("daysLived").textContent = lived.toLocaleString();
+      document.getElementById("daysLeft").textContent = left.toLocaleString();
       document.getElementById("bar").style.width = `${pct.toFixed(2)}%`;
 
       const targetStr = `${targetDate.getFullYear()}-${String(targetDate.getMonth()+1).padStart(2,"0")}-${String(targetDate.getDate()).padStart(2,"0")}`;
-      document.getElementById("targetText").textContent =
-        `Target date: ${targetStr} · Total days: ${total.toLocaleString()}`;
+      document.getElementById("targetText").textContent = `Target date: ${targetStr} - Total days: ${total.toLocaleString()}`;
+      document.getElementById("countdownText").textContent =
+        `${left.toLocaleString()} days, ${hours} hours, ${minutes} minutes, ${seconds} seconds remaining to 80.`;
     }
 
     render();
+    setInterval(render, 1000);
   </script>
+  <script src="assets/js/site.js"></script>
 </body>
 </html>
-

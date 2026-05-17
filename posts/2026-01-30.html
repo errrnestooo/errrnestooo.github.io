@@ -3,55 +3,85 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello World</title>
-
+  <meta name="description" content="Hello World - the first diary entry in Ernest's Journal.">
+  <meta property="og:title" content="Hello World | Ernest's Journal">
+  <meta property="og:description" content="The beginning of songyangao.com as a personal life archive.">
+  <meta property="og:type" content="article">
+  <title>Hello World | Ernest's Journal</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/site.css">
   <style>
+    :root{
+      --bg:#fbf7f0;
+      --card:#ffffff;
+      --text:#1f1f1f;
+      --muted:#6b5f54;
+      --border:#eadfce;
+      --accent:#7a4e2d;
+    }
+
     body{
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
-      max-width:700px;
+      max-width:720px;
       margin:0 auto;
-      padding:40px 20px;
-      background:#fbf7f0;
-      color:#1f1f1f;
+      padding:42px 20px 80px;
+      background:var(--bg);
+      color:var(--text);
       line-height:1.8;
     }
 
-    a{
-      text-decoration:none;
-      color:#7a4e2d;
+    a{ color:var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    article{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:24px;
+      box-shadow:0 10px 25px rgba(0,0,0,.05);
     }
 
-    a:hover{
-      text-decoration:underline;
-    }
+    h1{ margin-top:0; }
 
     .meta{
-      color:#6b5f54;
+      color:var(--muted);
       font-size:13px;
       margin-bottom:20px;
     }
+
+    .post-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:22px;
+      padding-top:16px;
+      border-top:1px dashed #efe5d7;
+      flex-wrap:wrap;
+    }
   </style>
 </head>
-
 <body>
+  <p><a href="../diary.html">← Back to Diary</a></p>
 
-<a href="../diary.html">← Back</a>
+  <article class="fade-in">
+    <h1>2026-01-30 - Hello World</h1>
+    <div class="meta">Singapore - Hopeful - 1 min read - #beginning #journal</div>
 
-<h1>2026-01-30 · Hello World</h1>
+    <p>
+      Today I officially started using songyangao.com to record life. I hope that ten years later,
+      looking back, I will not regret the decision I made today.
+    </p>
 
-<div class="meta">
-  📍 Singapore | ✍️ Ernest
-</div>
+    <p>
+      Ernest's website will keep ordinary days in one quiet place, and walk with me for a long time.
+    </p>
 
-<p>
-  今天正式开始用 songyangao.com 记录人生。
-  希望十年后回看，不会后悔今天的决定。
-</p>
+    <nav class="post-nav">
+      <span></span>
+      <a href="2026-03-29.html">Next entry: Building My Website →</a>
+    </nav>
+  </article>
 
-<p>
-  Ernest 的网站会永远保存下去，
-  与你同行。30 Jan 2026
-</p>
-
+  <script src="../assets/js/site.js"></script>
 </body>
 </html>

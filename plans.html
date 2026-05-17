@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="Plan future trips with Singapore public holidays, saved plans, travel statistics, and JSON import/export.">
+  <meta property="og:title" content="Plans | Ernest's Journal">
+  <meta property="og:description" content="A warm minimalist trip planning calendar for future travel ideas.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://songyangao.com/plans.html">
   <title>Plans | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
 
   <style>
     :root{
@@ -201,6 +208,89 @@
 
     .right-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:flex-end; }
     .mobile-plan-toggle, .mobile-plan-panel{ display:none; }
+    .sync-toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-top:12px;
+      padding:12px;
+      border:1px dashed var(--line);
+      border-radius:14px;
+      background:#fffdf8;
+    }
+    .sync-toolbar .left,
+    .sync-toolbar .right{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+    }
+    .color-dot{
+      display:inline-block;
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--dot,#c98b57);
+      margin-right:6px;
+      box-shadow:0 0 0 2px rgba(255,255,255,.8);
+    }
+    .plan-color-select{
+      min-width:132px;
+    }
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .stat-card{
+      background:#fffdf8;
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px;
+    }
+    .stat-card .value{
+      font-size:22px;
+      font-weight:700;
+      color:var(--link);
+    }
+    .usage-chart{
+      display:grid;
+      gap:8px;
+      margin-top:12px;
+    }
+    .usage-row{
+      display:grid;
+      grid-template-columns:70px 1fr 48px;
+      gap:10px;
+      align-items:center;
+      font-size:13px;
+      color:var(--muted);
+    }
+    .usage-track{
+      height:10px;
+      border-radius:999px;
+      background:#f3eadb;
+      overflow:hidden;
+      border:1px solid var(--line);
+    }
+    .usage-fill{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background:linear-gradient(90deg,#c98b57,#8a5a34);
+    }
+    .future-note{
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px dashed var(--line);
+      color:var(--muted);
+      background:#fffdf8;
+      font-size:13px;
+    }
 
     .plan-details { margin-top: 6px; }
     .plan-details summary{
@@ -426,6 +516,23 @@
       .mobile-plan-panel .right-actions button{
         flex:1;
       }
+      .sync-toolbar,
+      .sync-toolbar .left,
+      .sync-toolbar .right{
+        display:grid;
+        grid-template-columns:1fr;
+        align-items:stretch;
+      }
+      .sync-toolbar button,
+      .sync-toolbar select{
+        width:100%;
+      }
+      .stats-grid{
+        grid-template-columns:1fr 1fr;
+      }
+      .usage-row{
+        grid-template-columns:56px 1fr 38px;
+      }
     }
   </style>
 </head>
@@ -466,6 +573,22 @@
   <div class="hint" id="draftHint">
     ✅ 点击日期：加入/取消 Draft 假期。按住 <b>Shift</b>：连续选择区间（先点起点，再 Shift 点终点）。<br/>
     🟧 标记 <b>PH</b> 的为新加坡公假（Public Holiday）。
+  </div>
+  <div class="sync-toolbar">
+    <div class="left">
+      <span class="small">Cloud sync ready: API + local draft + JSON backup</span>
+      <select id="planColorInput" class="plan-color-select" aria-label="Trip color label">
+        <option value="#c98b57">Amber label</option>
+        <option value="#7a4e2d">Cocoa label</option>
+        <option value="#8aa0a8">Mist label</option>
+        <option value="#9f7f52">Olive label</option>
+      </select>
+    </div>
+    <div class="right">
+      <button id="exportPlansBtn">Export JSON</button>
+      <button id="importPlansBtn">Import JSON</button>
+      <input id="importPlansFile" type="file" accept="application/json,.json" hidden>
+    </div>
   </div>
 </div>
 
@@ -524,6 +647,37 @@
       </thead>
       <tbody id="summaryBody"></tbody>
     </table>
+  </div>
+</div>
+
+<div class="panel" style="margin-top:16px;">
+  <h2>Travel Statistics</h2>
+  <div class="small">A quiet planning dashboard for annual vacation usage and future AI/cloud features.</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="small">Saved plans</div>
+      <div class="value" id="statPlans">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="small">Planned days</div>
+      <div class="value" id="statDays">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="small">This year</div>
+      <div class="value" id="statThisYear">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="small">Public holidays shown</div>
+      <div class="value" id="statPublicHolidays">0</div>
+    </div>
+  </div>
+
+  <div class="usage-chart" id="usageChart"></div>
+
+  <div class="future-note">
+    Future structure prepared: AI travel summaries, AI diary assistant, itinerary generator,
+    Cloudflare KV sync, and login can connect to the same plan objects without changing the page layout.
   </div>
 </div>
 
@@ -608,6 +762,9 @@ let draftDates = loadDraft();
 let savedPlans = [];
 let lastClickedKey = null;
 let editingPlanId = null;
+let isDraggingDates = false;
+let dragSelectMode = true;
+let suppressNextDateClick = false;
 
 /* =========
    Helpers
@@ -651,9 +808,18 @@ const savePlanBtn = document.getElementById("savePlanBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 const draftPreview = document.getElementById("draftPreview");
 const draftHint = document.getElementById("draftHint");
+const planColorInput = document.getElementById("planColorInput");
+const exportPlansBtn = document.getElementById("exportPlansBtn");
+const importPlansBtn = document.getElementById("importPlansBtn");
+const importPlansFile = document.getElementById("importPlansFile");
 
 const plansBody = document.getElementById("plansBody");
 const summaryBody = document.getElementById("summaryBody");
+const statPlans = document.getElementById("statPlans");
+const statDays = document.getElementById("statDays");
+const statThisYear = document.getElementById("statThisYear");
+const statPublicHolidays = document.getElementById("statPublicHolidays");
+const usageChart = document.getElementById("usageChart");
 
 /* ==========
    Init selects
@@ -686,6 +852,14 @@ monthSelect.value = currentMonth;
    Calendar render
    ========== */
 const dows = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+function setDraftDate(key, value){
+  if(value) draftDates[key] = true;
+  else delete draftDates[key];
+  saveDraft();
+  updateDraftHint();
+  renderDraftPreview();
+}
 
 function renderCalendar(){
   calendarEl.innerHTML = "";
@@ -731,6 +905,10 @@ function renderCalendar(){
     `;
 
     cell.addEventListener("click", (e) => {
+      if(suppressNextDateClick && !e.shiftKey){
+        suppressNextDateClick = false;
+        return;
+      }
       if(e.shiftKey && lastClickedKey){
         const range = buildRange(lastClickedKey, key);
         range.forEach(k => { draftDates[k] = true; });
@@ -745,9 +923,29 @@ function renderCalendar(){
       renderDraftPreview();
     });
 
+    cell.addEventListener("pointerdown", (e) => {
+      if(e.pointerType === "mouse" && e.button !== 0) return;
+      suppressNextDateClick = true;
+      isDraggingDates = true;
+      dragSelectMode = !draftDates[key];
+      setDraftDate(key, dragSelectMode);
+      lastClickedKey = key;
+      renderCalendar();
+    });
+
+    cell.addEventListener("pointerenter", () => {
+      if(!isDraggingDates) return;
+      setDraftDate(key, dragSelectMode);
+      renderCalendar();
+    });
+
     calendarEl.appendChild(cell);
   }
 }
+
+document.addEventListener("pointerup", () => {
+  isDraggingDates = false;
+});
 
 function buildRange(a, b){
   if(!inSameMonth(a,b)) return [b];
@@ -811,15 +1009,16 @@ function renderSavedPlans(){
     const note = noteText || `<span class="small">-</span>`;
     const planId = escapeHtml(p.id);
     const planName = escapeHtml(p.name || "");
+    const planColor = escapeHtml(p.color || "#c98b57");
 
     const tr = document.createElement("tr");
     tr.className = "plan-row";
     tr.innerHTML = `
       <td class="plan-name">
-        <b>${planName}</b>
+        <b><span class="color-dot" style="--dot:${planColor}"></span>${planName}</b>
         <button class="mobile-plan-toggle" type="button" aria-expanded="false">
           <span>
-            <span class="mobile-plan-title">${planName}</span>
+            <span class="mobile-plan-title"><span class="color-dot" style="--dot:${planColor}"></span>${planName}</span>
             <span class="mobile-plan-meta">${dates.length} day(s)</span>
           </span>
           <span class="chev"></span>
@@ -886,6 +1085,7 @@ function renderSavedPlans(){
       editingPlanId = id;
       planNameInput.value = plan.name || "";
       planNoteInput.value = plan.note || "";
+      planColorInput.value = plan.color || "#c98b57";
 
       draftDates = {};
       (plan.dates || []).forEach(d => draftDates[d] = true);
@@ -906,6 +1106,7 @@ function renderSavedPlans(){
       renderCalendar();
       renderDraftPreview();
       renderYearlySummary();
+      renderTravelStats();
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
@@ -926,6 +1127,7 @@ function renderSavedPlans(){
 
       renderSavedPlans();
       renderYearlySummary();
+      renderTravelStats();
     });
   });
 }
@@ -993,6 +1195,85 @@ function renderYearlySummary(){
     `;
     summaryBody.appendChild(tr);
   }
+  renderTravelStats();
+}
+
+function renderTravelStats(){
+  const allDates = savedPlans.flatMap(p => p.dates || []);
+  const currentYearText = String(currentYear);
+  const thisYearDays = allDates.filter(d => d.startsWith(currentYearText + "-")).length;
+  const phCount = Object.values(SG_PUBLIC_HOLIDAYS).reduce((sum, yearMap) => sum + Object.keys(yearMap).length, 0);
+
+  statPlans.textContent = savedPlans.length;
+  statDays.textContent = allDates.length;
+  statThisYear.textContent = thisYearDays;
+  statPublicHolidays.textContent = phCount;
+
+  const byYear = {};
+  allDates.forEach(date => {
+    const year = date.slice(0,4);
+    byYear[year] = (byYear[year] || 0) + 1;
+  });
+
+  const years = Object.keys(byYear).sort();
+  if(!years.length){
+    usageChart.innerHTML = `<div class="small">No vacation usage yet. Saved plans will appear here.</div>`;
+    return;
+  }
+
+  const maxDays = Math.max(...Object.values(byYear), 1);
+  usageChart.innerHTML = years.map(year => {
+    const days = byYear[year];
+    const pct = Math.round((days / maxDays) * 100);
+    return `
+      <div class="usage-row">
+        <strong>${year}</strong>
+        <div class="usage-track"><div class="usage-fill" style="width:${pct}%"></div></div>
+        <span>${days}d</span>
+      </div>
+    `;
+  }).join("");
+}
+
+function exportPlans(){
+  const payload = {
+    version: 2,
+    exportedAt: new Date().toISOString(),
+    source: "Ernest's Journal",
+    syncReady: {
+      provider: "Cloudflare KV",
+      auth: "future-login-system",
+      ai: ["travel summaries", "diary assistant", "itinerary generator"]
+    },
+    plans: savedPlans
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:"application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "ernest-plans.json";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+async function importPlans(file){
+  const text = await file.text();
+  const payload = JSON.parse(text);
+  const incoming = Array.isArray(payload) ? payload : payload.plans;
+  if(!Array.isArray(incoming)) throw new Error("Invalid plans JSON");
+
+  savedPlans = incoming.map(plan => ({
+    id: plan.id || newId(),
+    name: plan.name || "Untitled Plan",
+    note: plan.note || "",
+    dates: Array.isArray(plan.dates) ? plan.dates : [],
+    color: plan.color || "#c98b57"
+  }));
+
+  await saveSavedPlansToServer(savedPlans);
+  renderSavedPlans();
+  renderYearlySummary();
+  renderTravelStats();
 }
 
 /* ==========
@@ -1007,6 +1288,7 @@ function exitEditMode(clearDraft){
     saveDraft();
     planNameInput.value = "";
     planNoteInput.value = "";
+    planColorInput.value = "#c98b57";
     lastClickedKey = null;
   }
   updateDraftHint();
@@ -1021,6 +1303,26 @@ todayBtn.addEventListener("click", () => {
   yearSelect.value = currentYear;
   monthSelect.value = currentMonth;
   renderCalendar();
+});
+
+exportPlansBtn.addEventListener("click", exportPlans);
+
+importPlansBtn.addEventListener("click", () => {
+  importPlansFile.click();
+});
+
+importPlansFile.addEventListener("change", async () => {
+  const file = importPlansFile.files[0];
+  if(!file) return;
+  try{
+    await importPlans(file);
+    alert("Imported plans successfully.");
+  }catch(e){
+    console.error(e);
+    alert("Import failed. Please check the JSON file.");
+  }finally{
+    importPlansFile.value = "";
+  }
 });
 
 yearSelect.addEventListener("change", () => renderCalendar());
@@ -1066,6 +1368,7 @@ savePlanBtn.addEventListener("click", async () => {
   }
 
   const note = planNoteInput.value.trim();
+  const color = planColorInput.value || "#c98b57";
 
   if(editingPlanId){
     const idx = savedPlans.findIndex(p => p.id === editingPlanId);
@@ -1074,17 +1377,18 @@ savePlanBtn.addEventListener("click", async () => {
       exitEditMode(true);
       return;
     }
-    savedPlans[idx] = { ...savedPlans[idx], name, note, dates };
+    savedPlans[idx] = { ...savedPlans[idx], name, note, dates, color };
     await saveSavedPlansToServer(savedPlans);
 
     exitEditMode(true);
     renderSavedPlans();
     renderYearlySummary();
+    renderTravelStats();
     alert("已更新 ✅");
     return;
   }
 
-  const plan = { id:newId(), name, note, dates };
+  const plan = { id:newId(), name, note, dates, color };
   savedPlans.push(plan);
   await saveSavedPlansToServer(savedPlans);
 
@@ -1093,6 +1397,7 @@ savePlanBtn.addEventListener("click", async () => {
   lastClickedKey = null;
   planNameInput.value = "";
   planNoteInput.value = "";
+  planColorInput.value = "#c98b57";
 
   updateDraftHint();
   renderCalendar();
@@ -1112,10 +1417,12 @@ async function initPage(){
   renderDraftPreview();
   renderSavedPlans();
   renderYearlySummary();
+  renderTravelStats();
 }
 
 initPage();
 </script>
+<script src="assets/js/site.js"></script>
 
 </body>
 </html>
