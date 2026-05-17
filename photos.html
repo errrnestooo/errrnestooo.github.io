@@ -3,42 +3,71 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ernest's Journal 的摄影网格。">
-  <meta property="og:title" content="照片 | Ernest's Journal">
-  <meta property="og:description" content="一些孤独但温暖的画面。">
+  <meta name="description" content="A quiet photography page for Ernest's Journal.">
+  <meta property="og:title" content="Photos | Ernest's Journal">
+  <meta property="og:description" content="Passing light, windows, airports, and nights.">
   <meta property="og:type" content="website">
-  <title>照片 | Ernest's Journal</title>
+  <title>Photos | Ernest's Journal</title>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
   <main class="journal-page">
-    <nav class="nav">
-      <a href="index.html">首页</a><a href="diary.html">日记</a><a href="stories.html">小说</a><a href="field-notes.html">札记</a><a href="now.html">近况</a><a href="timeline.html">时间线</a><a href="travel.html">旅行</a><a href="travel-map.html">地图</a><a href="library.html">书影音</a><a href="photos.html" class="active">照片</a><a href="life.html">生活</a><a href="plans.html">计划</a><a href="about.html">关于</a>
-    </nav>
-    <header class="journal-hero fade-in"><div class="journal-kicker">Warm solitude</div><h1 data-i18n="photos.title">照片</h1><p data-i18n="photos.subtitle">一些孤独但温暖的画面：街道、机场、沙漠、新加坡、夜晚和移动中的光。</p></header>
+    <div class="nav">
+      <a href="index.html">&#x9996;&#x9875;</a>
+      <a href="diary.html">&#x65E5;&#x8BB0;</a>
+      <a href="stories.html">&#x5C0F;&#x8BF4;</a>
+      <a href="field-notes.html">&#x672D;&#x8BB0;</a>
+      <a href="now.html">&#x8FD1;&#x51B5;</a>
+      <a href="timeline.html">&#x65F6;&#x95F4;&#x7EBF;</a>
+      <a href="travel.html">&#x65C5;&#x884C;</a>
+      <a href="travel-map.html">&#x5730;&#x56FE;</a>
+      <a href="library.html">&#x4E66;&#x5F71;&#x97F3;</a>
+      <a href="photos.html" class="active">&#x7167;&#x7247;</a>
+      <a href="life.html">&#x751F;&#x6D3B;</a>
+      <a href="plans.html">&#x8BA1;&#x5212;</a>
+      <a href="about.html">&#x5173;&#x4E8E;</a>
+    </div>
+
+    <header class="journal-hero fade-in">
+      <div class="journal-kicker">Photo archive</div>
+      <h1 data-i18n="photos.title">&#x7167;&#x7247;</h1>
+      <p data-i18n="photos.subtitle">&#x4E00;&#x4E9B;&#x8DEF;&#x8FC7;&#x7684;&#x5149;&#x3001;&#x7A97;&#x53E3;&#x3001;&#x673A;&#x573A;&#x548C;&#x591C;&#x665A;&#x3002;</p>
+    </header>
+
     <section class="photo-grid">
-      <figure class="photo-tile" style="--photo-color:#c9a27a;"><div class="photo-art"></div><figcaption data-i18n="photos.streets">街道</figcaption></figure>
-      <figure class="photo-tile" style="--photo-color:#9fa9ad;"><div class="photo-art"></div><figcaption data-i18n="photos.airports">机场</figcaption></figure>
-      <figure class="photo-tile" style="--photo-color:#b98655;"><div class="photo-art"></div><figcaption data-i18n="photos.desert">沙漠</figcaption></figure>
-      <figure class="photo-tile" style="--photo-color:#8aa08f;"><div class="photo-art"></div><figcaption data-i18n="photos.singapore">新加坡</figcaption></figure>
-      <figure class="photo-tile" style="--photo-color:#3d3733;"><div class="photo-art"></div><figcaption data-i18n="photos.night">夜晚</figcaption></figure>
-      <figure class="photo-tile" style="--photo-color:#b7a17d;"><div class="photo-art"></div><figcaption data-i18n="photos.motion">移动</figcaption></figure>
+      <figure class="photo-tile fade-in"><div class="photo-art" style="--photo-color:#d8c2a5"></div><figcaption data-i18n="photos.streets">&#x8857;&#x9053;</figcaption></figure>
+      <figure class="photo-tile fade-in"><div class="photo-art" style="--photo-color:#b9b7aa"></div><figcaption data-i18n="photos.airports">&#x673A;&#x573A;</figcaption></figure>
+      <figure class="photo-tile fade-in"><div class="photo-art" style="--photo-color:#c9a06e"></div><figcaption data-i18n="photos.desert">&#x6C99;&#x6F20;</figcaption></figure>
+      <figure class="photo-tile fade-in"><div class="photo-art" style="--photo-color:#b7c0b2"></div><figcaption data-i18n="photos.singapore">&#x65B0;&#x52A0;&#x5761;</figcaption></figure>
+      <figure class="photo-tile fade-in"><div class="photo-art" style="--photo-color:#6f665e"></div><figcaption data-i18n="photos.night">&#x591C;&#x665A;</figcaption></figure>
+      <figure class="photo-tile fade-in"><div class="photo-art" style="--photo-color:#a88d76"></div><figcaption data-i18n="photos.motion">&#x79FB;&#x52A8;&#x4E2D;</figcaption></figure>
     </section>
+
+    <div class="lightbox" aria-hidden="true">
+      <div class="lightbox-content">
+        <div class="photo-art" style="--photo-color:#d8c2a5"></div>
+      </div>
+    </div>
+
+    <footer class="archive-footer" data-i18n="footer">Ernest's Journal - &#x5728;&#x65B0;&#x52A0;&#x5761;&#x7F13;&#x6162;&#x5EFA;&#x9020;&#x7684;&#x4E2A;&#x4EBA;&#x6863;&#x6848;</footer>
   </main>
-  <div class="lightbox" id="lightbox"><div class="lightbox-content"><div class="photo-art" id="lightboxArt"></div></div></div>
-  <script src="assets/js/i18n.js"></script>
   <script>
-    const lightbox = document.getElementById("lightbox");
-    const art = document.getElementById("lightboxArt");
-    document.querySelectorAll(".photo-tile").forEach((tile) => {
-      tile.addEventListener("click", () => {
-        art.style.setProperty("--photo-color", tile.style.getPropertyValue("--photo-color"));
-        lightbox.classList.add("is-open");
+    document.addEventListener("DOMContentLoaded", function(){
+      const lightbox = document.querySelector(".lightbox");
+      document.querySelectorAll(".photo-tile").forEach(function(tile){
+        tile.addEventListener("click", function(){
+          lightbox.classList.add("is-open");
+          lightbox.setAttribute("aria-hidden", "false");
+        });
+      });
+      lightbox.addEventListener("click", function(){
+        lightbox.classList.remove("is-open");
+        lightbox.setAttribute("aria-hidden", "true");
       });
     });
-    lightbox.addEventListener("click", () => lightbox.classList.remove("is-open"));
   </script>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/site.js"></script>
 </body>
 </html>
