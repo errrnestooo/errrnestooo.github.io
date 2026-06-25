@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Redirecting</title>
+  <script>
+    (function(){
+      const legacyPrivatePaths = new Set([
+        "/ernest-os",
+        "/ernest-os/",
+        "/wealth-os",
+        "/wealth-os/",
+        "/asset-manager",
+        "/asset-manager/",
+        "/os",
+        "/os/"
+      ]);
+      if(legacyPrivatePaths.has(window.location.pathname)){
+        window.location.replace("/");
+      }
+    })();
+  </script>
+</head>
+<body></body>
+</html>
