@@ -1,4 +1,4 @@
-(function(){
+﻿(function(){
   const themeKey = "ernest_journal_theme";
   const countKey = "ernest_journal_visits";
   const i18n = window.ErnestI18n;
@@ -25,7 +25,7 @@
   function languageSwitchMarkup(className){
     return `
       <span class="${className}" aria-label="Language switch">
-        <button type="button" data-lang-option="zh">中文</button>
+        <button type="button" data-lang-option="zh">涓枃</button>
         <span>|</span>
         <button type="button" data-lang-option="en">EN</button>
       </span>
@@ -88,18 +88,18 @@
     document.body.appendChild(tools);
 
     const ambientDock = document.createElement("aside");
-    ambientDock.className = "ambient-dock is-collapsed";
+    ambientDock.className = "ambient-dock";
     ambientDock.setAttribute("aria-label", "Ambient sound controls");
     ambientDock.innerHTML = `
       <button class="ambient-toggle" type="button" data-ambient-toggle aria-expanded="false" aria-controls="ambientPanel">
-        <span data-zh="环境" data-en="Ambience">环境</span>
+        <span data-zh="\u73af\u5883" data-en="Ambience">\u73af\u5883</span>
       </button>
       <section class="ambient-panel music-player" id="ambientPanel" aria-label="Quiet Room">
         <div class="music-player-title">
           <span data-i18n="music.title">${t("music.title")}</span>
           <span id="musicState" data-i18n="music.paused">${t("music.paused")}</span>
         </div>
-        <button class="ambient-close" type="button" data-ambient-close aria-label="Minimize ambient panel">×</button>
+        <button class="ambient-close" type="button" data-ambient-close aria-label="Minimize ambient panel">\u00d7</button>
         <div class="ambient-presets">
           <button type="button" data-ambient="rain" data-i18n="music.preset.rain">${t("music.preset.rain")}</button>
           <button type="button" data-ambient="cafe" data-i18n="music.preset.cafe">${t("music.preset.cafe")}</button>
@@ -134,13 +134,23 @@
 
     const ambientToggle = ambientDock.querySelector("[data-ambient-toggle]");
     const ambientClose = ambientDock.querySelector("[data-ambient-close]");
-    function setAmbientExpanded(expanded){
-      ambientDock.classList.toggle("is-expanded", expanded);
-      ambientDock.classList.toggle("is-collapsed", !expanded);
-      ambientToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+    let ambientOpen = window.matchMedia("(min-width: 1280px)").matches;
+    function renderAmbientState(){
+      ambientDock.classList.toggle("is-expanded", ambientOpen);
+      ambientDock.classList.toggle("is-collapsed", !ambientOpen);
+      ambientDock.dataset.ambientOpen = ambientOpen ? "true" : "false";
+      ambientToggle.setAttribute("aria-expanded", ambientOpen ? "true" : "false");
     }
-    ambientToggle.addEventListener("click", () => setAmbientExpanded(!ambientDock.classList.contains("is-expanded")));
-    ambientClose.addEventListener("click", () => setAmbientExpanded(false));
+    function setAmbientOpen(nextOpen){
+      ambientOpen = Boolean(nextOpen);
+      renderAmbientState();
+    }
+    renderAmbientState();
+    ambientToggle.addEventListener("click", () => setAmbientOpen(!ambientOpen));
+    ambientClose.addEventListener("click", () => setAmbientOpen(false));
+    window.addEventListener("resize", () => {
+      if(window.innerWidth <= 1024 && ambientOpen) setAmbientOpen(false);
+    });
 
     document.querySelectorAll("[data-ambient]").forEach((btn) => {
       btn.addEventListener("click", () => {
