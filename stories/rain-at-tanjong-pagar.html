@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="丹戎巴葛的雨，Ernest's Journal 的一篇日记小说。">
+  <meta property="og:title" content="丹戎巴葛的雨 | Ernest's Journal">
+  <meta property="og:description" content="下班以后，城市开始反光，并把一个人送回家。">
+  <meta property="og:type" content="article">
+  <title>丹戎巴葛的雨 | Ernest's Journal</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <style>
+    :root{ --bg:#fbf7f0; --text:#1f1f1f; --muted:#6b5f54; --border:#eadfce; --accent:#7a4e2d; }
+    body{ margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.9; }
+    .reading-progress{ position:fixed; top:0; left:0; height:3px; width:0%; z-index:50; background:linear-gradient(90deg,#c98b57,#7a4e2d); }
+    .reader{ max-width:760px; margin:0 auto; padding:54px 22px 96px; }
+    .back,.story-nav a{ color:var(--accent); text-decoration:none; font-size:14px; }
+    article{ margin-top:34px; padding:34px 0; }
+    h1{ margin:0 0 14px; font-family:Georgia,"Times New Roman","Songti SC",serif; font-size:48px; font-weight:500; line-height:1.14; }
+    .deck{ color:var(--muted); font-size:18px; margin:0 0 22px; }
+    .meta{ display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:13px; margin-bottom:44px; }
+    .tag{ border:1px solid var(--border); background:#fffaf3; color:var(--accent); border-radius:999px; padding:2px 8px; }
+    .story-body{ font-family:Georgia,"Times New Roman","Songti SC",serif; font-size:20px; color:#2b2621; }
+    .story-body p{ margin:0 0 28px; }
+    .story-body p:first-child::first-letter{ float:left; font-size:58px; line-height:.9; padding-right:8px; color:var(--accent); }
+    .story-nav{ display:flex; justify-content:space-between; gap:18px; margin-top:54px; padding-top:22px; border-top:1px solid var(--border); flex-wrap:wrap; }
+    body.dark-mode .story-body{ color:#f2e8dc; }
+    @media (max-width:700px){ .reader{ padding:38px 18px 84px; } h1{ font-size:38px; } .deck{ font-size:16px; } .story-body{ font-size:18px; } }
+  </style>
+</head>
+<body>
+  <div class="reading-progress" id="readingProgress"></div>
+  <main class="reader fade-in">
+    <a class="back" href="../stories.html" data-i18n="story.back">返回小说</a>
+    <article>
+      <h1 data-i18n="stories.title.rain">丹戎巴葛的雨</h1>
+      <p class="deck" data-i18n="story.rain.deck">下班以后，城市开始反光，并把一个人送回家。</p>
+      <div class="meta">
+        <span class="tag" data-i18n="stories.tag.fiction">虚构</span>
+        <span class="tag" data-i18n="stories.tag.diary">日记</span>
+        <span data-i18n="stories.readtime.rain">4 分钟阅读</span>
+      </div>
+      <section class="story-body">
+        <p data-i18n="story.rain.p1">他到丹戎巴葛的时候，雨已经让城市变得更诚实。玻璃不再假装透明，路面接住了所有递给它的光。</p>
+        <p data-i18n="story.rain.p2">他站在遮雨棚下，和其他人一起临时成为天气的居民。没有人说话。手机在各自手里亮着，像一间间小小的私人房间。</p>
+        <p data-i18n="story.rain.p3">这一天并没有戏剧性地困难，只是太满了：会议、数字、办公室里礼貌的天气。但雨一来，他身体里某个地方就松开了一点。</p>
+        <p data-i18n="story.rain.p4">路对面，一辆出租车缓慢穿过红绿灯的倒影。有一秒钟，整座城市像是画在水上。他想，也许记忆也是这样：保存的不是事物本身，而是它留下的微光。</p>
+        <p data-i18n="story.rain.p5">雨小下来的时候，他朝地铁站走去。鞋湿了，包也比刚才更重。但这个傍晚给了他一个可以带回家的小句子，而此刻这已经足够。</p>
+      </section>
+      <nav class="story-nav">
+        <a href="road-to-petra.html" data-i18n="story.prev.petra"><- 上一篇：去佩特拉之前的路</a>
+        <span></span>
+      </nav>
+    </article>
+  </main>
+  <script>
+    const progress = document.getElementById("readingProgress");
+    window.addEventListener("scroll", () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+    });
+  </script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/site.js"></script>
+</body>
+</html>

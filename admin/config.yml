@@ -44,6 +44,31 @@ collections:
       - { label: "Cover Image", name: "cover", widget: "image", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
 
+  - name: "stories"
+    label: "Stories"
+    label_singular: "Story"
+    folder: "content/stories"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    preview_path: "stories.html"
+    editor:
+      preview: true
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Subtitle", name: "subtitle", widget: "text", required: false }
+      - { label: "Publish Date", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
+      - label: "Story Type"
+        name: "story_type"
+        widget: "select"
+        options: ["Travel", "Fiction", "Diary", "Road Novel"]
+      - { label: "Tags", name: "tags", widget: "list", required: false, default: ["Story"] }
+      - { label: "Estimated Reading Time", name: "reading_time", widget: "string", required: false, default: "5 min read" }
+      - { label: "Excerpt", name: "excerpt", widget: "text" }
+      - { label: "Cover Image", name: "cover", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
   - name: "travel"
     label: "Travel Entries"
     files:

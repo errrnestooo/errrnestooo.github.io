@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="去佩特拉之前的路，Ernest's Journal 的一篇旅行小说。">
+  <meta property="og:title" content="去佩特拉之前的路 | Ernest's Journal">
+  <meta property="og:description" content="一条沙漠公路、一辆租来的车，以及抵达古老之地之前的安静。">
+  <meta property="og:type" content="article">
+  <title>去佩特拉之前的路 | Ernest's Journal</title>
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <style>
+    :root{ --bg:#fbf7f0; --text:#1f1f1f; --muted:#6b5f54; --border:#eadfce; --accent:#7a4e2d; }
+    body{ margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.9; }
+    .reading-progress{ position:fixed; top:0; left:0; height:3px; width:0%; z-index:50; background:linear-gradient(90deg,#c98b57,#7a4e2d); }
+    .reader{ max-width:760px; margin:0 auto; padding:54px 22px 96px; }
+    .back,.story-nav a{ color:var(--accent); text-decoration:none; font-size:14px; }
+    article{ margin-top:34px; padding:34px 0; }
+    h1{ margin:0 0 14px; font-family:Georgia,"Times New Roman","Songti SC",serif; font-size:48px; font-weight:500; line-height:1.14; }
+    .deck{ color:var(--muted); font-size:18px; margin:0 0 22px; }
+    .meta{ display:flex; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:13px; margin-bottom:44px; }
+    .tag{ border:1px solid var(--border); background:#fffaf3; color:var(--accent); border-radius:999px; padding:2px 8px; }
+    .story-body{ font-family:Georgia,"Times New Roman","Songti SC",serif; font-size:20px; color:#2b2621; }
+    .story-body p{ margin:0 0 28px; }
+    .story-body p:first-child::first-letter{ float:left; font-size:58px; line-height:.9; padding-right:8px; color:var(--accent); }
+    .story-nav{ display:flex; justify-content:space-between; gap:18px; margin-top:54px; padding-top:22px; border-top:1px solid var(--border); flex-wrap:wrap; }
+    body.dark-mode .story-body{ color:#f2e8dc; }
+    @media (max-width:700px){ .reader{ padding:38px 18px 84px; } h1{ font-size:38px; } .deck{ font-size:16px; } .story-body{ font-size:18px; } }
+  </style>
+</head>
+<body>
+  <div class="reading-progress" id="readingProgress"></div>
+  <main class="reader fade-in">
+    <a class="back" href="../stories.html" data-i18n="story.back">返回小说</a>
+    <article>
+      <h1 data-i18n="stories.title.petra">去佩特拉之前的路</h1>
+      <p class="deck" data-i18n="story.petra.deck">一条沙漠公路、一辆租来的车，以及抵达古老之地之前的安静。</p>
+      <div class="meta">
+        <span class="tag" data-i18n="stories.tag.travel">旅行</span>
+        <span class="tag" data-i18n="stories.tag.road">公路小说</span>
+        <span data-i18n="stories.readtime.petra">6 分钟阅读</span>
+      </div>
+      <section class="story-body">
+        <p data-i18n="story.petra.p1">去佩特拉的路并没有高声宣布自己。它没有像帷幕一样升起，也没有带着音乐抵达。它只是继续向前，苍白、耐心，穿过一片石头构成的国度。</p>
+        <p data-i18n="story.petra.p2">我原以为沙漠会显得空旷。可它更像是被时间占据着：每一座山丘都仿佛记得什么，每一个转弯都带着比车里任何地图更古老的脚步声。</p>
+        <p data-i18n="story.petra.p3">租来的车在辽阔土地上发出很小的、家常的声音：空调、转向灯、轮胎轻微的抱怨。这些普通声响反而让人安心，因为窗外的一切太大了，无法直接交谈。</p>
+        <p data-i18n="story.petra.p4">在抵达佩特拉之前，有一段奇特的时刻：你已经近到相信自己快到了，却仍然属于路。我想，旅行最诚实的部分常常就在这里，不在地标，不在照片，而在尚未完成的靠近。</p>
+        <p data-i18n="story.petra.p5">后来会有石壁、狭窄通道，以及从阴影里发光的第一眼立面。但在那之前，只有一个温暖的下午、一瓶在副驾驶座下滚动的水，和一种世界短暂地比恐惧更古老的感觉。</p>
+      </section>
+      <nav class="story-nav">
+        <span></span>
+        <a href="rain-at-tanjong-pagar.html" data-i18n="story.next.rain">下一篇：丹戎巴葛的雨 -></a>
+      </nav>
+    </article>
+  </main>
+  <script>
+    const progress = document.getElementById("readingProgress");
+    window.addEventListener("scroll", () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`;
+    });
+  </script>
+  <script src="../assets/js/i18n.js"></script>
+  <script src="../assets/js/site.js"></script>
+</body>
+</html>

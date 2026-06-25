@@ -37,10 +37,15 @@
       "index.html": "nav.home",
       "": "nav.home",
       "diary.html": "nav.diary",
+      "stories.html": "nav.stories",
+      "field-notes.html": "nav.notes",
+      "now.html": "nav.now",
       "timeline.html": "nav.timeline",
       "travel.html": "nav.travel",
+      "travel-map.html": "nav.map",
       "library.html": "nav.library",
       "photos.html": "nav.photos",
+      "life.html": "nav.life",
       "plans.html": "nav.plans",
       "about.html": "nav.about"
     };
