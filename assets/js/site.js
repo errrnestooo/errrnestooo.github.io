@@ -83,11 +83,23 @@
     tools.innerHTML = `
       ${languageSwitchMarkup("language-switch")}
       <button class="theme-toggle" type="button" data-theme-toggle>${t("theme.dark")}</button>
-      <section class="music-player" aria-label="Quiet Room">
+      <div class="visitor-counter" id="visitorCounter"><span data-i18n="visits">${t("visits")}</span>: 1</div>
+    `;
+    document.body.appendChild(tools);
+
+    const ambientDock = document.createElement("aside");
+    ambientDock.className = "ambient-dock is-collapsed";
+    ambientDock.setAttribute("aria-label", "Ambient sound controls");
+    ambientDock.innerHTML = `
+      <button class="ambient-toggle" type="button" data-ambient-toggle aria-expanded="false" aria-controls="ambientPanel">
+        <span data-zh="环境" data-en="Ambience">环境</span>
+      </button>
+      <section class="ambient-panel music-player" id="ambientPanel" aria-label="Quiet Room">
         <div class="music-player-title">
           <span data-i18n="music.title">${t("music.title")}</span>
           <span id="musicState" data-i18n="music.paused">${t("music.paused")}</span>
         </div>
+        <button class="ambient-close" type="button" data-ambient-close aria-label="Minimize ambient panel">×</button>
         <div class="ambient-presets">
           <button type="button" data-ambient="rain" data-i18n="music.preset.rain">${t("music.preset.rain")}</button>
           <button type="button" data-ambient="cafe" data-i18n="music.preset.cafe">${t("music.preset.cafe")}</button>
@@ -97,9 +109,8 @@
         </div>
         <input id="musicVolume" type="range" min="0" max="100" value="36" data-i18n-aria="music.title" aria-label="Quiet Room">
       </section>
-      <div class="visitor-counter" id="visitorCounter"><span data-i18n="visits">${t("visits")}</span>: 1</div>
     `;
-    document.body.appendChild(tools);
+    document.body.appendChild(ambientDock);
 
     const nav = document.querySelector(".nav");
     ensureOsNavLink();
@@ -120,6 +131,16 @@
       localStorage.setItem(themeKey, next);
       applyTheme(next);
     });
+
+    const ambientToggle = ambientDock.querySelector("[data-ambient-toggle]");
+    const ambientClose = ambientDock.querySelector("[data-ambient-close]");
+    function setAmbientExpanded(expanded){
+      ambientDock.classList.toggle("is-expanded", expanded);
+      ambientDock.classList.toggle("is-collapsed", !expanded);
+      ambientToggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+    }
+    ambientToggle.addEventListener("click", () => setAmbientExpanded(!ambientDock.classList.contains("is-expanded")));
+    ambientClose.addEventListener("click", () => setAmbientExpanded(false));
 
     document.querySelectorAll("[data-ambient]").forEach((btn) => {
       btn.addEventListener("click", () => {

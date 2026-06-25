@@ -81,12 +81,13 @@ body.dark-mode button{
 
 .site-tools{
   position:fixed;
-  right:18px;
-  bottom:18px;
-  z-index:20;
+  right:24px;
+  top:24px;
+  bottom:auto;
+  z-index:18;
   display:flex;
   flex-direction:column;
-  gap:10px;
+  gap:8px;
   align-items:flex-end;
 }
 
@@ -137,6 +138,65 @@ body.dark-mode button{
 
 .music-player{
   width:220px;
+}
+
+.ambient-dock{
+  position:fixed;
+  right:24px;
+  top:160px;
+  bottom:auto;
+  z-index:16;
+  max-width:min(280px, calc(100vw - 48px));
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+}
+
+.ambient-dock.is-expanded{
+  z-index:46;
+}
+
+.ambient-toggle{
+  width:54px;
+  height:54px;
+  border:1px solid var(--journal-line);
+  border-radius:50%;
+  background:rgba(255,250,242,.9);
+  color:var(--journal-accent);
+  box-shadow:0 10px 28px rgba(90,62,38,.12);
+  backdrop-filter:blur(12px);
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+}
+
+.ambient-panel{
+  position:relative;
+  width:244px;
+  max-width:100%;
+}
+
+.ambient-dock.is-collapsed .ambient-panel{
+  display:none;
+}
+
+.ambient-dock.is-expanded .ambient-toggle{
+  display:none;
+}
+
+.ambient-close{
+  position:absolute;
+  top:7px;
+  right:8px;
+  width:24px;
+  height:24px;
+  border:1px solid var(--journal-line);
+  border-radius:50%;
+  background:rgba(255,250,242,.86);
+  color:var(--journal-muted);
+  cursor:pointer;
+  line-height:1;
+  font-size:16px;
 }
 
 .music-player-title{
@@ -199,7 +259,8 @@ body.dark-mode button{
 @media (max-width:700px){
   .site-tools{
     right:12px;
-    bottom:12px;
+    top:12px;
+    bottom:auto;
     max-width:calc(100vw - 24px);
   }
 
@@ -257,7 +318,7 @@ body.dark-mode{
 }
 
 .site-tools{
-  top:18px;
+  top:24px;
   bottom:auto;
 }
 
@@ -589,4 +650,45 @@ body.dark-mode .journal-card{
   .photo-grid{ grid-template-columns:1fr; }
   .journal-card{ padding:18px; }
   .timeline-item{ padding-left:46px; }
+}
+
+@media (max-width:1024px){
+  .ambient-dock{
+    top:auto;
+    right:24px;
+    bottom:24px;
+    max-width:min(320px, calc(100vw - 48px));
+  }
+
+  .ambient-dock.is-collapsed{
+    z-index:18;
+  }
+
+  .ambient-dock.is-expanded{
+    z-index:48;
+  }
+
+  .ambient-toggle{
+    width:56px;
+    height:56px;
+    padding:0;
+    border-radius:50%;
+  }
+
+  .ambient-panel{
+    width:min(320px, calc(100vw - 48px));
+  }
+}
+
+@media (max-width:700px){
+  .ambient-dock{
+    right:24px;
+    bottom:24px;
+    top:auto;
+  }
+
+  .ambient-panel{
+    width:min(320px, calc(100vw - 48px));
+    order:initial;
+  }
 }
