@@ -19,7 +19,7 @@
 
   function pagePrefix(){
     const path = window.location.pathname.replace(/\\/g, "/");
-    return /\/(posts|stories)\//.test(path) ? "../" : "";
+    return /\/posts\//.test(path) ? "../" : "";
   }
 
   function languageSwitchMarkup(className){
@@ -32,42 +32,16 @@
     `;
   }
 
-  function ensureOsNavLink(){
-    const nav = document.querySelector(".nav");
-    if(!nav || nav.querySelector('a[href$="ernest-os.html"]')) return;
-
-    const link = document.createElement("a");
-    link.href = `${pagePrefix()}ernest-os.html`;
-    link.dataset.i18n = "nav.os";
-    link.textContent = t("nav.os");
-
-    const aboutLink = Array.from(nav.querySelectorAll("a")).find((item) => {
-      const file = (item.getAttribute("href") || "").split("/").pop();
-      return file === "about.html";
-    });
-    if(aboutLink){
-      nav.insertBefore(link, aboutLink);
-    }else{
-      nav.appendChild(link);
-    }
-  }
-
   function translateNav(){
     const map = {
       "index.html": "nav.home",
       "": "nav.home",
       "diary.html": "nav.diary",
-      "stories.html": "nav.stories",
-      "field-notes.html": "nav.notes",
-      "now.html": "nav.now",
       "timeline.html": "nav.timeline",
       "travel.html": "nav.travel",
-      "travel-map.html": "nav.map",
       "library.html": "nav.library",
       "photos.html": "nav.photos",
-      "life.html": "nav.life",
       "plans.html": "nav.plans",
-      "ernest-os.html": "nav.os",
       "about.html": "nav.about"
     };
     document.querySelectorAll(".nav a").forEach((link) => {
@@ -113,7 +87,6 @@
     document.body.appendChild(ambientDock);
 
     const nav = document.querySelector(".nav");
-    ensureOsNavLink();
     if(nav && !nav.querySelector(".nav-language-switch")){
       nav.insertAdjacentHTML("beforeend", languageSwitchMarkup("nav-language-switch"));
     }
@@ -204,7 +177,6 @@
   });
 
   window.addEventListener("ernest:languagechange", () => {
-    ensureOsNavLink();
     translateNav();
     applyTheme(localStorage.getItem(themeKey) || "light");
   });

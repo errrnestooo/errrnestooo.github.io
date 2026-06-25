@@ -3,7 +3,7 @@ main = "decap-oauth-worker.js"
 compatibility_date = "2026-05-17"
 
 # Recommended: add cms-auth.songyangao.com as a Worker custom domain in the
-# Cloudflare dashboard, or adapt this route to your zone setup.
+# Cloudflare account settings, or adapt this route to your zone setup.
 # route = { pattern = "cms-auth.songyangao.com", custom_domain = true }
 
 [vars]
