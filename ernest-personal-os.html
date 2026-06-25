@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ernest Personal OS, a private life archive and self-understanding system.">
+  <meta property="og:title" content="Ernest Personal OS">
+  <meta property="og:description" content="A quiet private operating system for memory, emotion, movement, and long-term direction.">
+  <meta property="og:type" content="website">
+  <title>Ernest Personal OS</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/ernest-personal-os.css">
+</head>
+<body class="epos-page">
+  <canvas id="ambientCanvas" class="ambient-canvas" aria-hidden="true"></canvas>
+
+  <aside class="epos-sidebar">
+    <div class="epos-brand">
+      <span data-zh="私人生命系统" data-en="Private Life System">私人生命系统</span>
+      <strong>Ernest Personal OS</strong>
+    </div>
+
+    <nav class="epos-nav" aria-label="Ernest Personal OS">
+      <a href="#dashboard" data-view="dashboard" data-zh="主 Dashboard" data-en="Dashboard">主 Dashboard</a>
+      <a href="#life-state" data-view="life-state" data-zh="人生状态" data-en="Life State">人生状态</a>
+      <a href="#temperature" data-view="temperature" data-zh="人生温度" data-en="Life Temperature">人生温度</a>
+      <a href="#timeline" data-view="timeline" data-zh="Life Timeline" data-en="Life Timeline">Life Timeline</a>
+      <a href="#analytics" data-view="analytics" data-zh="Self Analytics" data-en="Self Analytics">Self Analytics</a>
+      <a href="#intelligence" data-view="intelligence" data-zh="深度分析" data-en="Life Intelligence">深度分析</a>
+      <a href="#contradictions" data-view="contradictions" data-zh="长期矛盾" data-en="Contradictions">长期矛盾</a>
+      <a href="#future" data-view="future" data-zh="未来轨迹" data-en="Future">未来轨迹</a>
+      <a href="#atlas" data-view="atlas" data-zh="Travel Atlas" data-en="Travel Atlas">Travel Atlas</a>
+      <a href="#quiet" data-view="quiet" data-zh="Quiet Mode" data-en="Quiet Mode">Quiet Mode</a>
+      <a href="#relationships" data-view="relationships" data-zh="关系星图" data-en="Relationships">关系星图</a>
+      <a href="#reflection" data-view="reflection" data-zh="每日记录" data-en="Daily Reflection">每日记录</a>
+      <a href="#memory" data-view="memory" data-zh="Memory Engine" data-en="Memory Engine">Memory Engine</a>
+      <a href="#principles" data-view="principles" data-zh="人生原则" data-en="Principles">人生原则</a>
+    </nav>
+
+    <div class="epos-sidebar-foot">
+      <div class="epos-language" aria-label="Language switch">
+        <button type="button" data-lang-option="zh">中文</button>
+        <span>|</span>
+        <button type="button" data-lang-option="en">EN</button>
+      </div>
+      <a class="epos-back" href="index.html" data-zh="返回 Journal" data-en="Back to Journal">返回 Journal</a>
+    </div>
+  </aside>
+
+  <main class="epos-shell">
+    <section class="epos-view is-active" id="dashboard" data-view-panel="dashboard">
+      <header class="epos-hero">
+        <p class="eyebrow" data-zh="长期记录 / 自我理解 / 人生方向" data-en="Long-term record / self-understanding / life direction">长期记录 / 自我理解 / 人生方向</p>
+        <h1 data-zh="把人生从流水账，慢慢整理成一张可以回望的地图。" data-en="Turn life from scattered entries into a map you can return to.">把人生从流水账，慢慢整理成一张可以回望的地图。</h1>
+        <p data-zh="这里不是效率工具，也不是财务软件。它是一个安静的私人系统，用来观察你的情绪、消费、移动、关系、记忆和长期方向。" data-en="This is not a productivity tool or finance app. It is a quiet private system for observing emotion, spending, movement, relationships, memory, and long-term direction.">这里不是效率工具，也不是财务软件。它是一个安静的私人系统，用来观察你的情绪、消费、移动、关系、记忆和长期方向。</p>
+      </header>
+
+      <div class="status-ribbon">
+        <article>
+          <span data-zh="今日状态" data-en="Today">今日状态</span>
+          <strong id="todayState">-</strong>
+        </article>
+        <article>
+          <span data-zh="当前年龄" data-en="Current age">当前年龄</span>
+          <strong id="ageText">-</strong>
+        </article>
+        <article>
+          <span data-zh="人生进度" data-en="Life progress">人生进度</span>
+          <strong id="lifeProgressText">-</strong>
+        </article>
+      </div>
+
+      <div class="os-manuscript-strip">
+        <article class="manuscript-card">
+          <span data-zh="当前人生状态" data-en="Current life state">当前人生状态</span>
+          <strong id="stateInline">-</strong>
+          <p id="stateInlineReason"></p>
+        </article>
+        <article class="manuscript-card">
+          <span data-zh="生活温度" data-en="Life temperature">生活温度</span>
+          <div class="temperature-mini" id="temperatureMini"></div>
+        </article>
+        <article class="manuscript-card">
+          <span data-zh="本月切片" data-en="Monthly slice">本月切片</span>
+          <strong id="memoryInline">-</strong>
+          <p id="memoryInlineNote"></p>
+        </article>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="panel wide">
+          <div class="panel-head"><span data-zh="最近情绪" data-en="Recent emotion">最近情绪</span><b data-zh="30 天观察" data-en="30-day view">30 天观察</b></div>
+          <div class="mood-river" id="moodRiver"></div>
+          <p data-zh="情绪不是要被优化掉，而是要被看见：什么时候稳定，什么时候想离开，什么时候只是太累。" data-en="Emotion does not need to be optimized away. It needs to be seen: when you feel stable, when you want to leave, and when you are simply tired.">情绪不是要被优化掉，而是要被看见：什么时候稳定，什么时候想离开，什么时候只是太累。</p>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><span data-zh="本月消费趋势" data-en="Spending trend">本月消费趋势</span><b>SGD</b></div>
+          <div class="spending-orbit" id="spendingOrbit"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><span data-zh="当前人生重点" data-en="Current focus">当前人生重点</span><b data-zh="不是任务，是方向" data-en="Direction, not task">不是任务，是方向</b></div>
+          <ul class="quiet-list" id="focusList"></ul>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><span data-zh="最近旅行" data-en="Recent travel">最近旅行</span><b data-zh="移动档案" data-en="Movement archive">移动档案</b></div>
+          <div class="travel-strip" id="recentTravel"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><span data-zh="最近思考" data-en="Recent thought">最近思考</span><b data-zh="私人摘录" data-en="Private note">私人摘录</b></div>
+          <blockquote id="recentThought"></blockquote>
+        </article>
+
+        <article class="panel wide">
+          <div class="panel-head"><span data-zh="长期目标进度" data-en="Long-term goals">长期目标进度</span><b data-zh="人生方向" data-en="Life direction">人生方向</b></div>
+          <div class="goal-stack" id="goalStack"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><span data-zh="生活平衡状态" data-en="Life balance">生活平衡状态</span><b data-zh="当前形状" data-en="Current shape">当前形状</b></div>
+          <div class="balance-compass" id="balanceCompass"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="epos-view" id="life-state" data-view-panel="life-state">
+      <header class="section-title">
+        <span>00A</span>
+        <h2 data-zh="Life State Engine" data-en="Life State Engine">Life State Engine</h2>
+        <p data-zh="它不把你归类成某种人格，而是观察你当前处在怎样的人生天气里：建设、漂流、稳定、转型、孤独、高压、探索或扎根。" data-en="It does not classify you as a type. It observes the weather of your current life: building, drifting, stability, transition, solitude, pressure, exploration, or rootedness.">它不把你归类成某种人格，而是观察你当前处在怎样的人生天气里：建设、漂流、稳定、转型、孤独、高压、探索或扎根。</p>
+      </header>
+      <div class="state-engine-layout">
+        <article class="state-orb-panel">
+          <div class="state-orb" id="lifeStateOrb"></div>
+        </article>
+        <article class="panel state-reading" id="lifeStateReading"></article>
+      </div>
+      <div class="state-cards" id="lifeStateCards"></div>
+    </section>
+
+    <section class="epos-view" id="temperature" data-view-panel="temperature">
+      <header class="section-title">
+        <span>00B</span>
+        <h2 data-zh="Life Temperature" data-en="Life Temperature">Life Temperature</h2>
+        <p data-zh="把消费、写作、旅行、社交、作息和情绪记录折叠成一张缓慢变化的生活温度图。" data-en="A slow visual field that folds spending, writing, travel, relationships, rhythm, and emotion into one life temperature.">把消费、写作、旅行、社交、作息和情绪记录折叠成一张缓慢变化的生活温度图。</p>
+      </header>
+      <div class="temperature-room">
+        <canvas id="temperatureCanvas"></canvas>
+        <aside id="temperatureReadings"></aside>
+      </div>
+    </section>
+
+    <section class="epos-view" id="timeline" data-view-panel="timeline">
+      <header class="section-title">
+        <span>01</span>
+        <h2 data-zh="Life Timeline" data-en="Life Timeline">Life Timeline</h2>
+        <p data-zh="时间线不是简历，而是人生如何转向、如何变得更复杂。" data-en="This is not a resume. It is how life turns, widens, and becomes more complex.">时间线不是简历，而是人生如何转向、如何变得更复杂。</p>
+      </header>
+      <div class="timeline-stage">
+        <div class="timeline-line" id="lifeTimeline"></div>
+        <aside class="timeline-map" id="timelineMap"></aside>
+      </div>
+    </section>
+
+    <section class="epos-view" id="analytics" data-view-panel="analytics">
+      <header class="section-title">
+        <span>02</span>
+        <h2 data-zh="Self Analytics" data-en="Self Analytics">Self Analytics</h2>
+        <p data-zh="它不是图表，而是一份会呼吸的人生研究报告。" data-en="Not charts for charts' sake, but a breathing report on one life.">它不是图表，而是一份会呼吸的人生研究报告。</p>
+      </header>
+      <div class="analytics-layout">
+        <article class="panel tall"><div id="traitField"></div></article>
+        <article class="panel"><div class="panel-head"><span data-zh="消费人格" data-en="Spending self">消费人格</span></div><p id="spendingSelf"></p></article>
+        <article class="panel"><div class="panel-head"><span data-zh="情绪周期" data-en="Emotional cycle">情绪周期</span></div><p id="emotionCycle"></p></article>
+        <article class="panel wide"><div id="indexCards" class="index-cards"></div></article>
+      </div>
+    </section>
+
+    <section class="epos-view" id="intelligence" data-view-panel="intelligence">
+      <header class="section-title intelligence-title">
+        <span>02B</span>
+        <h2 data-zh="Life Intelligence" data-en="Life Intelligence">Life Intelligence</h2>
+        <p data-zh="这里把账本、旅行、阅读、影像、简历和长期写作放在一起看：不是罗列记录，而是区分事实、推断、置信度和证据来源。" data-en="This view reads finance, movement, books, films, resume, and writing together: not as records, but as observed facts, inferred patterns, confidence, and evidence sources.">这里把账本、旅行、阅读、影像、简历和长期写作放在一起看：不是罗列记录，而是区分事实、推断、置信度和证据来源。</p>
+      </header>
+
+      <div class="intelligence-brief" id="intelligenceBrief"></div>
+
+      <div class="intelligence-grid">
+        <article class="intel-panel wide" data-intel-card="consumption"></article>
+        <article class="intel-panel" data-intel-card="movement"></article>
+        <article class="intel-panel" data-intel-card="discipline"></article>
+        <article class="intel-panel wide" data-intel-card="emotion"></article>
+        <article class="intel-panel" data-intel-card="personality"></article>
+        <article class="intel-panel" data-intel-card="contradictions"></article>
+        <article class="intel-panel wide" data-intel-card="future"></article>
+      </div>
+
+      <div class="pattern-lab">
+        <article class="panel">
+          <div class="panel-head"><span data-zh="消费心理热区" data-en="Consumption heatmap">消费心理热区</span><b data-zh="观察事实" data-en="Observed">观察事实</b></div>
+          <div id="consumptionHeatmap" class="behavior-heatmap"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-head"><span data-zh="自由与控制关系图" data-en="Freedom-control map">自由与控制关系图</span><b data-zh="推断模型" data-en="Inferred model">推断模型</b></div>
+          <div id="contradictionMap" class="contradiction-map"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="epos-view" id="contradictions" data-view-panel="contradictions">
+      <header class="section-title">
+        <span>02C</span>
+        <h2 data-zh="Contradiction Engine" data-en="Contradiction Engine">Contradiction Engine</h2>
+        <p data-zh="长期矛盾不是缺陷，而是人生方向的内在张力。这里观察它们如何影响消费、旅行、职业、感情与决策。" data-en="Long-term contradictions are not flaws. They are inner tensions that shape spending, travel, career, relationships, and decisions.">长期矛盾不是缺陷，而是人生方向的内在张力。这里观察它们如何影响消费、旅行、职业、感情与决策。</p>
+      </header>
+      <div class="contradiction-engine" id="contradictionEngine"></div>
+    </section>
+
+    <section class="epos-view" id="future" data-view-panel="future">
+      <header class="section-title">
+        <span>02D</span>
+        <h2 data-zh="Future Trajectory Engine" data-en="Future Trajectory Engine">Future Trajectory Engine</h2>
+        <p data-zh="这不是算命，而是从行为轨迹、消费结构、旅行偏好、写作风格和职业路径推断未来五年的可能形状。" data-en="This is not fortune telling. It infers the next five years from behavior, spending structure, travel preference, writing style, and career path.">这不是算命，而是从行为轨迹、消费结构、旅行偏好、写作风格和职业路径推断未来五年的可能形状。</p>
+      </header>
+      <div class="future-engine" id="futureEngine"></div>
+    </section>
+
+    <section class="epos-view" id="atlas" data-view-panel="atlas">
+      <header class="section-title">
+        <span>03</span>
+        <h2 data-zh="Travel Memory Atlas" data-en="Travel Memory Atlas">Travel Memory Atlas</h2>
+        <p data-zh="旅行不是离开生活，而是在人生章节之间换气。" data-en="Travel is not leaving life. It is breathing between chapters.">旅行不是离开生活，而是在人生章节之间换气。</p>
+      </header>
+      <div class="atlas-layout">
+        <div class="world-map" id="worldMap"></div>
+        <aside class="atlas-card" id="atlasCard"></aside>
+      </div>
+      <div class="atlas-timeline" id="atlasTimeline"></div>
+    </section>
+
+    <section class="epos-view" id="quiet" data-view-panel="quiet">
+      <header class="section-title">
+        <span>04</span>
+        <h2 data-zh="Quiet Mode" data-en="Quiet Mode">Quiet Mode</h2>
+        <p data-zh="深夜书房模式：慢下来，不是为了逃避，而是为了重新听见自己。" data-en="Late-night study mode: slowing down not to escape, but to hear yourself again.">深夜书房模式：慢下来，不是为了逃避，而是为了重新听见自己。</p>
+      </header>
+      <div class="quiet-room">
+        <div class="quiet-vinyl" aria-hidden="true"><i></i></div>
+        <div class="quiet-clock" id="quietClock"></div>
+        <div class="breath-orb"><span></span></div>
+        <div class="quiet-controls">
+          <button type="button" data-sound="rain" data-zh="雨声" data-en="Rain">雨声</button>
+          <button type="button" data-sound="wind" data-zh="风声" data-en="Wind">风声</button>
+          <button type="button" data-sound="white" data-zh="白噪音" data-en="White noise">白噪音</button>
+          <button type="button" data-sound="night" data-zh="深夜模式" data-en="Night">深夜模式</button>
+          <button type="button" data-sound="focus" data-zh="专注 25" data-en="Focus 25">专注 25</button>
+          <button type="button" id="quietStop" data-zh="停止" data-en="Stop">停止</button>
+        </div>
+        <div class="focus-timer" id="focusTimer">25:00</div>
+        <blockquote data-zh="真正长期的东西，通常不喧闹。" data-en="The truly long-term things are usually quiet.">真正长期的东西，通常不喧闹。</blockquote>
+      </div>
+    </section>
+
+    <section class="epos-view" id="relationships" data-view-panel="relationships">
+      <header class="section-title">
+        <span>05</span>
+        <h2 data-zh="Relationship Constellation" data-en="Relationship Constellation">Relationship Constellation</h2>
+        <p data-zh="不是社交网络，而是影响你成为谁的关系、城市和记忆。" data-en="Not a social network, but the relationships, cities, and memories that shape who you become.">不是社交网络，而是影响你成为谁的关系、城市和记忆。</p>
+      </header>
+      <div class="constellation-wrap">
+        <canvas id="constellationCanvas"></canvas>
+        <aside id="constellationNote"></aside>
+      </div>
+    </section>
+
+    <section class="epos-view" id="reflection" data-view-panel="reflection">
+      <header class="section-title">
+        <span>06</span>
+        <h2 data-zh="Daily Reflection System" data-en="Daily Reflection System">Daily Reflection System</h2>
+        <p data-zh="每日记录不是打卡，而是给未来的自己留下可分析的生活样本。" data-en="Daily reflection is not check-in culture. It leaves analyzable samples for your future self.">每日记录不是打卡，而是给未来的自己留下可分析的生活样本。</p>
+      </header>
+      <form class="reflection-form" id="reflectionForm">
+        <label><span data-zh="情绪" data-en="Mood">情绪</span><input name="mood" type="range" min="1" max="10" value="6"></label>
+        <label><span data-zh="花费" data-en="Spending">花费</span><input name="spending" type="number" min="0" step="0.01" placeholder="SGD"></label>
+        <label><span data-zh="能量" data-en="Energy">能量</span><input name="energy" type="range" min="1" max="10" value="6"></label>
+        <label><span data-zh="孤独感" data-en="Loneliness">孤独感</span><input name="loneliness" type="range" min="1" max="10" value="4"></label>
+        <label><span data-zh="满足感" data-en="Fulfillment">满足感</span><input name="fulfillment" type="range" min="1" max="10" value="6"></label>
+        <label class="full"><span data-zh="今天的思考" data-en="Thought of the day">今天的思考</span><textarea name="thought" rows="4" data-zh-placeholder="一句真实的话，不用漂亮。" data-en-placeholder="One true sentence. It does not need to be beautiful."></textarea></label>
+        <button type="submit" data-zh="保存今天" data-en="Save today">保存今天</button>
+      </form>
+      <div class="reflection-output" id="reflectionOutput"></div>
+    </section>
+
+    <section class="epos-view" id="memory" data-view-panel="memory">
+      <header class="section-title">
+        <span>07</span>
+        <h2 data-zh="Memory Engine" data-en="Memory Engine">Memory Engine</h2>
+        <p data-zh="选择一个月份，让系统把消费、地点、情绪和人生主题折叠在一起。" data-en="Choose a month and let the system fold spending, places, emotion, and life theme into one page.">选择一个月份，让系统把消费、地点、情绪和人生主题折叠在一起。</p>
+      </header>
+      <div class="memory-controls">
+        <select id="memoryMonth" aria-label="Memory month"></select>
+      </div>
+      <div class="memory-time-machine" id="memoryTimeMachine">
+        <aside class="memory-lens" id="memoryLens"></aside>
+        <div class="memory-board" id="memoryBoard"></div>
+      </div>
+    </section>
+
+    <section class="epos-view" id="principles" data-view-panel="principles">
+      <header class="section-title">
+        <span>08</span>
+        <h2 data-zh="Personal Operating Principles" data-en="Personal Operating Principles">Personal Operating Principles</h2>
+        <p data-zh="这些不是口号，而是从长期记录里提炼出的生活操作原则。它们会随着数据、写作和人生阶段变化而更新。" data-en="These are not slogans. They are operating principles distilled from long-term records, and they can change with data, writing, and life stage.">这些不是口号，而是从长期记录里提炼出的生活操作原则。它们会随着数据、写作和人生阶段变化而更新。</p>
+      </header>
+      <div class="principles-grid" id="principlesGrid"></div>
+    </section>
+  </main>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/ernest-personal-os.js"></script>
+</body>
+</html>

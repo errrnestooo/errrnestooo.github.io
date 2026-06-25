@@ -498,47 +498,6 @@ body.dark-mode .journal-card{
   transition:opacity .55s ease, transform .55s ease;
 }
 
-.map-stage{
-  border:1px solid var(--journal-line);
-  border-radius:24px;
-  min-height:340px;
-  background:
-    radial-gradient(circle at 24% 42%, rgba(217,164,111,.28), transparent 9rem),
-    radial-gradient(circle at 58% 38%, rgba(138,160,168,.18), transparent 12rem),
-    radial-gradient(circle at 75% 58%, rgba(217,164,111,.18), transparent 8rem),
-    #171411;
-  color:#f2e8da;
-  position:relative;
-  overflow:hidden;
-  margin-bottom:22px;
-}
-
-.map-stage::after{
-  content:"";
-  position:absolute;
-  inset:28px;
-  border:1px solid rgba(242,232,218,.12);
-  border-radius:50%;
-}
-
-.map-pin{
-  position:absolute;
-  border:1px solid rgba(217,164,111,.72);
-  color:#f2e8da;
-  background:rgba(20,17,15,.72);
-  border-radius:999px;
-  padding:5px 9px;
-  font-size:12px;
-  cursor:pointer;
-  backdrop-filter:blur(8px);
-}
-
-.map-pin:hover,
-.map-pin.active{
-  background:#d9a46f;
-  color:#171411;
-}
-
 .photo-grid{
   display:grid;
   grid-template-columns:repeat(3, minmax(0, 1fr));
@@ -630,5 +589,4 @@ body.dark-mode .journal-card{
   .photo-grid{ grid-template-columns:1fr; }
   .journal-card{ padding:18px; }
   .timeline-item{ padding-left:46px; }
-  .map-stage{ min-height:420px; }
 }

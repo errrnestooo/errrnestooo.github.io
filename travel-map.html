@@ -3,16 +3,406 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A cinematic travel map for Ernest's Journal.">
+  <meta name="description" content="A warm minimalist travel archive map for Ernest's Journal.">
   <meta property="og:title" content="Travel Map | Ernest's Journal">
-  <meta property="og:description" content="A map that behaves more like memory than itinerary.">
+  <meta property="og:description" content="A quiet map of routes, countries, and memories.">
   <meta property="og:type" content="website">
   <title>Travel Map | Ernest's Journal</title>
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/css/site.css">
+  <style>
+    .map-page{
+      max-width:1180px;
+    }
+
+    .travel-stats{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:14px;
+      margin:0 0 30px;
+    }
+
+    .travel-stat{
+      border:1px solid var(--journal-line);
+      border-radius:16px;
+      padding:18px 18px 17px;
+      background:#fffaf2;
+      box-shadow:0 12px 26px rgba(92,67,43,.045);
+    }
+
+    .travel-stat span{
+      display:block;
+      color:var(--journal-muted);
+      font-size:12px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+
+    .travel-stat strong{
+      display:block;
+      margin-top:8px;
+      color:var(--journal-text);
+      font-size:clamp(25px, 3vw, 38px);
+      font-weight:650;
+      line-height:1;
+      letter-spacing:0;
+    }
+
+    .travel-map-archive{
+      border:1px solid var(--journal-line);
+      border-radius:30px;
+      background:#fbf4e8;
+      box-shadow:0 20px 50px rgba(92,67,43,.075);
+      padding:28px;
+    }
+
+    .travel-map-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:20px;
+      margin-bottom:16px;
+    }
+
+    .travel-map-header p{
+      margin:0;
+      max-width:560px;
+      color:var(--journal-muted);
+      font-size:14px;
+      line-height:1.75;
+    }
+
+    .travel-legend{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      color:var(--journal-muted);
+      font-size:12px;
+      white-space:nowrap;
+    }
+
+    .travel-legend span{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+    }
+
+    .legend-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      display:inline-block;
+      background:#C89B63;
+    }
+
+    .legend-dot.future{
+      background:#d8cbbb;
+    }
+
+    .travel-map-layout{
+      display:grid;
+      grid-template-columns:minmax(0, 1fr) 300px;
+      gap:24px;
+      align-items:stretch;
+    }
+
+    .world-map-panel{
+      border:1px solid rgba(234,223,206,.88);
+      border-radius:24px;
+      background:#fff8ed;
+      padding:22px;
+      min-height:510px;
+      overflow:hidden;
+    }
+
+    .world-map{
+      width:100%;
+      height:100%;
+      min-height:460px;
+      display:block;
+    }
+
+    .map-graticule{
+      stroke:#e9dfcf;
+      stroke-width:1;
+      opacity:.52;
+      fill:none;
+    }
+
+    .land{
+      fill:#d9d3ca;
+      opacity:.34;
+      stroke:#cec4b6;
+      stroke-width:1;
+    }
+
+    .route-line{
+      fill:none;
+      stroke:#C89B63;
+      stroke-width:1.7;
+      stroke-linecap:round;
+      stroke-dasharray:5 7;
+      opacity:.55;
+      animation:routeDrift 8s linear infinite;
+    }
+
+    .route-line.is-active{
+      opacity:.95;
+      stroke-width:2.4;
+    }
+
+    .map-country{
+      cursor:pointer;
+      outline:none;
+    }
+
+    .map-country .country-dot{
+      fill:#C89B63;
+      stroke:#fffaf2;
+      stroke-width:3;
+      transition:r .18s ease, fill .18s ease, opacity .18s ease;
+    }
+
+    .map-country .country-halo{
+      fill:#C89B63;
+      opacity:.11;
+      transition:opacity .18s ease, r .18s ease;
+    }
+
+    .map-country .country-label{
+      fill:#6b5f54;
+      font-size:12px;
+      letter-spacing:.01em;
+      pointer-events:none;
+    }
+
+    .map-country.future .country-dot{
+      fill:#d8cbbb;
+      stroke:#fffaf2;
+    }
+
+    .map-country.future .country-halo{
+      fill:#d8cbbb;
+    }
+
+    .map-country.future .country-label{
+      fill:#9d9286;
+    }
+
+    .map-country:hover .country-dot,
+    .map-country.is-active .country-dot{
+      r:8;
+      fill:#b98143;
+    }
+
+    .map-country:hover .country-halo,
+    .map-country.is-active .country-halo{
+      r:18;
+      opacity:.18;
+    }
+
+    .journey-panel{
+      border:1px solid var(--journal-line);
+      border-radius:24px;
+      background:#fffaf2;
+      padding:22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:100%;
+      box-shadow:0 12px 28px rgba(92,67,43,.055);
+    }
+
+    .journey-panel h2{
+      margin:0 0 8px;
+      font-size:28px;
+      font-weight:650;
+      letter-spacing:0;
+    }
+
+    .journey-dates{
+      color:var(--journal-muted);
+      font-size:13px;
+      margin-bottom:18px;
+    }
+
+    .journey-description{
+      color:var(--journal-muted);
+      font-size:15px;
+      line-height:1.85;
+      margin:0 0 22px;
+    }
+
+    .journey-meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-bottom:20px;
+    }
+
+    .journey-meta span{
+      border:1px solid var(--journal-line);
+      border-radius:14px;
+      padding:10px;
+      color:var(--journal-muted);
+      font-size:12px;
+      background:#fbf4e8;
+    }
+
+    .journey-panel a{
+      color:#8a5b2f;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:600;
+    }
+
+    .travel-timeline{
+      margin:36px auto 0;
+      max-width:960px;
+    }
+
+    .travel-timeline h2{
+      margin:0 0 18px;
+      text-align:center;
+      font-size:24px;
+      font-weight:650;
+      letter-spacing:0;
+    }
+
+    .travel-timeline-list{
+      display:grid;
+      grid-template-columns:repeat(6, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .timeline-stop{
+      border:1px solid var(--journal-line);
+      border-radius:16px;
+      padding:14px 13px;
+      background:#fffaf2;
+      color:var(--journal-text);
+      text-align:left;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(92,67,43,.04);
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .timeline-stop:hover,
+    .timeline-stop.is-active{
+      transform:translateY(-3px);
+      border-color:rgba(200,155,99,.78);
+      background:#fff5e5;
+    }
+
+    .timeline-stop time{
+      display:block;
+      color:var(--journal-muted);
+      font-size:12px;
+      margin-bottom:6px;
+    }
+
+    .timeline-stop strong{
+      font-size:14px;
+      font-weight:650;
+    }
+
+    body.dark-mode .travel-stat,
+    body.dark-mode .travel-map-archive,
+    body.dark-mode .world-map-panel,
+    body.dark-mode .journey-panel,
+    body.dark-mode .timeline-stop{
+      background:#211c18;
+      border-color:var(--journal-line);
+    }
+
+    body.dark-mode .world-map-panel,
+    body.dark-mode .journey-meta span{
+      background:#1d1814;
+    }
+
+    body.dark-mode .land{
+      fill:#6f665d;
+      stroke:#7a6d60;
+      opacity:.32;
+    }
+
+    body.dark-mode .map-graticule{
+      stroke:#3b3129;
+      opacity:.7;
+    }
+
+    body.dark-mode .map-country .country-label{
+      fill:#c8b8a5;
+    }
+
+    @keyframes routeDrift{
+      to{ stroke-dashoffset:-80; }
+    }
+
+    @media (max-width:920px){
+      .travel-stats{
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+      }
+
+      .travel-map-layout{
+        grid-template-columns:1fr;
+      }
+
+      .world-map-panel{
+        min-height:auto;
+      }
+
+      .travel-timeline-list{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width:640px){
+      .map-page{
+        padding-left:14px;
+        padding-right:14px;
+      }
+
+      .travel-stats{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+      }
+
+      .travel-stat{
+        padding:14px;
+      }
+
+      .travel-map-archive{
+        padding:16px;
+        border-radius:22px;
+      }
+
+      .travel-map-header{
+        flex-direction:column;
+      }
+
+      .world-map-panel{
+        padding:12px;
+        overflow-x:auto;
+      }
+
+      .world-map{
+        min-width:780px;
+        min-height:430px;
+      }
+
+      .journey-panel{
+        padding:18px;
+      }
+
+      .travel-timeline-list{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-  <main class="journal-page">
+  <main class="journal-page map-page">
     <div class="nav">
       <a href="index.html">&#x9996;&#x9875;</a>
       <a href="diary.html">&#x65E5;&#x8BB0;</a>
@@ -30,33 +420,163 @@
     </div>
 
     <header class="journal-hero fade-in">
-      <div class="journal-kicker">Travel archive</div>
-      <h1 data-i18n="map.title">&#x65C5;&#x884C;&#x5730;&#x56FE;</h1>
-      <p data-i18n="map.subtitle">&#x4E00;&#x5F20;&#x66F4;&#x50CF;&#x8BB0;&#x5FC6;&#x800C;&#x4E0D;&#x662F;&#x653B;&#x7565;&#x7684;&#x4E16;&#x754C;&#x5730;&#x56FE;&#x3002;</p>
+      <div class="journal-kicker" data-zh="Travel archive" data-en="Travel archive">Travel archive</div>
+      <h1 data-zh="&#x65C5;&#x884C;&#x5730;&#x56FE;" data-en="Travel Map">&#x65C5;&#x884C;&#x5730;&#x56FE;</h1>
+      <p data-zh="&#x4E00;&#x5F20;&#x4E2A;&#x4EBA;&#x7684;&#x4E16;&#x754C;&#x5730;&#x56FE;&#xFF1A;&#x4E0D;&#x662F;&#x653B;&#x7565;&#xFF0C;&#x800C;&#x662F;&#x8DEF;&#x7EBF;&#x3001;&#x65F6;&#x95F4;&#x548C;&#x8BB0;&#x5FC6;&#x7684;&#x7F13;&#x6162;&#x7D22;&#x5F15;&#x3002;" data-en="A personal world map: not an itinerary, but a quiet index of routes, time, and memory.">&#x4E00;&#x5F20;&#x4E2A;&#x4EBA;&#x7684;&#x4E16;&#x754C;&#x5730;&#x56FE;&#xFF1A;&#x4E0D;&#x662F;&#x653B;&#x7565;&#xFF0C;&#x800C;&#x662F;&#x8DEF;&#x7EBF;&#x3001;&#x65F6;&#x95F4;&#x548C;&#x8BB0;&#x5FC6;&#x7684;&#x7F13;&#x6162;&#x7D22;&#x5F15;&#x3002;</p>
     </header>
 
-    <section class="map-stage fade-in" aria-label="Travel map">
-      <button class="map-pin active" style="left:55%;top:54%" data-target="singapore" data-i18n="map.singapore">&#x65B0;&#x52A0;&#x5761;</button>
-      <button class="map-pin" style="left:44%;top:43%" data-target="oman" data-i18n="map.oman">&#x963F;&#x66FC;</button>
-      <button class="map-pin" style="left:40%;top:38%" data-target="jordan" data-i18n="map.jordan">&#x7EA6;&#x65E6;</button>
-      <button class="map-pin" style="left:39%;top:34%" data-target="israel" data-i18n="map.israel">&#x4EE5;&#x8272;&#x5217;</button>
-      <button class="map-pin" style="left:42%;top:28%" data-target="turkey" data-i18n="map.turkey">&#x571F;&#x8033;&#x5176;</button>
-      <button class="map-pin" style="left:52%;top:31%" data-target="uzbekistan" data-i18n="map.uzbekistan">&#x4E4C;&#x5179;&#x522B;&#x514B;</button>
-      <button class="map-pin" style="left:43%;top:49%" data-target="bahrain" data-i18n="map.bahrain">&#x5DF4;&#x6797;</button>
-      <button class="map-pin" style="left:72%;top:68%" data-target="australia" data-i18n="map.australia">&#x6FB3;&#x5927;&#x5229;&#x4E9A;</button>
-      <button class="map-pin" style="left:54%;top:47%" data-target="thailand" data-i18n="map.thailand">&#x6CF0;&#x56FD;</button>
+    <section class="travel-stats fade-in" aria-label="Travel statistics">
+      <article class="travel-stat"><span data-zh="&#x53BB;&#x8FC7;&#x7684;&#x56FD;&#x5BB6;" data-en="Visited Countries">&#x53BB;&#x8FC7;&#x7684;&#x56FD;&#x5BB6;</span><strong>9</strong></article>
+      <article class="travel-stat"><span data-zh="&#x57CE;&#x5E02;" data-en="Cities">&#x57CE;&#x5E02;</span><strong>54</strong></article>
+      <article class="travel-stat"><span data-zh="&#x5927;&#x6D32;" data-en="Continents">&#x5927;&#x6D32;</span><strong>3</strong></article>
+      <article class="travel-stat"><span data-zh="&#x751F;&#x6D3B;&#x5750;&#x6807;" data-en="Home Base">&#x751F;&#x6D3B;&#x5750;&#x6807;</span><strong data-zh="&#x65B0;&#x52A0;&#x5761;" data-en="Singapore">&#x65B0;&#x52A0;&#x5761;</strong></article>
     </section>
 
-    <p class="journal-meta" data-i18n="map.hint">&#x70B9;&#x51FB;&#x4E00;&#x4E2A;&#x56FD;&#x5BB6;&#xFF0C;&#x67E5;&#x770B;&#x8DEF;&#x7EBF;&#x548C;&#x77ED;&#x8BB0;&#x3002;</p>
-    <section class="journal-grid two">
-      <article class="journal-card fade-in"><h2 data-i18n="map.singapore">&#x65B0;&#x52A0;&#x5761;</h2><div class="journal-meta">2019-present / home base</div><p data-i18n="map.singapore.body">&#x4E0D;&#x53EA;&#x662F;&#x5730;&#x56FE;&#x4E0A;&#x7684;&#x70B9;&#xFF0C;&#x4E5F;&#x662F;&#x73B0;&#x5728;&#x751F;&#x6D3B;&#x7684;&#x5750;&#x6807;&#x3002;</p></article>
-      <article class="journal-card fade-in"><h2 data-i18n="map.oman">&#x963F;&#x66FC;</h2><div class="journal-meta">Muscat / coast</div><p data-i18n="map.oman.body">Muscat &#x4E0E;&#x6D77;&#x8FB9;&#x516C;&#x8DEF;&#xFF0C;&#x9ECE;&#x660E;&#x524D;&#x7684;&#x98CE;&#x5F88;&#x8F7B;&#x3002;</p></article>
-      <article class="journal-card fade-in"><h2 data-i18n="map.jordan">&#x7EA6;&#x65E6;</h2><div class="journal-meta">Amman - Petra</div><p data-i18n="map.jordan.body">Amman &#x5230; Petra&#xFF0C;&#x77F3;&#x5934;&#x50CF;&#x628A;&#x65F6;&#x95F4;&#x4FDD;&#x5B58;&#x4E86;&#x4E0B;&#x6765;&#x3002;</p></article>
-      <article class="journal-card fade-in"><h2 data-i18n="map.uzbekistan">&#x4E4C;&#x5179;&#x522B;&#x514B;&#x65AF;&#x5766;</h2><div class="journal-meta">Samarkand / night road</div><p data-i18n="map.uzbekistan.body">&#x6492;&#x9A6C;&#x5C14;&#x7F55;&#x7684;&#x591C;&#x8F66;&#xFF0C;&#x4E2D;&#x4E9A;&#x5728;&#x7A97;&#x5916;&#x6162;&#x6162;&#x540E;&#x9000;&#x3002;</p></article>
+    <section class="travel-map-archive fade-in" aria-label="Travel archive map">
+      <div class="travel-map-header">
+        <p data-zh="&#x91D1;&#x8272;&#x5706;&#x70B9;&#x662F;&#x5DF2;&#x7ECF;&#x5230;&#x8FBE;&#x7684;&#x5730;&#x65B9;&#x3002;&#x70B9;&#x51FB;&#x5730;&#x56FE;&#x6216;&#x4E0B;&#x65B9;&#x65F6;&#x95F4;&#x7EBF;&#xFF0C;&#x53F3;&#x4FA7;&#x4F1A;&#x663E;&#x793A;&#x90A3;&#x6BB5;&#x65C5;&#x7A0B;&#x7684;&#x7B80;&#x77ED;&#x6863;&#x6848;&#x3002;" data-en="Gold dots mark places already reached. Click the map or the timeline to open a short archive card for that journey.">&#x91D1;&#x8272;&#x5706;&#x70B9;&#x662F;&#x5DF2;&#x7ECF;&#x5230;&#x8FBE;&#x7684;&#x5730;&#x65B9;&#x3002;&#x70B9;&#x51FB;&#x5730;&#x56FE;&#x6216;&#x4E0B;&#x65B9;&#x65F6;&#x95F4;&#x7EBF;&#xFF0C;&#x53F3;&#x4FA7;&#x4F1A;&#x663E;&#x793A;&#x90A3;&#x6BB5;&#x65C5;&#x7A0B;&#x7684;&#x7B80;&#x77ED;&#x6863;&#x6848;&#x3002;</p>
+        <div class="travel-legend" aria-label="Map legend">
+          <span><i class="legend-dot"></i><span data-zh="&#x5DF2;&#x5230;&#x8FBE;" data-en="Visited">&#x5DF2;&#x5230;&#x8FBE;</span></span>
+          <span><i class="legend-dot future"></i><span data-zh="&#x672A;&#x6765;" data-en="Future">&#x672A;&#x6765;</span></span>
+        </div>
+      </div>
+
+      <div class="travel-map-layout">
+        <div class="world-map-panel">
+          <svg class="world-map" viewBox="0 0 1000 520" role="img" aria-labelledby="mapTitle mapDesc">
+            <title id="mapTitle">Ernest's travel archive map</title>
+            <desc id="mapDesc">A simplified low-opacity world map with warm gold dots placed near visited countries.</desc>
+
+            <path class="map-graticule" d="M80 130 H930 M70 240 H940 M90 350 H920 M210 70 V456 M420 62 V468 M630 68 V462 M810 88 V450"/>
+
+            <path class="land" d="M78 160 C104 112 176 94 246 118 C304 138 332 182 306 224 C282 264 224 274 178 252 C128 230 58 218 78 160Z"/>
+            <path class="land" d="M250 305 C286 260 350 262 388 294 C424 326 402 382 354 404 C304 426 250 392 238 350 C232 328 236 316 250 305Z"/>
+            <path class="land" d="M406 126 C468 80 588 88 654 130 C704 162 704 214 650 236 C596 258 552 226 502 246 C458 264 398 244 388 204 C380 172 388 144 406 126Z"/>
+            <path class="land" d="M520 258 C564 240 622 268 648 326 C674 386 646 448 590 462 C534 474 502 414 516 354 C524 318 500 284 520 258Z"/>
+            <path class="land" d="M648 210 C704 166 810 178 866 224 C918 268 894 326 824 334 C774 340 752 296 708 310 C666 324 624 286 648 210Z"/>
+            <path class="land" d="M776 386 C828 350 906 376 936 420 C964 462 908 492 846 478 C800 466 750 420 776 386Z"/>
+
+            <path class="route-line" data-route="singapore" d="M744 332 C704 318 660 306 600 276"/>
+            <path class="route-line" data-route="oman" d="M600 276 C586 260 574 248 568 240"/>
+            <path class="route-line" data-route="bahrain" d="M568 240 C552 226 534 210 520 196"/>
+            <path class="route-line" data-route="turkey" d="M520 196 C520 212 526 224 534 236"/>
+            <path class="route-line" data-route="jordan" d="M534 236 C530 232 530 226 532 220"/>
+            <path class="route-line" data-route="israel" d="M532 220 C560 204 598 186 632 176"/>
+            <path class="route-line" data-route="uzbekistan" d="M632 176 C680 216 724 278 744 332"/>
+
+            <g class="map-country is-active" data-country="singapore" tabindex="0" transform="translate(744 332)">
+              <circle class="country-halo" r="14"></circle><circle class="country-dot" r="6"></circle><text class="country-label" x="14" y="4">Singapore</text>
+            </g>
+            <g class="map-country" data-country="thailand" tabindex="0" transform="translate(722 304)">
+              <circle class="country-halo" r="13"></circle><circle class="country-dot" r="5.5"></circle><text class="country-label" x="13" y="4">Thailand</text>
+            </g>
+            <g class="map-country" data-country="oman" tabindex="0" transform="translate(600 276)">
+              <circle class="country-halo" r="13"></circle><circle class="country-dot" r="5.5"></circle><text class="country-label" x="13" y="4">Oman</text>
+            </g>
+            <g class="map-country" data-country="bahrain" tabindex="0" transform="translate(568 240)">
+              <circle class="country-halo" r="12"></circle><circle class="country-dot" r="5"></circle><text class="country-label" x="12" y="-8">Bahrain</text>
+            </g>
+            <g class="map-country" data-country="jordan" tabindex="0" transform="translate(534 236)">
+              <circle class="country-halo" r="12"></circle><circle class="country-dot" r="5"></circle><text class="country-label" x="-58" y="5">Jordan</text>
+            </g>
+            <g class="map-country" data-country="israel" tabindex="0" transform="translate(532 220)">
+              <circle class="country-halo" r="12"></circle><circle class="country-dot" r="5"></circle><text class="country-label" x="-54" y="-6">Israel</text>
+            </g>
+            <g class="map-country" data-country="turkey" tabindex="0" transform="translate(520 196)">
+              <circle class="country-halo" r="13"></circle><circle class="country-dot" r="5.5"></circle><text class="country-label" x="-22" y="-14">Turkey</text>
+            </g>
+            <g class="map-country" data-country="uzbekistan" tabindex="0" transform="translate(632 176)">
+              <circle class="country-halo" r="14"></circle><circle class="country-dot" r="6"></circle><text class="country-label" x="13" y="-6">Uzbekistan</text>
+            </g>
+            <g class="map-country" data-country="australia" tabindex="0" transform="translate(846 420)">
+              <circle class="country-halo" r="14"></circle><circle class="country-dot" r="6"></circle><text class="country-label" x="14" y="4">Australia</text>
+            </g>
+            <g class="map-country future" data-country="kazakhstan" tabindex="0" transform="translate(648 146)">
+              <circle class="country-halo" r="13"></circle><circle class="country-dot" r="5.5"></circle><text class="country-label" x="13" y="4">Kazakhstan</text>
+            </g>
+          </svg>
+        </div>
+
+        <aside class="journey-panel" aria-live="polite">
+          <div>
+            <h2 id="journeyCountry">Singapore</h2>
+            <div class="journey-dates" id="journeyDates">2021 - present</div>
+            <p class="journey-description" id="journeyDescription">Not only a point on the map, but the coordinate of daily life now.</p>
+            <div class="journey-meta">
+              <span id="journeyEntries">12 diary entries</span>
+              <span id="journeyPhotos">18 photos</span>
+            </div>
+          </div>
+          <a href="travel.html" data-zh="&#x9605;&#x8BFB;&#x65C5;&#x7A0B; &#x2192;" data-en="Read Journey &rarr;">&#x9605;&#x8BFB;&#x65C5;&#x7A0B; &#x2192;</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="travel-timeline fade-in" aria-label="Travel timeline">
+      <h2 data-zh="&#x65C5;&#x884C;&#x65F6;&#x95F4;&#x7EBF;" data-en="Travel Timeline">&#x65C5;&#x884C;&#x65F6;&#x95F4;&#x7EBF;</h2>
+      <div class="travel-timeline-list">
+        <button class="timeline-stop is-active" type="button" data-country="singapore"><time>2021</time><strong>Singapore</strong></button>
+        <button class="timeline-stop" type="button" data-country="oman"><time>2024</time><strong>Oman</strong></button>
+        <button class="timeline-stop" type="button" data-country="turkey"><time>2025</time><strong>Turkey</strong></button>
+        <button class="timeline-stop" type="button" data-country="jordan"><time>2025</time><strong>Jordan</strong></button>
+        <button class="timeline-stop" type="button" data-country="israel"><time>2025</time><strong>Israel</strong></button>
+        <button class="timeline-stop" type="button" data-country="uzbekistan"><time>2026</time><strong>Uzbekistan</strong></button>
+      </div>
     </section>
 
     <footer class="archive-footer" data-i18n="footer">Ernest's Journal - &#x5728;&#x65B0;&#x52A0;&#x5761;&#x7F13;&#x6162;&#x5EFA;&#x9020;&#x7684;&#x4E2A;&#x4EBA;&#x6863;&#x6848;</footer>
   </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      const journeys = {
+        singapore: { country:{ zh:"\u65b0\u52a0\u5761", en:"Singapore" }, dates:"2021 - present", entries:12, photos:18, description:{ zh:"\u4e0d\u53ea\u662f\u5730\u56fe\u4e0a\u7684\u70b9\uff0c\u4e5f\u662f\u73b0\u5728\u751f\u6d3b\u7684\u5750\u6807\u3002", en:"Not only a point on the map, but the coordinate of daily life now." } },
+        thailand: { country:{ zh:"\u6cf0\u56fd", en:"Thailand" }, dates:"2023", entries:2, photos:11, description:{ zh:"\u70ed\u5e26\u7684\u5468\u672b\uff0c\u5728\u6f6e\u6e7f\u7a7a\u6c14\u91cc\u77ed\u6682\u9003\u79bb\u3002", en:"A tropical weekend, a short escape in humid air." } },
+        oman: { country:{ zh:"\u963f\u66fc", en:"Oman" }, dates:"2024", entries:4, photos:26, description:{ zh:"Muscat \u4e0e\u6d77\u8fb9\u516c\u8def\uff0c\u9ece\u660e\u524d\u7684\u98ce\u5f88\u8f7b\u3002", en:"Muscat and the coastal road, with a light wind before dawn." } },
+        bahrain: { country:{ zh:"\u5df4\u6797", en:"Bahrain" }, dates:"2024", entries:1, photos:7, description:{ zh:"\u77ed\u6682\u505c\u7559\uff0c\u4e00\u5ea7\u6d77\u6e7e\u57ce\u5e02\u7684\u70ed\u548c\u5149\u3002", en:"A brief stop, a Gulf city made of heat and light." } },
+        turkey: { country:{ zh:"\u571f\u8033\u5176", en:"Turkey" }, dates:"2025", entries:5, photos:31, description:{ zh:"\u4f0a\u65af\u5766\u5e03\u5c14\u7684\u6d77\u5ce1\uff0c\u50cf\u4e00\u6761\u7f13\u6162\u7684\u8fb9\u754c\u3002", en:"The Bosphorus in Istanbul, a slow border made of water." } },
+        jordan: { country:{ zh:"\u7ea6\u65e6", en:"Jordan" }, dates:"2025", entries:6, photos:34, description:{ zh:"Amman \u5230 Petra\uff0c\u77f3\u5934\u50cf\u628a\u65f6\u95f4\u4fdd\u5b58\u4e86\u4e0b\u6765\u3002", en:"From Amman to Petra, stone seemed to keep time for everyone." } },
+        israel: { country:{ zh:"\u4ee5\u8272\u5217", en:"Israel" }, dates:"2025", entries:3, photos:19, description:{ zh:"\u8036\u8def\u6492\u51b7\u7684\u51ac\u5929\uff0c\u5386\u53f2\u4e0e\u65e5\u5e38\u5e76\u6392\u884c\u8d70\u3002", en:"Jerusalem in winter, history and daily life walking side by side." } },
+        uzbekistan: { country:{ zh:"\u4e4c\u5179\u522b\u514b\u65af\u5766", en:"Uzbekistan" }, dates:"2026", entries:4, photos:22, description:{ zh:"\u6492\u9a6c\u5c14\u7f55\u7684\u591c\u8f66\uff0c\u4e2d\u4e9a\u5728\u7a97\u5916\u6162\u6162\u540e\u9000\u3002", en:"The night bus to Samarkand, Central Asia moving past the window." } },
+        australia: { country:{ zh:"\u6fb3\u5927\u5229\u4e9a", en:"Australia" }, dates:"2022", entries:2, photos:13, description:{ zh:"\u66f4\u5bbd\u7684\u5929\u5149\uff0c\u66f4\u6162\u7684\u8def\u3002", en:"Wider light, slower roads." } },
+        kazakhstan: { country:{ zh:"\u54c8\u8428\u514b\u65af\u5766", en:"Kazakhstan" }, dates:"Future", entries:0, photos:0, description:{ zh:"\u4e0b\u4e00\u6bb5\u4e2d\u4e9a\u8def\u7ebf\uff0c\u6682\u65f6\u4fdd\u6301\u5b89\u9759\u3002", en:"A future Central Asian route, kept quiet for now." } }
+      };
+
+      const country = document.getElementById("journeyCountry");
+      const dates = document.getElementById("journeyDates");
+      const description = document.getElementById("journeyDescription");
+      const entries = document.getElementById("journeyEntries");
+      const photos = document.getElementById("journeyPhotos");
+      const lang = () => window.ErnestI18n ? window.ErnestI18n.lang() : "zh";
+
+      function plural(value, singular, plural){
+        return value === 1 ? singular : plural;
+      }
+
+      function updateJourney(id){
+        const item = journeys[id] || journeys.singapore;
+        const activeLang = lang();
+        country.textContent = item.country[activeLang] || item.country.en;
+        dates.textContent = item.dates;
+        description.textContent = item.description[activeLang] || item.description.en;
+        entries.textContent = activeLang === "zh" ? `${item.entries} \u7bc7\u65e5\u8bb0` : `${item.entries} ${plural(item.entries, "diary entry", "diary entries")}`;
+        photos.textContent = activeLang === "zh" ? `${item.photos} \u5f20\u7167\u7247` : `${item.photos} ${plural(item.photos, "photo", "photos")}`;
+        document.querySelectorAll("[data-country]").forEach((node) => node.classList.toggle("is-active", node.dataset.country === id));
+        document.querySelectorAll("[data-route]").forEach((node) => node.classList.toggle("is-active", node.dataset.route === id));
+      }
+
+      document.querySelectorAll(".map-country, .timeline-stop").forEach((node) => {
+        node.addEventListener("mouseenter", () => updateJourney(node.dataset.country));
+        node.addEventListener("focus", () => updateJourney(node.dataset.country));
+        node.addEventListener("click", () => updateJourney(node.dataset.country));
+      });
+
+      window.addEventListener("ernest:languagechange", () => {
+        const active = document.querySelector(".map-country.is-active");
+        updateJourney(active ? active.dataset.country : "singapore");
+      });
+    });
+  </script>
   <script src="assets/js/i18n.js"></script>
   <script src="assets/js/site.js"></script>
 </body>

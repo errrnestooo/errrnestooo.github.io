@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Personal Analysis OS, a private AI mirror for Ernest.">
+  <meta property="og:title" content="Personal Analysis OS">
+  <meta property="og:description" content="A private reflective dashboard for personality, values, movement, time, and future trajectory.">
+  <meta property="og:type" content="website">
+  <title>Personal Analysis OS</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/personal-analysis-os.css">
+</head>
+<body class="analysis-os-page">
+  <div class="analysis-grain" aria-hidden="true"></div>
+
+  <aside class="analysis-sidebar" aria-label="Personal Analysis OS navigation">
+    <div class="analysis-brand">
+      <span data-zh="私人 AI 镜子" data-en="Private AI mirror">私人 AI 镜子</span>
+      <strong>Personal Analysis OS</strong>
+    </div>
+
+    <nav class="analysis-side-nav">
+      <a href="#overview" data-zh="总览" data-en="Overview">总览</a>
+      <a href="#personality" data-zh="性格" data-en="Personality">性格</a>
+      <a href="#values" data-zh="价值观" data-en="Values">价值观</a>
+      <a href="#emotions" data-zh="情绪模式" data-en="Emotional Patterns">情绪模式</a>
+      <a href="#discipline" data-zh="行动力" data-en="Discipline">行动力</a>
+      <a href="#taste" data-zh="审美" data-en="Taste">审美</a>
+      <a href="#movement" data-zh="移动心理" data-en="Movement">移动心理</a>
+      <a href="#financial-behavior" data-zh="财务行为" data-en="Financial Behavior">财务行为</a>
+      <a href="#time" data-zh="时间关系" data-en="Time">时间关系</a>
+      <a href="#future" data-zh="未来轨迹" data-en="Future">未来轨迹</a>
+      <a href="#blind-spots" data-zh="盲点" data-en="Blind Spots">盲点</a>
+    </nav>
+
+    <div class="analysis-sidebar-actions">
+      <div class="analysis-language" aria-label="Language switch">
+        <button type="button" data-lang-option="zh">中文</button>
+        <span>|</span>
+        <button type="button" data-lang-option="en">EN</button>
+      </div>
+      <a class="analysis-back-link" href="index.html" data-zh="返回 Journal" data-en="Back to Journal">返回 Journal</a>
+    </div>
+  </aside>
+
+  <main class="analysis-shell">
+    <header class="analysis-hero" id="overview">
+      <p class="analysis-kicker" data-zh="私人分析系统 / 不公开叙事" data-en="Private analysis system / not a public narrative">私人分析系统 / 不公开叙事</p>
+      <h1>Personal Analysis OS</h1>
+      <p class="analysis-hero-copy" data-zh="这里不是日记流、小说页或旅行相册。这里只保存一个问题：从简历、私人记录、书、电影、航班、火车、旅行、消费和生活记录里，能看见一个怎样的人。" data-en="This is not a diary feed, story page, or travel album. This page keeps one question: what kind of person becomes visible through the resume, private records, books, films, flights, trains, travel, spending, and life records?">这里不是日记流、小说页或旅行相册。这里只保存一个问题：从简历、私人记录、书、电影、航班、火车、旅行、消费和生活记录里，能看见一个怎样的人。</p>
+      <article class="analysis-thesis">
+        <span data-zh="核心观察" data-en="Core observation">核心观察</span>
+        <strong data-zh="你一直在寻找一种既能扎根、又不失去移动能力的生活。" data-en="You are looking for a life that can root without losing the ability to move.">你一直在寻找一种既能扎根、又不失去移动能力的生活。</strong>
+      </article>
+    </header>
+
+    <section class="analysis-module analysis-overview">
+      <div class="analysis-module-head"><span>00</span><h2 data-zh="生命坐标" data-en="Life Coordinates">生命坐标</h2></div>
+      <div class="analysis-metric-grid" id="lifeCoordinates"></div>
+      <article class="analysis-panel">
+        <h3 data-zh="人生进度" data-en="Life Progress">人生进度</h3>
+        <div class="analysis-progress"><span id="lifeProgressBar"></span></div>
+        <p id="lifeProgressNote"></p>
+      </article>
+    </section>
+
+    <section class="analysis-module" id="personality">
+      <div class="analysis-module-head"><span>01</span><h2 data-zh="人格剖面" data-en="Personality Profile">人格剖面</h2></div>
+      <div class="analysis-split">
+        <article class="analysis-panel analysis-radar" id="analysisRadar"></article>
+        <article class="analysis-panel">
+          <h3 data-zh="运行气质" data-en="Operating temperament">运行气质</h3>
+          <p data-zh="你习惯用记录来确认自己正在生活：简历证明能力，账本证明安全，航班和火车证明世界仍然打开，日记证明那些普通时刻没有白白经过。" data-en="You use records to confirm that life is actually happening: the resume proves capability, the ledger proves safety, flights and trains prove the world is still open, and diaries prove ordinary moments were not wasted.">你习惯用记录来确认自己正在生活：简历证明能力，账本证明安全，航班和火车证明世界仍然打开，日记证明那些普通时刻没有白白经过。</p>
+          <p data-zh="你的自我不是静态的身份，而是一套持续校准的坐标系统。" data-en="Your self is less a fixed identity than a coordinate system under continuous calibration.">你的自我不是静态的身份，而是一套持续校准的坐标系统。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="analysis-module" id="values">
+      <div class="analysis-module-head"><span>02</span><h2 data-zh="核心价值" data-en="Core Values">核心价值</h2></div>
+      <div class="analysis-card-grid" id="coreValues"></div>
+    </section>
+
+    <section class="analysis-module" id="emotions">
+      <div class="analysis-module-head"><span>03</span><h2 data-zh="情绪模式" data-en="Emotional Patterns">情绪模式</h2></div>
+      <div class="analysis-card-grid" id="emotionalPatterns"></div>
+    </section>
+
+    <section class="analysis-module" id="discipline">
+      <div class="analysis-module-head"><span>04</span><h2 data-zh="行动力" data-en="Discipline">行动力</h2></div>
+      <div class="analysis-axis" id="ambitionAxis"></div>
+    </section>
+
+    <section class="analysis-module" id="taste">
+      <div class="analysis-module-head"><span>05</span><h2 data-zh="审美与品味" data-en="Taste & Aesthetics">审美与品味</h2></div>
+      <div class="analysis-card-grid" id="tasteProfile"></div>
+      <div class="analysis-card-grid analysis-secondary-grid" id="aestheticArchive"></div>
+    </section>
+
+    <section class="analysis-module" id="movement">
+      <div class="analysis-module-head"><span>06</span><h2 data-zh="移动心理" data-en="Movement Psychology">移动心理</h2></div>
+      <div class="analysis-split">
+        <article class="analysis-panel" id="movementPsychology"></article>
+        <article class="analysis-panel" id="lonelinessPattern"></article>
+      </div>
+      <div class="analysis-map" id="movementMap"></div>
+    </section>
+
+    <section class="analysis-module" id="financial-behavior">
+      <div class="analysis-module-head"><span>07</span><h2 data-zh="财务行为" data-en="Financial Behavior">财务行为</h2></div>
+      <div class="analysis-card-grid" id="financialBehavior"></div>
+    </section>
+
+    <section class="analysis-module" id="time">
+      <div class="analysis-module-head"><span>08</span><h2 data-zh="时间关系" data-en="Relationship With Time">时间关系</h2></div>
+      <div class="analysis-timeline" id="analysisTimeline"></div>
+    </section>
+
+    <section class="analysis-module" id="future">
+      <div class="analysis-module-head"><span>09</span><h2 data-zh="未来轨迹" data-en="Future Trajectory">未来轨迹</h2></div>
+      <div class="analysis-card-grid" id="futureTrajectory"></div>
+    </section>
+
+    <section class="analysis-module" id="blind-spots">
+      <div class="analysis-module-head"><span>10</span><h2 data-zh="盲点" data-en="Blind Spots">盲点</h2></div>
+      <div class="analysis-card-grid" id="blindSpots"></div>
+      <div class="analysis-card-grid analysis-secondary-grid" id="hiddenPatterns"></div>
+    </section>
+
+    <section class="analysis-module analysis-becoming">
+      <div class="analysis-module-head"><span>11</span><h2 data-zh="你正在成为什么样的人" data-en="What You Are Becoming">你正在成为什么样的人</h2></div>
+      <blockquote id="becomingQuote"></blockquote>
+    </section>
+  </main>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/personal-analysis-os.js"></script>
+</body>
+</html>

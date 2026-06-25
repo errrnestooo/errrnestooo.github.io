@@ -1,0 +1,11 @@
+private-data/
+*.local.json
+data/finance/*.json
+uploads/private/
+*.xlsx
+
+# Private local OS files. Keep these on this computer; do not publish to songyangao.com.
+personal-finance-intelligence.html
+assets/js/personal-finance-intelligence.js
+assets/css/personal-finance-intelligence.css
+scripts/build_finance_intelligence.py

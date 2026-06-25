@@ -17,6 +17,41 @@
     if(btn) btn.textContent = theme === "dark" ? t("theme.light") : t("theme.dark");
   }
 
+  function pagePrefix(){
+    const path = window.location.pathname.replace(/\\/g, "/");
+    return /\/(posts|stories)\//.test(path) ? "../" : "";
+  }
+
+  function languageSwitchMarkup(className){
+    return `
+      <span class="${className}" aria-label="Language switch">
+        <button type="button" data-lang-option="zh">中文</button>
+        <span>|</span>
+        <button type="button" data-lang-option="en">EN</button>
+      </span>
+    `;
+  }
+
+  function ensureOsNavLink(){
+    const nav = document.querySelector(".nav");
+    if(!nav || nav.querySelector('a[href$="ernest-os.html"]')) return;
+
+    const link = document.createElement("a");
+    link.href = `${pagePrefix()}ernest-os.html`;
+    link.dataset.i18n = "nav.os";
+    link.textContent = t("nav.os");
+
+    const aboutLink = Array.from(nav.querySelectorAll("a")).find((item) => {
+      const file = (item.getAttribute("href") || "").split("/").pop();
+      return file === "about.html";
+    });
+    if(aboutLink){
+      nav.insertBefore(link, aboutLink);
+    }else{
+      nav.appendChild(link);
+    }
+  }
+
   function translateNav(){
     const map = {
       "index.html": "nav.home",
@@ -32,6 +67,7 @@
       "photos.html": "nav.photos",
       "life.html": "nav.life",
       "plans.html": "nav.plans",
+      "ernest-os.html": "nav.os",
       "about.html": "nav.about"
     };
     document.querySelectorAll(".nav a").forEach((link) => {
@@ -45,11 +81,7 @@
     const tools = document.createElement("aside");
     tools.className = "site-tools";
     tools.innerHTML = `
-      <div class="language-switch" aria-label="Language switch">
-        <button type="button" data-lang-option="zh">中文</button>
-        <span>|</span>
-        <button type="button" data-lang-option="en">EN</button>
-      </div>
+      ${languageSwitchMarkup("language-switch")}
       <button class="theme-toggle" type="button" data-theme-toggle>${t("theme.dark")}</button>
       <section class="music-player" aria-label="Quiet Room">
         <div class="music-player-title">
@@ -70,14 +102,9 @@
     document.body.appendChild(tools);
 
     const nav = document.querySelector(".nav");
+    ensureOsNavLink();
     if(nav && !nav.querySelector(".nav-language-switch")){
-      nav.insertAdjacentHTML("beforeend", `
-        <span class="nav-language-switch">
-          <button type="button" data-lang-option="zh">中文</button>
-          <span>|</span>
-          <button type="button" data-lang-option="en">EN</button>
-        </span>
-      `);
+      nav.insertAdjacentHTML("beforeend", languageSwitchMarkup("nav-language-switch"));
     }
 
     const visits = Number(localStorage.getItem(countKey) || "0") + 1;
@@ -146,6 +173,7 @@
   });
 
   window.addEventListener("ernest:languagechange", () => {
+    ensureOsNavLink();
     translateNav();
     applyTheme(localStorage.getItem(themeKey) || "light");
   });

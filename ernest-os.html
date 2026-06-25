@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Financial OS, a private bilingual money dashboard for Ernest.">
+  <meta property="og:title" content="Financial OS | Ernest's Journal">
+  <meta property="og:description" content="Assets, spending, savings, investments, property goals, and financial projections.">
+  <meta property="og:type" content="website">
+  <title>Financial OS | Ernest's Journal</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="stylesheet" href="assets/css/ernest-os.css">
+</head>
+<body class="ernest-os-page financial-os-page">
+  <div class="os-grain" aria-hidden="true"></div>
+
+  <main class="os-shell">
+    <nav class="nav os-nav" aria-label="Site navigation">
+      <a href="index.html" data-i18n="nav.home">首页</a>
+      <a href="diary.html" data-i18n="nav.diary">日记</a>
+      <a href="stories.html" data-i18n="nav.stories">小说</a>
+      <a href="field-notes.html" data-i18n="nav.notes">札记</a>
+      <a href="now.html" data-i18n="nav.now">近况</a>
+      <a href="timeline.html" data-i18n="nav.timeline">时间线</a>
+      <a href="travel.html" data-i18n="nav.travel">旅行</a>
+      <a href="travel-map.html" data-i18n="nav.map">地图</a>
+      <a href="library.html" data-i18n="nav.library">书影音</a>
+      <a href="photos.html" data-i18n="nav.photos">照片</a>
+      <a href="life.html" data-i18n="nav.life">生活</a>
+      <a href="plans.html" data-i18n="nav.plans">计划</a>
+      <a href="ernest-os.html" class="active" data-i18n="nav.os">Ernest OS</a>
+      <a href="about.html" data-i18n="nav.about">关于</a>
+    </nav>
+
+    <div class="os-private-tabs" aria-label="Private OS navigation">
+      <a class="active" href="ernest-os.html" data-zh="Financial OS" data-en="Financial OS">Financial OS</a>
+      <a href="personal-analysis-os.html" data-zh="Personal Analysis OS" data-en="Personal Analysis OS">Personal Analysis OS</a>
+    </div>
+
+    <header class="os-hero os-finance-hero">
+      <p class="os-kicker" data-zh="私人财务系统 / 不混入人格分析" data-en="Private financial system / analysis kept separate">私人财务系统 / 不混入人格分析</p>
+      <h1>Financial OS</h1>
+      <p class="os-hero-copy" data-zh="这个页面只处理钱：资产、支出、储蓄、投资、购房目标和未来预测。关于你是谁、你如何移动、你正在成为什么，已经移到 Personal Analysis OS。" data-en="This page is only about money: assets, spending, savings, investments, property goals, and projections. The question of who you are, how you move, and what you are becoming now lives in Personal Analysis OS.">这个页面只处理钱：资产、支出、储蓄、投资、购房目标和未来预测。关于你是谁、你如何移动、你正在成为什么，已经移到 Personal Analysis OS。</p>
+      <article class="os-thesis">
+        <span data-zh="财务原则" data-en="Financial principle">财务原则</span>
+        <strong data-zh="安全感、自由度、长期居住权。" data-en="Security, optionality, and the right to stay.">安全感、自由度、长期居住权。</strong>
+      </article>
+    </header>
+
+    <section class="os-module" id="finance-overview">
+      <div class="os-module-head">
+        <span>01</span>
+        <h2 data-zh="资产概览" data-en="Asset Overview">资产概览</h2>
+      </div>
+      <div class="os-metric-grid" id="financialMetrics"></div>
+    </section>
+
+    <section class="os-module" id="spending">
+      <div class="os-module-head">
+        <span>02</span>
+        <h2 data-zh="支出结构" data-en="Spending Structure">支出结构</h2>
+      </div>
+      <div class="os-split">
+        <article class="os-panel" id="spendingBars"></article>
+        <article class="os-panel os-text-panel">
+          <h3 data-zh="支出只回答一个问题" data-en="Spending answers one question">支出只回答一个问题</h3>
+          <p data-zh="钱流向哪里，生活就正在把什么放在优先级里。这个模块保留消费、类别、频率和异常波动，不再混入情绪解释。" data-en="Where money goes shows what life is prioritizing. This module keeps categories, frequency, and unusual movements without mixing in psychological interpretation.">钱流向哪里，生活就正在把什么放在优先级里。这个模块保留消费、类别、频率和异常波动，不再混入情绪解释。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="os-module" id="savings">
+      <div class="os-module-head">
+        <span>03</span>
+        <h2 data-zh="储蓄与现金流" data-en="Savings & Cash Flow">储蓄与现金流</h2>
+      </div>
+      <div class="os-card-grid" id="savingsCards"></div>
+    </section>
+
+    <section class="os-module" id="investments">
+      <div class="os-module-head">
+        <span>04</span>
+        <h2 data-zh="投资追踪" data-en="Investment Tracking">投资追踪</h2>
+      </div>
+      <div class="os-card-grid" id="investmentCards"></div>
+    </section>
+
+    <section class="os-module" id="property">
+      <div class="os-module-head">
+        <span>05</span>
+        <h2 data-zh="购房目标" data-en="Property Goal">购房目标</h2>
+      </div>
+      <div class="os-panel-pair">
+        <article class="os-panel">
+          <h3 data-zh="首付款准备度" data-en="Down-payment readiness">首付款准备度</h3>
+          <div class="os-progress"><span id="propertyProgress"></span></div>
+          <p id="propertyNote"></p>
+        </article>
+        <article class="os-panel">
+          <h3 data-zh="目标逻辑" data-en="Goal logic">目标逻辑</h3>
+          <p data-zh="购房不是炫耀型资产，而是长期居住权、家庭感和新加坡身份的一部分。这里保留数字，不负责解释情感。" data-en="Property is treated here as long-term residence, family infrastructure, and Singapore rootedness. This page keeps the numbers and leaves the emotional layer elsewhere.">购房不是炫耀型资产，而是长期居住权、家庭感和新加坡身份的一部分。这里保留数字，不负责解释情感。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="os-module" id="projections">
+      <div class="os-module-head">
+        <span>06</span>
+        <h2 data-zh="未来预测" data-en="Financial Projections">未来预测</h2>
+      </div>
+      <div class="os-card-grid" id="projectionCards"></div>
+    </section>
+  </main>
+
+  <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/ernest-os.js"></script>
+</body>
+</html>
